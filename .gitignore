@@ -1,0 +1,11 @@
+# Source material stays local (OneDrive), never in the public repo
+*.pptx
+*.ppt
+*.docx
+*.xlsx
+*.pdf
+partner-incubation-site-mockup.html
+
+.DS_Store
+Thumbs.db
+*.log
