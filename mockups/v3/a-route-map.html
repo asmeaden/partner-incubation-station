@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Incubation Station: Concept A, route map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16202e; --ink-2:#3c4656; --muted:#667085; --paper:#fbfcfd; --panel:#eef1f5; --rule:#d9dee6;
+  --biz:#1f5fd1; --work:#e09400; --agent:#b2316f; --fin:#0a8a64;
+  --font:"Overpass",system-ui,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--biz);outline-offset:3px}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+
+.top{border-bottom:1px solid var(--rule);background:#fff}
+.top .wrap{display:flex;align-items:center;gap:28px;min-height:66px}
+.roundel{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:800;letter-spacing:-.01em;font-size:18px}
+.roundel svg{flex:none}
+.top nav{display:flex;gap:4px;margin-left:auto}
+.top nav a{text-decoration:none;font-weight:600;font-size:15px;padding:8px 12px;border-radius:6px;display:flex;align-items:center;gap:8px}
+.top nav a i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.top nav a:hover{background:var(--panel)}
+.desk{font-weight:700;font-size:15px;text-decoration:none;background:var(--ink);color:#fff;border-radius:6px;padding:9px 16px}
+
+.hero{padding-block:clamp(40px,6vw,72px) 24px}
+.hero-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:28px}
+h1{font-size:clamp(40px,5.6vw,72px);line-height:.98;letter-spacing:-.03em;font-weight:900;margin:0}
+.hero-head p{margin:0;font-size:19px;color:var(--ink-2);max-width:44ch}
+
+.map-wrap{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:18px 18px 8px}
+.map{width:100%;height:auto;display:block}
+.map .ln{fill:none;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;transition:opacity .25s}
+.map .st{fill:#fff;stroke-width:5;transition:opacity .25s}
+.map .ix{fill:#fff;stroke:var(--ink);stroke-width:5}
+.map text{font-family:var(--font);font-size:15px;font-weight:700;fill:var(--ink);transition:opacity .25s}
+.map text.end{font-weight:800}
+.map[data-focus] [data-l]{opacity:.12}
+.map[data-focus="biz"] [data-l~="biz"],.map[data-focus="work"] [data-l~="work"],.map[data-focus="agent"] [data-l~="agent"],.map[data-focus="fin"] [data-l~="fin"]{opacity:1}
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:14px 4px 10px;border-top:1px solid var(--rule);margin-top:6px}
+.legend button{font:inherit;font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px;background:none;border:1.5px solid var(--rule);border-radius:999px;padding:7px 16px 6px 10px;cursor:pointer;color:var(--ink)}
+.legend button i{width:26px;height:8px;border-radius:4px;background:var(--c)}
+.legend button[aria-pressed="true"]{border-color:var(--ink);background:var(--panel)}
+.line-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;padding:18px 6px 10px;min-height:96px;border-top:1px solid var(--rule)}
+.line-card h2{margin:0 0 2px;font-size:22px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.line-card h2 i{width:30px;height:10px;border-radius:5px;background:var(--c)}
+.line-card p{margin:0;color:var(--ink-2);max-width:70ch}
+.line-card .facts{font-size:14.5px;color:var(--muted);margin-top:4px}
+.go{font-weight:800;text-decoration:none;color:#fff;background:var(--c,var(--ink));border-radius:6px;padding:12px 20px;white-space:nowrap}
+
+section.band{padding-block:clamp(56px,7vw,88px)}
+.band.alt{background:var(--panel)}
+.band h2.h{font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em;line-height:1.05;font-weight:900;margin:0 0 12px;max-width:22ch}
+.band .sub{margin:0 0 32px;color:var(--ink-2);max-width:60ch}
+
+.help{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:3px solid var(--ink)}
+.help div{padding:20px 24px 0 0}
+.help div + div{padding-left:24px;border-left:1px solid var(--rule)}
+.help b{display:block;font-size:21px;font-weight:800;margin-bottom:6px}
+.help p{margin:0;color:var(--ink-2);font-size:16px}
+.help small{display:block;margin-top:10px;color:var(--muted);font-size:14px}
+
+.timetable{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden}
+.timetable th,.timetable td{text-align:left;padding:14px 18px;border-bottom:1px solid var(--rule);vertical-align:top}
+.timetable th{font-size:14px;font-weight:700;color:var(--muted);background:#f7f8fa}
+.timetable td:first-child{font-weight:800;white-space:nowrap}
+.timetable td:first-child i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--c);margin-right:10px;vertical-align:0}
+.timetable .n{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.timetable .n small{display:block;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0}
+
+.team{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:48px;align-items:start}
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.person{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:14px}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-weight:800;color:var(--muted)}
+.person b{display:block}
+.person span{font-size:14.5px;color:var(--muted)}
+
+.desk-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.chat{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:18px}
+.msg{padding:12px 14px;border-radius:10px;margin-bottom:10px;font-size:15.5px;max-width:90%}
+.msg.u{background:var(--ink);color:#fff;margin-left:auto}
+.msg.a{background:var(--panel)}
+.msg.a small{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.ask{display:flex;gap:8px;margin-top:6px}
+.ask input{flex:1;font:inherit;border:1.5px solid var(--rule);border-radius:6px;padding:10px 12px}
+.ask button{font:inherit;font-weight:800;border:0;background:var(--ink);color:#fff;border-radius:6px;padding:0 18px}
+
+footer{border-top:1px solid var(--rule);padding-block:26px 40px;color:var(--muted);font-size:14px}
+.ph{background:#fff1b8;color:#6b4e00;border-radius:3px;padding:0 4px}
+.concept{position:fixed;bottom:16px;left:16px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;border-radius:999px;padding:8px 14px;text-decoration:none;z-index:5}
+
+@media (max-width:900px){
+  .top nav{display:none}
+  .hero-head,.team,.desk-panel{grid-template-columns:1fr}
+  .help{grid-template-columns:1fr}.help div + div{padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  .people{grid-template-columns:1fr}
+  .line-card{grid-template-columns:1fr}
+  .timetable thead{display:none}.timetable tr{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule)}.timetable td{border:0}.timetable td:first-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="roundel" href="#">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="13" fill="none" stroke="#16202e" stroke-width="6"/><rect x="0" y="13" width="34" height="8" rx="2" fill="#1f5fd1"/></svg>
+      Partner Incubation Station
+    </a>
+    <nav aria-label="Lines">
+      <a href="#" style="--c:var(--biz)"><i></i>Business</a>
+      <a href="#" style="--c:var(--work)"><i></i>Workforce</a>
+      <a href="#" style="--c:var(--agent)"><i></i>Agentic</a>
+      <a href="#" style="--c:var(--fin)"><i></i>FinOps</a>
+    </nav>
+    <a class="desk" href="#desk">Ask a question</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-head">
+      <h1>Four routes to an AI practice that pays.</h1>
+      <p>Pick the line that matches what you're building. Each one walks you through the stops that matter and ends with recommendations for your practice.</p>
+    </div>
+
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="0 0 1000 560" role="img" aria-label="Route map of the four practice areas and where they connect">
+        <!-- Business -->
+        <polyline data-l="biz" class="ln" stroke="var(--biz)" points="60,220 940,220"/>
+        <!-- FinOps -->
+        <polyline data-l="fin" class="ln" stroke="var(--fin)" points="340,40 340,220 440,320 940,320"/>
+        <!-- Agentic -->
+        <polyline data-l="agent" class="ln" stroke="var(--agent)" points="60,440 510,440 730,220 730,60"/>
+        <!-- Workforce -->
+        <polyline data-l="work" class="ln" stroke="var(--work)" points="60,340 230,340 330,440 390,500 940,500"/>
+
+        <!-- Business stops -->
+        <g data-l="biz" stroke="var(--biz)">
+          <circle class="st" cx="80" cy="220" r="9"/><circle class="st" cx="210" cy="220" r="9"/>
+          <circle class="st" cx="470" cy="220" r="9"/><circle class="st" cx="600" cy="220" r="9"/><circle class="st" cx="900" cy="220" r="12"/>
+        </g>
+        <g data-l="biz">
+          <text x="80" y="200" text-anchor="middle">Discovery</text>
+          <text x="210" y="200" text-anchor="middle">Positioning</text>
+          <text x="470" y="200" text-anchor="middle">Use-case fit</text>
+          <text x="600" y="252" text-anchor="middle">Task design</text>
+          <text x="900" y="200" text-anchor="middle" class="end">Value cadence</text>
+        </g>
+        <!-- FinOps stops -->
+        <g data-l="fin" stroke="var(--fin)">
+          <circle class="st" cx="340" cy="60" r="9"/><circle class="st" cx="340" cy="140" r="9"/>
+          <circle class="st" cx="560" cy="320" r="9"/><circle class="st" cx="800" cy="320" r="9"/><circle class="st" cx="920" cy="320" r="12"/>
+        </g>
+        <g data-l="fin">
+          <text x="360" y="65">Cost modelling</text>
+          <text x="360" y="145">Demand sizing</text>
+          <text x="560" y="352" text-anchor="middle">Governance</text>
+          <text x="800" y="352" text-anchor="middle">Optimise</text>
+          <text x="920" y="300" text-anchor="end" class="end">Capital allocation</text>
+        </g>
+        <!-- Agentic stops -->
+        <g data-l="agent" stroke="var(--agent)">
+          <circle class="st" cx="80" cy="440" r="9"/><circle class="st" cx="200" cy="440" r="9"/><circle class="st" cx="730" cy="70" r="12"/>
+        </g>
+        <g data-l="agent">
+          <text x="80" y="472" text-anchor="middle">Plan</text>
+          <text x="200" y="472" text-anchor="middle">Implement</text>
+          <text x="750" y="76" class="end">Improve and scale</text>
+        </g>
+        <!-- Workforce stops -->
+        <g data-l="work" stroke="var(--work)">
+          <circle class="st" cx="80" cy="340" r="9"/><circle class="st" cx="200" cy="340" r="9"/>
+          <circle class="st" cx="600" cy="500" r="9"/><circle class="st" cx="900" cy="500" r="12"/>
+        </g>
+        <g data-l="work">
+          <text x="80" y="320" text-anchor="middle">Plan</text>
+          <text x="200" y="320" text-anchor="middle">Launch</text>
+          <text x="600" y="532" text-anchor="middle">Manage</text>
+          <text x="900" y="532" text-anchor="middle" class="end">Improve</text>
+        </g>
+        <!-- Interchanges -->
+        <g data-l="biz fin"><rect class="ix" x="322" y="204" width="36" height="32" rx="16"/><text x="340" y="262" text-anchor="middle">Business case</text></g>
+        <g data-l="biz agent"><rect class="ix" x="712" y="204" width="36" height="32" rx="16"/><text x="760" y="262">Value story</text></g>
+        <g data-l="work agent"><rect class="ix" x="314" y="424" width="36" height="32" rx="16"/><text x="370" y="420">Adoption and champions</text></g>
+      </svg>
+
+      <div class="legend" role="group" aria-label="Show a line">
+        <button type="button" data-line="biz" style="--c:var(--biz)" aria-pressed="false"><i></i>Business Transformation</button>
+        <button type="button" data-line="work" style="--c:var(--work)" aria-pressed="false"><i></i>Workforce Transformation</button>
+        <button type="button" data-line="agent" style="--c:var(--agent)" aria-pressed="false"><i></i>Agentic Transformation</button>
+        <button type="button" data-line="fin" style="--c:var(--fin)" aria-pressed="false"><i></i>FinOps</button>
+      </div>
+      <div class="line-card" id="card" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2 class="h">How we help partners</h2>
+    <p class="sub">The Partner Incubation team helps Microsoft partners build AI practices that customers buy, adopt and keep paying for. Start on your own, then bring us in when you need depth.</p>
+    <div class="help">
+      <div><b>Self-serve journeys</b><p>Interactive routes built from our practice guides. Diagnose your gaps and leave with a plan.</p><small>Any time, at your own pace</small></div>
+      <div><b>Expert engagements</b><p>Practice Review, UBB Deep-Dive and Roadmap sessions with the team, shaped by your journey results.</p><small>By request</small></div>
+      <div><b>Incubations</b><p>Pilot new assets with your own customers before they're released, and help shape what we build next.</p><small>Open cohorts through the year</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap">
+    <h2 class="h">What's on each line</h2>
+    <p class="sub">Every route is built from a practice guide and keeps the guide available to download.</p>
+    <table class="timetable">
+      <thead><tr><th>Line</th><th>Journey</th><th>Inside</th><th>You leave with</th></tr></thead>
+      <tbody>
+        <tr style="--c:var(--biz)"><td><i></i>Business</td><td class="n">7 stops<small>Practice health check</small></td><td>7 capability checks, 3 offer templates, 7 team roles</td><td>Maturity level, top gaps, matching offer</td></tr>
+        <tr style="--c:var(--work)"><td><i></i>Workforce</td><td class="n">5 stops<small>Copilot adoption plan</small></td><td>5 phases, success measures, champions model</td><td>Phased adoption plan</td></tr>
+        <tr style="--c:var(--agent)"><td><i></i>Agentic</td><td class="n">5 stops<small>Agent rollout planner</small></td><td>Prioritisation matrix, 6 resistance checks, value metrics</td><td>Rollout plan and envisioning template</td></tr>
+        <tr style="--c:var(--fin)"><td><i></i>FinOps</td><td class="n">5 stops<small>Service builder</small></td><td>15 service activities, 37 tools mapped, 5 maturity levels</td><td>Service menu and tool stack</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap team">
+    <div>
+      <h2 class="h">The team behind the station</h2>
+      <p class="sub">Practice development, business value and consumption specialists in Microsoft Frontier Partner Incubation. We read every question and feed what we learn into the next release.</p>
+    </div>
+    <div class="people">
+      <div class="person"><div class="avatar">?</div><div><b class="ph">Name</b><span class="ph">Role</span></div></div>
+      <div class="person"><div class="avatar">?</div><div><b class="ph">Name</b><span class="ph">Role</span></div></div>
+      <div class="person"><div class="avatar">?</div><div><b class="ph">Name</b><span class="ph">Role</span></div></div>
+      <div class="person"><div class="avatar">?</div><div><b class="ph">Name</b><span class="ph">Role</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="desk">
+  <div class="wrap desk-panel">
+    <div>
+      <h2 class="h">Not sure which line? Ask at the desk.</h2>
+      <p class="sub">The assistant answers from our practice guides and points you to the right stop. When a question needs a person, it passes you to the team.</p>
+    </div>
+    <div class="chat">
+      <div class="msg u">How do I forecast Cowork credits for a 500-person pilot?</div>
+      <div class="msg a">Segment the cohort into usage tiers, then model credits per tier with the Copilot Credit Planning Model. Expect a few power users to drive most consumption.<small>From: FinOps line, Demand sizing stop</small></div>
+      <div class="ask"><input aria-label="Ask a question" placeholder="Ask about any line"><button type="button">Ask</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Partner Incubation Station. Microsoft Frontier Partner Incubation. Concept A for review.</div></footer>
+<a class="concept" href="index.html">All concepts</a>
+
+<script>
+(function(){
+  var LINES = {
+    biz:{name:"Business Transformation",c:"var(--biz)",text:"Diagnose your advisory practice across discovery, business case, use-case fit and value storytelling.",facts:"7 stops, about 15 minutes. Ends with your maturity level and top gaps."},
+    work:{name:"Workforce Transformation",c:"var(--work)",text:"Plan how employees adopt Copilot day to day: launch, champions, measures and what comes next.",facts:"5 stops, about 10 minutes. Ends with a phased adoption plan."},
+    agent:{name:"Agentic Transformation",c:"var(--agent)",text:"Pick the right agent scenario, then lead the people side of the change from pilot to scale.",facts:"5 stops, about 15 minutes. Ends with a rollout plan."},
+    fin:{name:"FinOps",c:"var(--fin)",text:"Build the services that help customers forecast, govern and optimise AI spend.",facts:"5 stops, about 15 minutes. Ends with your service menu and tool stack."}
+  };
+  var map=document.getElementById("map"), card=document.getElementById("card"), btns=document.querySelectorAll(".legend button");
+  function focus(k){
+    btns.forEach(function(b){b.setAttribute("aria-pressed",b.dataset.line===k?"true":"false");});
+    if(!k){map.removeAttribute("data-focus");card.innerHTML='<div><h2>Choose a line to see its route</h2><p>Lines cross where the practices share a stop, so progress on one carries to another.</p></div>';return;}
+    map.setAttribute("data-focus",k);var L=LINES[k];
+    card.style.setProperty("--c",L.c);
+    card.innerHTML='<div><h2><i></i>'+L.name+'</h2><p>'+L.text+'</p><div class="facts">'+L.facts+'</div></div><a class="go" href="#">Start this route</a>';
+  }
+  btns.forEach(function(b){b.addEventListener("click",function(){focus(b.getAttribute("aria-pressed")==="true"?null:b.dataset.line);});});
+  map.querySelectorAll("polyline").forEach(function(p){p.style.cursor="pointer";p.addEventListener("click",function(){focus(p.dataset.l);});});
+  focus(null);
+})();
+</script>
+</body>
+</html>

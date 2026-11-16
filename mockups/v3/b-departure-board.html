@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Incubation Station: Concept B, departure board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2238; --navy-2:#1a3352; --amber:#ffc14d; --amber-dim:#a7843e;
+  --ink:#0f2238; --ink-2:#3b4a5e; --muted:#69778a; --paper:#ffffff; --panel:#f2f4f7; --rule:#dde2e9;
+  --biz:#2f6fe4; --work:#e8a317; --agent:#c43d7f; --fin:#14a37a;
+  --sans:"Barlow",system-ui,"Segoe UI",sans-serif; --cond:"Barlow Condensed","Arial Narrow",sans-serif;
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+
+.top{background:var(--navy);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:28px;min-height:62px}
+.word{font-family:var(--cond);font-weight:700;font-size:23px;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.word b{background:var(--amber);color:var(--navy);border-radius:4px;padding:0 7px;font-weight:700}
+.top nav{display:flex;gap:22px;margin-left:auto;font-weight:600;font-size:15.5px}
+.top nav a{text-decoration:none;opacity:.85}
+.top nav a:hover{opacity:1;color:var(--amber)}
+.clock{font-family:var(--cond);font-size:20px;font-weight:600;color:var(--amber);min-width:56px;text-align:right}
+
+.hero{background:var(--navy);color:#fff;padding-block:clamp(36px,5vw,64px) clamp(44px,6vw,72px)}
+.hero h1{font-family:var(--cond);font-size:clamp(44px,6vw,80px);line-height:.95;font-weight:700;margin:0 0 10px;letter-spacing:-.01em;max-width:16ch}
+.hero .lede{margin:0 0 34px;color:#c3cfdd;font-size:19px;max-width:56ch}
+
+.board{background:#08172a;border-radius:10px;padding:8px 10px 10px;box-shadow:inset 0 0 0 1px #24405f}
+.board table{width:100%;border-collapse:separate;border-spacing:0 6px}
+.board th{font-family:var(--cond);font-weight:600;font-size:15px;color:var(--amber-dim);text-align:left;padding:6px 14px 0}
+.board td{background:#0d2440;padding:14px;vertical-align:middle}
+.board td:first-child{border-radius:6px 0 0 6px;width:10px;padding:0;background:var(--c)}
+.board td:last-child{border-radius:0 6px 6px 0;text-align:right}
+.flap{font-family:var(--cond);font-weight:600;color:var(--amber);font-size:clamp(20px,2.2vw,27px);letter-spacing:.02em;white-space:nowrap}
+.calling{font-size:15px;color:#c3cfdd;overflow:hidden;white-space:nowrap;max-width:420px}
+.calling span{display:inline-block;padding-left:100%;animation:none}
+.board tr.row{cursor:pointer}
+.board tr.row:hover td:not(:first-child){background:#123056}
+.status{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--navy);background:var(--amber);border-radius:4px;padding:3px 10px;white-space:nowrap}
+.status.new{background:#fff}
+.board .go{font-family:var(--cond);font-weight:700;font-size:18px;color:#fff;text-decoration:none;border:1.5px solid #3c5a7d;border-radius:6px;padding:6px 14px;margin-left:10px;white-space:nowrap}
+.board tr.row:hover .go{border-color:var(--amber);color:var(--amber)}
+
+section.band{padding-block:clamp(56px,7vw,88px)}
+.band.alt{background:var(--panel)}
+.h{font-family:var(--cond);font-size:clamp(34px,4vw,50px);line-height:1;font-weight:700;margin:0 0 12px;letter-spacing:-.005em}
+.sub{margin:0 0 32px;color:var(--ink-2);max-width:62ch}
+
+.tiers{display:grid;grid-template-columns:1.1fr 1fr .9fr;gap:14px;align-items:stretch}
+.tier{border-radius:10px;padding:24px;background:var(--panel)}
+.tier:nth-child(2){background:#e3e9f1}
+.tier:nth-child(3){background:var(--navy);color:#fff}
+.tier:nth-child(3) p{color:#c3cfdd}
+.tier h3{font-family:var(--cond);font-size:28px;font-weight:700;margin:0 0 6px}
+.tier p{margin:0 0 14px;color:var(--ink-2)}
+.tier ul{margin:0;padding-left:18px;font-size:15.5px}
+
+.counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
+.count{padding:20px 20px 0 0}
+.count + .count{padding-left:20px;border-left:1px solid var(--rule)}
+.count b{font-family:var(--cond);font-size:clamp(46px,5vw,64px);line-height:1;font-weight:700;display:block}
+.count span{display:block;color:var(--ink-2);font-size:15.5px;margin-top:6px}
+
+.team{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:48px}
+.people{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.person .photo{aspect-ratio:1;border-radius:10px;background:linear-gradient(160deg,#e3e9f1,#cfd8e4);margin-bottom:10px}
+.person b{display:block}
+.person span{font-size:14.5px;color:var(--muted)}
+
+/* Help point */
+.help-btn{position:fixed;right:20px;bottom:20px;z-index:6;display:flex;align-items:center;gap:10px;background:var(--amber);color:var(--navy);border:0;border-radius:999px;padding:12px 20px 12px 14px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 24px rgba(15,34,56,.25)}
+.help-btn i{width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--amber);display:grid;place-items:center;font-style:normal;font-family:var(--cond);font-weight:700}
+.dock{position:fixed;right:20px;bottom:84px;z-index:6;width:min(380px,calc(100vw - 40px));background:#fff;border-radius:12px;box-shadow:0 18px 48px rgba(15,34,56,.28);overflow:hidden;transform-origin:bottom right;transition:transform .2s,opacity .2s}
+.dock[hidden]{display:block;opacity:0;transform:scale(.96) translateY(8px);pointer-events:none;visibility:hidden}
+.dock header{background:var(--navy);color:#fff;padding:14px 16px}
+.dock header b{font-family:var(--cond);font-size:21px;font-weight:700;display:block}
+.dock header span{font-size:13.5px;color:#c3cfdd}
+.dock .body{padding:14px 16px;max-height:340px;overflow:auto}
+.m{padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:15px}
+.m.a{background:var(--panel)}
+.m.u{background:var(--navy);color:#fff;margin-left:30px}
+.m small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
+.m .hand{display:inline-block;margin-top:8px;font-weight:700;color:var(--navy);background:var(--amber);border-radius:6px;padding:6px 12px;text-decoration:none;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px}
+.chips button{font:inherit;font-size:13.5px;font-weight:600;border:1.5px solid var(--rule);background:#fff;border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink)}
+.chips button:hover{border-color:var(--navy)}
+
+footer{border-top:1px solid var(--rule);padding-block:26px 90px;color:var(--muted);font-size:14px}
+.ph{background:#fff1b8;color:#6b4e00;border-radius:3px;padding:0 4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.concept{position:fixed;bottom:16px;left:16px;background:var(--navy);color:#fff;font-size:13px;font-weight:700;border-radius:999px;padding:8px 14px;text-decoration:none;z-index:5}
+
+@media (max-width:900px){
+  .top nav{display:none}
+  .calling{display:none}.board th:nth-child(3),.board td:nth-child(3){display:none}
+  .board th:nth-child(4),.board td:nth-child(4){display:none}
+  .tiers,.team{grid-template-columns:1fr}
+  .counts{grid-template-columns:1fr 1fr}.count + .count{padding-left:0;border-left:0}.count{padding-right:12px}
+  .people{grid-template-columns:1fr 1fr}
+  .board .go{display:none}
+  .flap{white-space:normal}
+  .word{font-size:19px;line-height:1.1}
+}
+@media (max-width:480px){
+  .board td:last-child,.board th:last-child{display:none}
+  .board td:nth-child(2){border-radius:0 6px 6px 0}
+  .flap{font-size:18px}
+  .clock{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="word" href="#"><b>PIS</b>Partner Incubation Station</a>
+    <nav aria-label="Primary"><a href="#">Business</a><a href="#">Workforce</a><a href="#">Agentic</a><a href="#">FinOps</a><a href="#team">Team</a></nav>
+    <span class="clock" id="clock" aria-hidden="true">09:00</span>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <h1>Where is your practice heading?</h1>
+    <p class="lede">Choose a journey. Each one takes you through the guidance from our practice guides, one stop at a time, and ends with recommendations you can print and act on.</p>
+    <div class="board" role="region" aria-label="Journeys">
+      <table>
+        <thead><tr><th><span class="sr" style="position:absolute;left:-9999px">Line</span></th><th>Destination</th><th>Calling at</th><th>Journey time</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr class="row" style="--c:var(--biz)"><td></td><td><span class="flap" data-text="BUSINESS TRANSFORMATION">BUSINESS TRANSFORMATION</span></td><td class="calling">Discovery, positioning, business case, use-case fit, task design, value story, value cadence</td><td><span class="flap" data-text="15 MIN">15 MIN</span></td><td><span class="status">Boarding</span><a class="go" href="#">Start</a></td></tr>
+          <tr class="row" style="--c:var(--work)"><td></td><td><span class="flap" data-text="WORKFORCE TRANSFORMATION">WORKFORCE TRANSFORMATION</span></td><td class="calling">Plan, launch, adopt, manage, improve</td><td><span class="flap" data-text="10 MIN">10 MIN</span></td><td><span class="status">Boarding</span><a class="go" href="#">Start</a></td></tr>
+          <tr class="row" style="--c:var(--agent)"><td></td><td><span class="flap" data-text="AGENTIC TRANSFORMATION">AGENTIC TRANSFORMATION</span></td><td class="calling">Pick a scenario, plan, implement, adopt, manage, improve</td><td><span class="flap" data-text="15 MIN">15 MIN</span></td><td><span class="status">Boarding</span><a class="go" href="#">Start</a></td></tr>
+          <tr class="row" style="--c:var(--fin)"><td></td><td><span class="flap" data-text="FINOPS FOR AI">FINOPS FOR AI</span></td><td class="calling">Cost modelling, demand sizing, plan, control, optimise</td><td><span class="flap" data-text="15 MIN">15 MIN</span></td><td><span class="status new">New route</span><a class="go" href="#">Start</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2 class="h">How the team helps</h2>
+    <p class="sub">Microsoft Frontier Partner Incubation helps partners build AI practices that customers buy, adopt and keep paying for. Most partners start on their own and bring us in for depth.</p>
+    <div class="tiers">
+      <div class="tier"><h3>Go it alone</h3><p>Take a journey whenever you like. Diagnose your gaps and leave with a plan.</p><ul><li>Four interactive journeys</li><li>Printable recommendations</li><li>Every guide to download</li></ul></div>
+      <div class="tier"><h3>Work with us</h3><p>Bring your journey results to a session with the team.</p><ul><li>Practice Review</li><li>UBB Deep-Dive</li><li>Roadmap planning</li></ul></div>
+      <div class="tier"><h3>Build with us</h3><p>Pilot new assets with your own customers before they're released.</p><ul><li>Open incubation cohorts</li><li>Early access to new tools</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap">
+    <h2 class="h">What's inside</h2>
+    <p class="sub">Three practice guides, rebuilt as journeys. The guides are still here when you want the full detail.</p>
+    <div class="counts">
+      <div class="count"><b>4</b><span>Journeys across business, workforce, agentic and FinOps</span></div>
+      <div class="count"><b>37</b><span>Microsoft and open-source tools mapped to the services they support</span></div>
+      <div class="count"><b>3</b><span>Ready-made offer templates you can adapt and price</span></div>
+      <div class="count"><b>30+</b><span>Kits, playbooks, trainings and links in the resource index</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="team">
+  <div class="wrap team">
+    <div><h2 class="h">Meet the team</h2><p class="sub">Practice development, business value and consumption specialists. We answer every handed-over question ourselves.</p></div>
+    <div class="people">
+      <div class="person"><div class="photo"></div><b class="ph">Name</b><span class="ph">Role</span></div>
+      <div class="person"><div class="photo"></div><b class="ph">Name</b><span class="ph">Role</span></div>
+      <div class="person"><div class="photo"></div><b class="ph">Name</b><span class="ph">Role</span></div>
+      <div class="person"><div class="photo"></div><b class="ph">Name</b><span class="ph">Role</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Partner Incubation Station. Microsoft Frontier Partner Incubation. Concept B for review.</div></footer>
+<a class="concept" href="index.html">All concepts</a>
+
+<button class="help-btn" id="helpBtn" aria-expanded="false" aria-controls="dock"><i>?</i>Help point</button>
+<div class="dock" id="dock" hidden role="dialog" aria-label="Help point assistant">
+  <header><b>Help point</b><span>Answers from our practice guides. A person takes over when needed.</span></header>
+  <div class="body" id="log"><div class="m a">Hi. Ask me anything about the four journeys, or pick a question below.</div></div>
+  <div class="chips" id="chips">
+    <button type="button" data-q="0">Which journey should I start with?</button>
+    <button type="button" data-q="1">How do I price a Cowork offer?</button>
+    <button type="button" data-q="2">Can Microsoft fund my pilot?</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Clock
+  var clock=document.getElementById("clock");
+  function tick(){var d=new Date();clock.textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");}
+  tick();setInterval(tick,30000);
+
+  // One split-flap reveal on load
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!reduce){
+    var A="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
+    document.querySelectorAll(".flap").forEach(function(el,row){
+      var target=el.dataset.text, start=performance.now(), settle=target.split("").map(function(_,i){return 8+i+row*3;});
+      var sr=document.createElement("span");sr.className="sr";sr.textContent=target;el.after(sr);el.setAttribute("aria-hidden","true");
+      var t=setInterval(function(){
+        // Driven by elapsed time so throttled timers still finish on schedule
+        var frame=Math.floor((performance.now()-start)/35),done=true;
+        el.textContent=target.split("").map(function(ch,i){if(ch===" "||frame>=settle[i])return ch;done=false;return A[Math.floor(Math.random()*36)];}).join("");
+        if(done)clearInterval(t);
+      },35);
+    });
+  }
+
+  // Help point
+  var btn=document.getElementById("helpBtn"),dock=document.getElementById("dock"),log=document.getElementById("log");
+  btn.addEventListener("click",function(){var open=dock.hidden;dock.hidden=!open;btn.setAttribute("aria-expanded",open?"true":"false");});
+  var QA=[
+    ["Which journey should I start with?","If customers already use Copilot and you're moving into advisory work, start with Business Transformation. It checks seven capabilities and tells you which gap to close first.","From: Business Transformation journey",false],
+    ["How do I price a Cowork offer?","Start from your two strongest capabilities, then price the Assess and Identify steps as a fixed-fee entry point. Cost governance and the value review are monthly work, which is where the recurring revenue sits. The three offer templates include pricing models.","From: Business Transformation, Offers stop",false],
+    ["Can Microsoft fund my pilot?","Funding depends on your partner status and the programme, so the team should answer this one. I'll pass your question on with the journey you were on.","Handed to the Partner Incubation team",true]
+  ];
+  document.getElementById("chips").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;var q=QA[+b.dataset.q];
+    var u=document.createElement("div");u.className="m u";u.textContent=q[0];log.appendChild(u);
+    var a=document.createElement("div");a.className="m a";a.textContent=q[1];
+    var s=document.createElement("small");s.textContent=q[2];a.appendChild(s);
+    if(q[3]){var h=document.createElement("a");h.className="hand";h.href="#";h.textContent="Send to the team";a.appendChild(document.createElement("br"));a.appendChild(h);}
+    log.appendChild(a);log.scrollTop=log.scrollHeight;
+  });
+  document.querySelectorAll(".board tr.row").forEach(function(r){r.addEventListener("click",function(e){if(!e.target.closest("a"))r.querySelector(".go").focus();});});
+})();
+</script>
+</body>
+</html>
