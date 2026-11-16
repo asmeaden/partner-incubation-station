@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Incubation Station</title>
+<meta name="description" content="Guided journeys that help Microsoft partners build AI practices across business, workforce, agentic and FinOps.">
+<style>
+:root{
+  --bg:#f7f8fc; --surface:#ffffff; --ink:#141a2e; --ink-2:#3d4459; --muted:#6b7186;
+  --line:#e5e7f0; --line-2:#d3d6e2;
+  --night:#0d1430; --night-2:#141d42; --amber:#ffc65c;
+  --biz:#1f6fe0; --work:#0e9f8c; --agent:#7a4fd8; --fin:#d0820f;
+  --fade:linear-gradient(100deg,#1f6fe0 0%,#5a63e0 55%,#7a4fd8 100%);
+  --shadow:0 1px 2px rgba(20,26,46,.04),0 6px 20px rgba(20,26,46,.06);
+  --shadow-lg:0 18px 50px rgba(20,26,46,.14);
+  --r:14px;
+  --font:"Segoe UI Variable Display","Segoe UI Variable","Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2.5px solid var(--biz);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(20px,4vw,36px)}
+.skip{position:absolute;left:-9999px;top:8px;z-index:50;background:var(--ink);color:#fff;padding:8px 14px;border-radius:8px}
+.skip:focus{left:12px}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:20;background:rgba(247,248,252,.82);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;min-height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16.5px;letter-spacing:-.01em;white-space:nowrap}
+.mark{width:30px;height:30px;border-radius:9px;background:var(--night);display:grid;place-items:center}
+.mark svg{width:20px;height:20px}
+.top nav{display:flex;gap:4px;margin-left:auto}
+.top nav a{font-size:14.5px;font-weight:550;color:var(--ink-2);padding:7px 12px;border-radius:8px;display:flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.top nav a i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.top nav a:hover{background:#eceef6;color:var(--ink)}
+.cta{font-size:14.5px;font-weight:650;color:#fff;background:var(--fade);border-radius:9px;padding:9px 16px;box-shadow:0 6px 16px rgba(79,96,224,.28);transition:transform .2s var(--ease),box-shadow .2s}
+.cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(79,96,224,.36)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,7vw,84px) clamp(56px,7vw,88px)}
+.hero::before{content:"";position:absolute;inset:-40% -10% auto auto;width:900px;height:900px;background:radial-gradient(closest-side,rgba(122,79,216,.13),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:auto auto -50% -15%;width:800px;height:800px;background:radial-gradient(closest-side,rgba(31,111,224,.10),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.hero-head{max-width:760px;margin-bottom:36px}
+.hero h1{font-size:clamp(40px,5.4vw,66px);line-height:1.02;letter-spacing:-.035em;font-weight:700;margin:0 0 18px}
+.hero .lede{font-size:clamp(17px,1.6vw,19.5px);color:var(--ink-2);margin:0;max-width:58ch}
+
+/* Departure board */
+.board{background:linear-gradient(180deg,var(--night-2),var(--night));border-radius:20px;padding:10px 10px 12px;box-shadow:var(--shadow-lg),inset 0 0 0 1px rgba(255,255,255,.06);position:relative;overflow:hidden}
+.board::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;background:radial-gradient(60% 100% at 20% 0%,rgba(122,79,216,.35),transparent 70%);pointer-events:none}
+.board-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px;color:#aab3d6;font-size:13.5px;font-weight:600;position:relative}
+.board-head b{color:#fff;font-size:15px;font-weight:650}
+.board-head .clock{font-variant-numeric:tabular-nums;color:var(--amber);font-size:16px;font-weight:650}
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:6px;position:relative}
+.row{display:grid;grid-template-columns:6px minmax(0,1.3fr) minmax(0,1.5fr) 92px 150px;align-items:center;gap:18px;background:rgba(255,255,255,.035);border-radius:12px;padding:14px 16px 14px 0;transition:background .25s,transform .25s var(--ease)}
+.row:hover{background:rgba(255,255,255,.075)}
+.row .bar{height:100%;min-height:44px;border-radius:0 4px 4px 0;background:var(--c)}
+.dest{font-size:clamp(17px,1.8vw,21px);font-weight:650;color:#fff;letter-spacing:.01em;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dest .flap-ch{display:inline-block;min-width:.1em}
+.via{font-size:14px;color:#9aa3c7;line-height:1.45}
+.via b{color:#cfd5ef;font-weight:600}
+.time{font-size:15px;font-weight:650;color:var(--amber);font-variant-numeric:tabular-nums}
+.time small{display:block;color:#8a93b8;font-weight:500;font-size:12.5px}
+.board .go{justify-self:end;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:650;color:#fff;border-radius:10px;padding:9px 14px;white-space:nowrap;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);transition:background .2s,box-shadow .2s}
+.board .go::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 0 rgba(255,198,92,.6);animation:blink 2.4s infinite}
+.row:hover .go{background:var(--c);box-shadow:none}
+@keyframes blink{0%,60%,100%{box-shadow:0 0 0 0 rgba(255,198,92,0)}30%{box-shadow:0 0 0 5px rgba(255,198,92,.18)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Sections */
+section.band{padding-block:clamp(64px,8vw,104px)}
+.band.white{background:var(--surface);border-block:1px solid var(--line)}
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:40px;align-items:end;margin-bottom:40px}
+.head h2{font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.03em;font-weight:700;margin:0}
+.head p{margin:0;color:var(--ink-2)}
+
+/* Ways we help */
+.ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.way{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .3s var(--ease),box-shadow .3s}
+.way:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.way .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:18px;background:var(--fade)}
+.way .ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.way h3{font-size:21px;letter-spacing:-.015em;margin:0 0 6px;font-weight:700}
+.way p{margin:0 0 16px;color:var(--ink-2)}
+.way ul{margin:0;padding:0;list-style:none;font-size:15px;color:var(--ink-2);border-top:1px solid var(--line)}
+.way li{padding:9px 0;border-bottom:1px solid var(--line)}
+.way li:last-child{border-bottom:0}
+.way .when{margin-top:auto;padding-top:16px;font-size:13.5px;color:var(--muted);font-weight:600}
+
+/* Journey map */
+.mapcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.map-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:16px 18px;border-bottom:1px solid var(--line)}
+.map-tabs button{font:inherit;font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);cursor:pointer;transition:all .2s}
+.map-tabs button i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.map-tabs button:hover{border-color:var(--c);color:var(--ink)}
+.map-tabs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.map-body{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+.map{width:100%;height:auto;display:block;padding:12px 6px 6px}
+.map .path{fill:none;stroke-width:5;stroke-linecap:round;transition:opacity .35s,stroke-width .35s}
+.map .glow{fill:none;stroke-width:16;stroke-linecap:round;opacity:0;transition:opacity .35s}
+.map .stop{fill:#fff;stroke-width:3;transition:opacity .35s}
+.map .lbl{font-family:var(--font);font-size:13.5px;font-weight:600;fill:var(--ink-2);transition:opacity .35s}
+.map .link{stroke:var(--line-2);stroke-width:2;stroke-dasharray:3 5;transition:opacity .35s}
+.map .xlbl{font-family:var(--font);font-size:12px;font-weight:600;fill:var(--muted)}
+.map .node{fill:var(--ink)}
+.map .node-lbl{font-family:var(--font);font-size:14px;font-weight:700;fill:var(--ink)}
+.map[data-focus] [data-l]{opacity:.14}
+.map[data-focus="biz"] [data-l~="biz"],.map[data-focus="work"] [data-l~="work"],.map[data-focus="agent"] [data-l~="agent"],.map[data-focus="fin"] [data-l~="fin"]{opacity:1}
+.map[data-focus="biz"] .glow[data-l="biz"],.map[data-focus="work"] .glow[data-l="work"],.map[data-focus="agent"] .glow[data-l="agent"],.map[data-focus="fin"] .glow[data-l="fin"]{opacity:.16}
+.traveller{fill:#fff;stroke-width:4;opacity:0}
+.detail{border-left:1px solid var(--line);padding:26px 26px 24px;display:flex;flex-direction:column;background:linear-gradient(180deg,#fbfbfe,#fff)}
+.detail .tag{font-size:13.5px;font-weight:650;color:var(--c,var(--muted));display:flex;align-items:center;gap:8px}
+.detail .tag i{width:22px;height:6px;border-radius:3px;background:var(--c,var(--line-2))}
+.detail h3{font-size:24px;line-height:1.15;letter-spacing:-.02em;margin:8px 0 8px}
+.detail p{margin:0 0 14px;color:var(--ink-2)}
+.detail ol{margin:0 0 18px;padding:0;list-style:none;counter-reset:s}
+.detail li{counter-increment:s;display:flex;gap:12px;align-items:baseline;padding:6px 0;font-size:15px;border-bottom:1px solid var(--line)}
+.detail li::before{content:counter(s);flex:none;width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;transform:translateY(4px)}
+.detail .out{font-size:14.5px;color:var(--ink-2);background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:18px}
+.detail .out b{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:650;font-size:15px;border-radius:10px;padding:11px 18px;color:#fff;background:var(--c,var(--ink));align-self:flex-start;transition:transform .2s var(--ease),filter .2s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+
+/* Inside */
+.inside{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:44px;line-height:1;letter-spacing:-.03em;font-weight:700;background:var(--fade);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px}
+.stat span{display:block;font-size:15px;color:var(--ink-2)}
+.guides{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;font-size:14.5px;color:var(--muted)}
+.guides span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+
+/* Team */
+.team{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:48px;align-items:start}
+.team h2{font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.03em;margin:0 0 12px}
+.team p{color:var(--ink-2);margin:0 0 20px}
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.person{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.avatar{flex:none;width:56px;height:56px;border-radius:50%;background:conic-gradient(from 200deg,var(--biz),var(--agent),var(--work),var(--fin),var(--biz));padding:3px}
+.avatar span{display:block;width:100%;height:100%;border-radius:50%;background:#eef0f7}
+.person b{display:block}
+.person small{color:var(--muted);font-size:14px}
+
+/* Help point */
+.help-btn{position:fixed;right:22px;bottom:22px;z-index:30;display:flex;align-items:center;gap:10px;background:var(--night);color:#fff;border:0;border-radius:999px;padding:12px 20px 12px 12px;font:inherit;font-weight:650;font-size:15.5px;cursor:pointer;box-shadow:0 12px 30px rgba(13,20,48,.3);transition:transform .2s var(--ease)}
+.help-btn:hover{transform:translateY(-2px)}
+.help-btn i{width:28px;height:28px;border-radius:50%;background:var(--fade);display:grid;place-items:center;font-style:normal;font-weight:700}
+.dock{position:fixed;right:22px;bottom:86px;z-index:30;width:min(390px,calc(100vw - 44px));background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(13,20,48,.28);overflow:hidden;transform-origin:bottom right;transition:transform .25s var(--ease),opacity .25s}
+.dock.closed{opacity:0;transform:scale(.95) translateY(10px);pointer-events:none;visibility:hidden}
+.dock header{background:linear-gradient(120deg,var(--night),#24206a);color:#fff;padding:16px 18px}
+.dock header b{display:block;font-size:17px}
+.dock header span{font-size:13.5px;color:#b8bfe0}
+.log{padding:14px 16px;max-height:330px;overflow:auto}
+.m{padding:10px 13px;border-radius:12px;margin-bottom:10px;font-size:15px}
+.m.a{background:#f1f2f8}
+.m.u{background:var(--ink);color:#fff;margin-left:36px}
+.m small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
+.m .hand{display:inline-block;margin-top:8px;font-weight:650;color:#fff;background:var(--fade);border-radius:8px;padding:6px 12px;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
+.chips button{font:inherit;font-size:13.5px;font-weight:550;border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink);transition:border-color .2s}
+.chips button:hover{border-color:var(--biz)}
+
+footer{border-top:1px solid var(--line);padding-block:28px 100px;color:var(--muted);font-size:14px;background:var(--surface)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ph{background:#fff1c2;color:#6b4e00;border-radius:4px;padding:0 5px}
+
+@media (max-width:980px){
+  .top nav{display:none}
+  .row{grid-template-columns:6px minmax(0,1fr) auto;row-gap:4px}
+  .row .via{grid-column:2/-1;grid-row:2}
+  .row .time{display:none}
+  .head,.team{grid-template-columns:1fr}
+  .ways,.inside{grid-template-columns:1fr 1fr}
+  .map-body{grid-template-columns:1fr}
+  .detail{border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:620px){
+  .ways,.inside,.people{grid-template-columns:1fr}
+  .board .go span{display:none}
+  .dest{white-space:normal}
+  .top .cta{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M3 10c3 0 3-6 7-6s4 6 7 6" fill="none" stroke="#1f6fe0" stroke-width="2.4" stroke-linecap="round"/><path d="M3 10c3 0 3 6 7 6s4-6 7-6" fill="none" stroke="#7a4fd8" stroke-width="2.4" stroke-linecap="round"/><circle cx="3" cy="10" r="2" fill="#fff"/><circle cx="17" cy="10" r="2" fill="#ffc65c"/></svg></span>
+      Partner Incubation Station
+    </a>
+    <nav aria-label="Journeys">
+      <a href="#map" data-go="biz" style="--c:var(--biz)"><i></i>Business</a>
+      <a href="#map" data-go="work" style="--c:var(--work)"><i></i>Workforce</a>
+      <a href="#map" data-go="agent" style="--c:var(--agent)"><i></i>Agentic</a>
+      <a href="#map" data-go="fin" style="--c:var(--fin)"><i></i>FinOps</a>
+    </nav>
+    <a class="cta" href="#team">Talk to the team</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-head">
+      <h1>Build an AI practice your customers keep investing in.</h1>
+      <p class="lede">Guided journeys built from the Partner Incubation team's practice guides. Answer a few questions at each stop and leave with recommendations for your practice, not a slide deck.</p>
+    </div>
+
+    <div class="board" role="region" aria-label="Journeys departing now">
+      <div class="board-head"><b>Journeys</b><span>Choose where your practice is heading</span><span class="clock" id="clock" aria-hidden="true">09:00</span></div>
+      <ol class="rows">
+        <li class="row" style="--c:var(--biz)"><span class="bar"></span><span class="dest" data-text="Business Transformation">Business Transformation</span><span class="via">Calling at <b>discovery, business case, use-case fit, value story</b></span><span class="time">15 min<small>7 stops</small></span><a class="go" href="#map" data-go="biz"><span>Start journey</span></a></li>
+        <li class="row" style="--c:var(--work)"><span class="bar"></span><span class="dest" data-text="Workforce Transformation">Workforce Transformation</span><span class="via">Calling at <b>plan, launch, adopt, manage, improve</b></span><span class="time">10 min<small>5 stops</small></span><a class="go" href="#map" data-go="work"><span>Start journey</span></a></li>
+        <li class="row" style="--c:var(--agent)"><span class="bar"></span><span class="dest" data-text="Agentic Transformation">Agentic Transformation</span><span class="via">Calling at <b>scenario, pilot, adoption, value, scale</b></span><span class="time">15 min<small>5 stops</small></span><a class="go" href="#map" data-go="agent"><span>Start journey</span></a></li>
+        <li class="row" style="--c:var(--fin)"><span class="bar"></span><span class="dest" data-text="FinOps for AI">FinOps for AI</span><span class="via">Calling at <b>cost modelling, plan, control, optimise</b></span><span class="time">15 min<small>5 stops</small></span><a class="go" href="#map" data-go="fin"><span>Start journey</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="band white">
+  <div class="wrap">
+    <div class="head">
+      <h2>How we help partners</h2>
+      <p>The Partner Incubation team helps Microsoft partners build AI practices that customers buy, adopt and keep paying for. Start on your own, then bring us in when you need depth.</p>
+    </div>
+    <div class="ways">
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h12M12 6l6 6-6 6"/></svg></span><h3>Take a journey</h3><p>Work through a practice area at your own pace and leave with a plan.</p><ul><li>Four guided journeys</li><li>Printable recommendations</li><li>Source guides to download</li></ul><span class="when">Any time</span></div>
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 15c3 0 6 1.5 6 4"/></svg></span><h3>Work with us</h3><p>Bring your journey results to a session with the team.</p><ul><li>Practice Review</li><li>UBB Deep-Dive</li><li>Roadmap planning</li></ul><span class="when">By request</span></div>
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span><h3>Build with us</h3><p>Pilot new assets with your own customers before they're released.</p><ul><li>Open incubation cohorts</li><li>Early access to new tools</li></ul><span class="when">Cohorts through the year</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="map">
+  <div class="wrap">
+    <div class="head">
+      <h2>Every journey ends with a plan</h2>
+      <p>The four journeys start from the same place and share some stops. Progress on one, such as your business case, counts towards another.</p>
+    </div>
+    <div class="mapcard">
+      <div class="map-tabs" role="group" aria-label="Show a journey">
+        <button type="button" data-line="biz" style="--c:var(--biz)" aria-pressed="false"><i></i>Business</button>
+        <button type="button" data-line="work" style="--c:var(--work)" aria-pressed="false"><i></i>Workforce</button>
+        <button type="button" data-line="agent" style="--c:var(--agent)" aria-pressed="false"><i></i>Agentic</button>
+        <button type="button" data-line="fin" style="--c:var(--fin)" aria-pressed="false"><i></i>FinOps</button>
+      </div>
+      <div class="map-body">
+        <svg class="map" id="mapsvg" viewBox="0 0 760 420" role="img" aria-label="Four journeys starting from one point, sharing some stops, and ending at your plan"></svg>
+        <div class="detail" id="detail" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band white">
+  <div class="wrap">
+    <div class="head">
+      <h2>What's inside</h2>
+      <p>Three practice guides, rebuilt as journeys. The guides are still here when you want the full detail.</p>
+    </div>
+    <div class="inside">
+      <div class="stat"><b>10</b><span>Capability checks that pinpoint your practice's gaps</span></div>
+      <div class="stat"><b>37</b><span>Microsoft and open-source tools mapped to the services they support</span></div>
+      <div class="stat"><b>3</b><span>Ready-made offer templates you can adapt and price</span></div>
+      <div class="stat"><b>30+</b><span>Kits, playbooks and trainings in the resource library</span></div>
+    </div>
+    <div class="guides"><span>Built from: AI Advisory Practice Guide</span><span>FinOps for AI Practice Guide</span><span>Agent Adoption and Change Playbook</span></div>
+  </div>
+</section>
+
+<section class="band" id="team">
+  <div class="wrap team">
+    <div>
+      <h2>The team behind the journeys</h2>
+      <p>Practice development, business value and consumption specialists in Microsoft Frontier Partner Incubation. When a question needs a person, it comes to one of us.</p>
+      <a class="btn" href="#" style="--c:var(--ink)">Talk to the team</a>
+    </div>
+    <div class="people">
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Partner Incubation Station. Microsoft Frontier Partner Incubation.</span><span>Mock-up v4 for review.</span></div></footer>
+
+<button class="help-btn" id="helpBtn" aria-expanded="false" aria-controls="dock"><i>?</i>Ask a question</button>
+<div class="dock closed" id="dock" role="dialog" aria-label="Assistant">
+  <header><b>Ask the station</b><span>Answers from our practice guides. The team picks up anything that needs a person.</span></header>
+  <div class="log" id="log"><div class="m a">Hi. Ask about any journey, or pick a question below.</div></div>
+  <div class="chips" id="chips">
+    <button type="button" data-q="0">Which journey should I start with?</button>
+    <button type="button" data-q="1">How do I price a Cowork offer?</button>
+    <button type="button" data-q="2">Can Microsoft fund my pilot?</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Clock
+  var clock = document.getElementById("clock");
+  function tick(){ var d = new Date(); clock.textContent = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); }
+  tick(); setInterval(tick, 30000);
+
+  // One gentle split-flap reveal on load
+  if (!reduce) {
+    var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    document.querySelectorAll(".dest").forEach(function(el, row){
+      var target = el.dataset.text, start = performance.now();
+      var sr = document.createElement("span"); sr.className = "sr"; sr.textContent = target;
+      el.setAttribute("aria-hidden", "true"); el.after(sr);
+      var settle = target.split("").map(function(_, i){ return 260 + row * 160 + i * 38; });
+      (function frame(){
+        var t = performance.now() - start, done = true;
+        el.textContent = target.split("").map(function(ch, i){
+          if (ch === " " || t >= settle[i]) return ch;
+          done = false; return A[Math.floor(Math.random() * A.length)];
+        }).join("");
+        if (!done) requestAnimationFrame(frame);
+      })();
+      setTimeout(function(){ el.textContent = target; }, settle[settle.length - 1] + 200);
+    });
+  }
+
+  // Journey map
+  var LINES = {
+    biz:  { name:"Business Transformation", y:70,  c:"var(--biz)",   stops:["Discovery","Business case","Use-case fit","Value story"],
+            text:"Diagnose your advisory practice and find the capability gap that's holding it back.",
+            steps:["Pick the problems that sound like your team","Check yourself against each capability","See your maturity level","Get resources for your top gaps","Match an offer you can price"],
+            out:"Your maturity level, top three gaps and a matching offer template" },
+    fin:  { name:"FinOps for AI", y:165, c:"var(--fin)",   stops:["Cost modelling","Business case","Control","Optimise"],
+            text:"Build the services that help customers forecast, govern and optimise their AI spend.",
+            steps:["Place your customer on the maturity path","Choose plan, control or optimise","Explore each customer need","See the tools that cover it","Find the gap only you can fill"],
+            out:"Your service menu and recommended tool stack" },
+    agent:{ name:"Agentic Transformation", y:260, c:"var(--agent)", stops:["Scenario","Adoption","Value story","Scale"],
+            text:"Pick the right agent scenario, then lead the people side of the change from pilot to scale.",
+            steps:["Rank scenarios by impact and complexity","Plan the change and success measures","Check for resistance","Pilot and launch","Prove value and scale"],
+            out:"A phased rollout plan and a completed envisioning template" },
+    work: { name:"Workforce Transformation", y:355, c:"var(--work)", stops:["Plan","Adoption","Manage","Improve"],
+            text:"Help employees make Copilot part of how they work every day.",
+            steps:["Align Copilot to productivity goals","Launch with training and champions","Build habits over time","Measure usage and sentiment","Plan the next wave"],
+            out:"A phased adoption plan with success measures" }
+  };
+  // Shared stops: [lineA, lineB, stop name]
+  var SHARED = [["biz","fin","Business case"],["biz","agent","Value story"],["agent","work","Adoption"]];
+  var X0 = 40, X1 = 720, XS = [250, 360, 470, 580], MID = 210;
+  var svg = document.getElementById("mapsvg"), NS = "http://www.w3.org/2000/svg";
+  function mk(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  function d(y){ return "M"+X0+","+MID+" C140,"+MID+" 120,"+y+" 220,"+y+" L610,"+y+" C700,"+y+" 640,"+MID+" "+X1+","+MID; }
+
+  var gLinks = mk("g", {}), gLines = mk("g", {}), gStops = mk("g", {});
+  var paths = {};
+  Object.keys(LINES).forEach(function(k){
+    var L = LINES[k];
+    mk("path", { class:"glow", d:d(L.y), stroke:L.c, "data-l":k }, gLines);
+    paths[k] = mk("path", { class:"path", d:d(L.y), stroke:L.c, "data-l":k }, gLines);
+    L.stops.forEach(function(s, i){
+      var shared = SHARED.some(function(x){ return x[2] === s && (x[0] === k || x[1] === k); });
+      if (!shared) {
+        mk("circle", { class:"stop", cx:XS[i], cy:L.y, r:7, stroke:L.c, "data-l":k }, gStops);
+        var t = mk("text", { class:"lbl", x:XS[i], y:L.y - 16, "text-anchor":"middle", "data-l":k }, gStops); t.textContent = s;
+      }
+    });
+  });
+  SHARED.forEach(function(x){
+    var a = LINES[x[0]], b = LINES[x[1]], i = a.stops.indexOf(x[2]), xx = XS[i];
+    mk("line", { class:"link", x1:xx, y1:a.y, x2:xx, y2:b.y, "data-l":x[0]+" "+x[1] }, gLinks);
+    [a, b].forEach(function(L, j){
+      mk("circle", { class:"stop", cx:xx, cy:L.y, r:8, stroke:"var(--ink)", "data-l":x[0]+" "+x[1] }, gStops);
+    });
+    var t = mk("text", { class:"lbl", x:xx + 12, y:(a.y + b.y)/2 + 4, "data-l":x[0]+" "+x[1] }, gStops); t.textContent = x[2];
+  });
+  mk("circle", { class:"node", cx:X0, cy:MID, r:11 });
+  mk("circle", { cx:X0, cy:MID, r:4, fill:"#fff" });
+  var st = mk("text", { class:"node-lbl", x:X0 - 4, y:MID + 34 }); st.textContent = "Start";
+  mk("circle", { class:"node", cx:X1, cy:MID, r:14 });
+  mk("circle", { cx:X1, cy:MID, r:5, fill:"var(--amber)" });
+  var en = mk("text", { class:"node-lbl", x:X1, y:MID + 38, "text-anchor":"end" }); en.textContent = "Your plan";
+  var trav = mk("circle", { class:"traveller", r:7, cx:X0, cy:MID });
+
+  var detail = document.getElementById("detail"), tabs = document.querySelectorAll(".map-tabs button"), anim;
+  function focus(k){
+    tabs.forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.line === k ? "true" : "false"); });
+    cancelAnimationFrame(anim); trav.style.opacity = 0;
+    if (!k) {
+      svg.removeAttribute("data-focus"); detail.style.removeProperty("--c");
+      detail.innerHTML = '<span class="tag"><i></i>Four journeys</span><h3>Choose a journey to see its stops</h3><p>Each journey takes 10 to 15 minutes and ends with recommendations you can print or save as a PDF.</p><p>Dotted links show where journeys share a stop.</p>';
+      return;
+    }
+    var L = LINES[k]; svg.setAttribute("data-focus", k); detail.style.setProperty("--c", L.c);
+    detail.innerHTML = '<span class="tag"><i></i>Journey</span><h3>' + L.name + '</h3><p>' + L.text + '</p><ol>' +
+      L.steps.map(function(s){ return "<li>" + s + "</li>"; }).join("") + '</ol><div class="out"><b>You leave with:</b> ' + L.out + '</div><a class="btn" href="#">Start this journey</a>';
+    if (reduce) return;
+    var p = paths[k], len = p.getTotalLength(), t0 = performance.now();
+    trav.setAttribute("stroke", L.c); trav.style.opacity = 1;
+    (function step(now){
+      var f = Math.min(1, (now - t0) / 1600), e = f < .5 ? 2*f*f : 1 - Math.pow(-2*f + 2, 2)/2, pt = p.getPointAtLength(e * len);
+      trav.setAttribute("cx", pt.x); trav.setAttribute("cy", pt.y);
+      if (f < 1) anim = requestAnimationFrame(step);
+    })(t0);
+  }
+  tabs.forEach(function(b){ b.addEventListener("click", function(){ focus(b.getAttribute("aria-pressed") === "true" ? null : b.dataset.line); }); });
+  Object.keys(paths).forEach(function(k){ paths[k].style.cursor = "pointer"; paths[k].addEventListener("click", function(){ focus(k); }); });
+  document.querySelectorAll("[data-go]").forEach(function(a){ a.addEventListener("click", function(){ focus(a.dataset.go); }); });
+  focus(null);
+
+  // Assistant (scripted for the mock-up)
+  var btn = document.getElementById("helpBtn"), dock = document.getElementById("dock"), log = document.getElementById("log");
+  btn.addEventListener("click", function(){ var open = dock.classList.toggle("closed") === false; btn.setAttribute("aria-expanded", open ? "true" : "false"); });
+  var QA = [
+    ["Which journey should I start with?", "If your customers already use Copilot and you're moving into advisory work, start with Business Transformation. It checks your capabilities and tells you which gap to close first.", "From the Business Transformation journey", false],
+    ["How do I price a Cowork offer?", "Start from your two strongest capabilities, then price the Assess and Identify steps as a fixed-fee entry point. Cost governance and value reviews are monthly work, which is where recurring revenue sits.", "From the Business Transformation journey, offers stop", false],
+    ["Can Microsoft fund my pilot?", "Funding depends on your partner status and the programme, so a person on the team should answer this. I'll send them your question and the journey you were on.", "Passed to the Partner Incubation team", true]
+  ];
+  document.getElementById("chips").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if (!b) return; var q = QA[+b.dataset.q];
+    var u = document.createElement("div"); u.className = "m u"; u.textContent = q[0]; log.appendChild(u);
+    var a = document.createElement("div"); a.className = "m a"; a.textContent = q[1];
+    var s = document.createElement("small"); s.textContent = q[2]; a.appendChild(s);
+    if (q[3]) { var h = document.createElement("a"); h.className = "hand"; h.href = "#"; h.textContent = "Send to the team"; a.appendChild(h); }
+    log.appendChild(a); log.scrollTop = log.scrollHeight;
+  });
+})();
+</script>
+</body>
+</html>
