@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Contact Us | Partner Incubation</title>
+<meta name="description" content="Request Partner Incubation support and meet the team.">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body data-page="contact" data-root="../">
+
+<main id="main">
+  <section class="hero" style="padding-block-end:28px">
+    <div class="wrap">
+      <div class="crumb"><a href="../">Home</a> / Contact Us</div>
+      <div class="eyebrow">Contact Us</div>
+      <h1>Request <span class="accent">support</span></h1>
+      <p class="lead">Tell us about the partner and what you need. We'll come back with a recommended next step.</p>
+    </div>
+  </section>
+
+  <section class="alt" style="padding-block-start:36px">
+    <div class="wrap grid contact-grid" style="grid-template-columns:1.5fr 1fr">
+      <div class="card">
+        <form class="form" data-not-connected novalidate>
+          <div class="fld"><label for="partner">Partner name</label><input id="partner" name="partner" type="text" placeholder="e.g. Contoso Ltd" autocomplete="organization"></div>
+          <div class="fld"><label for="region">Region</label><select id="region" name="region"><option value="">Select region</option><option>EMEA</option><option>Americas</option><option>Asia</option></select></div>
+          <div class="fld"><label for="focus">Focus area</label><select id="focus" name="focus"><option value="">Select focus area</option><option>Business Transformation</option><option>Agent Transformation</option><option>Workforce Transformation</option><option>Consumption &amp; Cost</option></select></div>
+          <div class="fld"><label for="engagement">Engagement</label><select id="engagement" name="engagement"><option value="">Select engagement</option><option>Practice Review</option><option>UBB Deep-Dive</option><option>Roadmap</option></select></div>
+          <div class="fld full"><label for="need">What do you need?</label><textarea id="need" name="need" placeholder="Goal, timing and any context…"></textarea></div>
+          <div class="fld full"><button class="btn btn-fade" type="submit">Submit request →</button></div>
+          <p class="form-note fld full ph" role="status" hidden>Form submission is not connected yet. Destination to confirm.</p>
+        </form>
+      </div>
+      <div class="card"><h3>What happens next</h3><ol class="next">
+        <li><b>We review your request</b>within <span class="ph">n</span> working days</li>
+        <li><b>We recommend a path</b>Practice Review, UBB Deep-Dive or Roadmap</li>
+        <li><b>We agree next steps</b>and the support we will provide</li>
+      </ol></div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-head"><div class="eyebrow">Meet the team</div><h2>The Partner Incubation Team</h2></div>
+      <div class="grid g4">
+        <div class="card person"><div class="avatar"></div><b class="ph">Name</b><span class="muted small ph">Role</span></div>
+        <div class="card person"><div class="avatar"></div><b class="ph">Name</b><span class="muted small ph">Role</span></div>
+        <div class="card person"><div class="avatar"></div><b class="ph">Name</b><span class="muted small ph">Role</span></div>
+        <div class="card person"><div class="avatar"></div><b class="ph">Name</b><span class="muted small ph">Role</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../site.js"></script>
+</body>
+</html>

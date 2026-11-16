@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontier Partner Incubation</title>
+<meta name="description" content="Find the capability gap in your AI practice, then the resource that closes it. Advisory, FinOps for AI and agent adoption guidance for Microsoft partners.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#13203b;
+  --ink-2:#3a4560;
+  --muted:#5d6779;
+  --paper:#ffffff;
+  --panel:#f3f5f8;
+  --rule:#d8dde6;
+  --advisory:#2453c9;
+  --finops:#0b7a5e;
+  --change:#a8326b;
+  --marker:#ffe066;
+  --sans:"Bricolage Grotesque",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --measure:68ch;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;font-optical-sizing:auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--advisory);outline-offset:3px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--ink);color:#fff;padding:8px 14px;z-index:9}
+.skip:focus{left:12px}
+
+/* Header */
+.top{border-bottom:1px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;gap:32px;min-height:64px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand-mark{display:flex;gap:3px}
+.brand-mark i{display:block;width:5px;height:18px;border-radius:3px}
+.brand-mark i:nth-child(1){background:var(--advisory)}
+.brand-mark i:nth-child(2){background:var(--finops);height:13px;align-self:flex-end}
+.brand-mark i:nth-child(3){background:var(--change);height:8px;align-self:flex-end}
+.top nav{display:flex;gap:26px;margin-left:auto;font-size:15px;font-weight:500}
+.top nav a{text-decoration:none;color:var(--ink-2);padding-block:6px;border-bottom:2px solid transparent}
+.top nav a:hover{color:var(--ink);border-color:var(--ink)}
+.top .ask{font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:7px 16px}
+.top .ask:hover{background:var(--ink);color:#fff}
+
+/* Hero + router */
+.hero{padding-block:clamp(48px,7vw,88px) 0}
+.hero h1{font-size:clamp(42px,6.6vw,84px);line-height:.98;letter-spacing:-.035em;font-weight:800;margin:0;max-width:13ch;font-variation-settings:"opsz" 96}
+.hero .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:40px;align-items:end}
+.hero .lede{font-size:19px;color:var(--ink-2);margin:0;max-width:40ch}
+.howto{margin:24px 0 0;padding:0;list-style:none;display:flex;gap:28px;flex-wrap:wrap;font-size:14.5px;color:var(--muted)}
+.howto li{display:flex;gap:8px;align-items:baseline}
+.howto b{font-weight:700;color:var(--ink)}
+
+.router{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,56px);margin-top:clamp(36px,5vw,56px);padding-bottom:clamp(56px,7vw,96px);align-items:start}
+.gaps h2{font-size:15px;font-weight:600;color:var(--muted);margin:0 0 6px}
+.component{border-top:1px solid var(--rule);padding:14px 0 10px}
+.component h3{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 4px;letter-spacing:0}
+.gap{display:block;width:100%;text-align:left;background:none;border:0;padding:6px 0;cursor:pointer;color:var(--ink);font-family:var(--serif);font-style:italic;font-size:clamp(21px,2.1vw,26px);line-height:1.3}
+.gap span{background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-size:0% 62%;background-position:0 88%;transition:background-size .45s cubic-bezier(.2,.7,.2,1);padding-inline:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.gap:hover span{background-size:100% 12%}
+.gap[aria-pressed="true"] span{background-size:100% 62%}
+
+.detail{position:sticky;top:20px;background:var(--panel);border-radius:6px;padding:clamp(22px,3vw,34px);border-left:5px solid var(--advisory)}
+.detail .cat{font-size:14px;font-weight:600;color:var(--advisory);margin:0}
+.detail h2{font-size:clamp(26px,2.6vw,34px);line-height:1.08;letter-spacing:-.02em;font-weight:700;margin:6px 0 14px}
+.detail .why{color:var(--ink-2);margin:0 0 22px;max-width:var(--measure)}
+.detail h3{font-size:15px;font-weight:700;margin:0 0 8px}
+.checks{list-style:none;margin:0 0 6px;padding:0}
+.checks label{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--rule);font-size:15.5px;cursor:pointer}
+.checks input{appearance:none;flex:none;width:20px;height:20px;margin:2px 0 0;border:1.5px solid var(--ink-2);border-radius:4px;background:#fff;display:grid;place-items:center;cursor:pointer}
+.checks input:checked{background:var(--ink);border-color:var(--ink)}
+.checks input:checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.verdict{font-size:14.5px;color:var(--muted);margin:8px 0 22px;min-height:1.5em}
+.verdict strong{color:var(--ink)}
+.res{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.res li{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-top:1px solid var(--rule);font-size:15.5px}
+.res a{font-weight:600;text-decoration-thickness:1.5px;text-underline-offset:3px}
+.res a:hover{color:var(--advisory)}
+.res small{color:var(--muted);font-size:13.5px;white-space:nowrap}
+.res .plain{font-weight:600}
+
+/* Practices as route lines */
+.practices{background:var(--panel);padding-block:clamp(56px,7vw,96px)}
+.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:40px;align-items:end;margin-bottom:clamp(32px,4vw,48px)}
+.section-head h2{font-size:clamp(32px,4vw,52px);line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:0}
+.section-head p{margin:0;color:var(--ink-2)}
+.line{background:var(--paper);border-radius:6px;padding:clamp(22px,3vw,32px);margin-bottom:16px;--c:var(--advisory)}
+.line.finops{--c:var(--finops)}
+.line.change{--c:var(--change)}
+.line-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start;margin-bottom:26px}
+.line-head h3{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.015em;font-weight:700;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+.line-head h3::before{content:"";width:28px;height:6px;border-radius:3px;background:var(--c)}
+.line-head p{margin:0;color:var(--ink-2);max-width:60ch}
+.line-head .src{font-size:14px;font-weight:600;text-decoration:none;color:var(--c);white-space:nowrap;border-bottom:1.5px solid currentColor;padding-bottom:1px}
+.stops{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));position:relative}
+.stops::before{content:"";position:absolute;left:9px;right:9px;top:8px;height:4px;border-radius:2px;background:var(--c)}
+.stops li{position:relative;padding:30px 16px 0 0}
+.stops li::before{content:"";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:#fff;border:4px solid var(--c);box-sizing:border-box}
+.stops b{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.stops .when{display:block;font-size:13.5px;font-weight:600;color:var(--c);margin-bottom:2px}
+.stops span{display:block;font-size:14.5px;color:var(--muted);line-height:1.45}
+.stops.loop::after{content:"Then back to Plan as usage changes";position:absolute;right:0;top:-24px;font-size:13px;color:var(--muted);font-weight:500}
+.maturity{margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);display:flex;gap:10px 22px;flex-wrap:wrap;align-items:baseline;font-size:14.5px;color:var(--muted)}
+.maturity strong{color:var(--ink);font-weight:700}
+.maturity ol{display:flex;gap:6px;flex-wrap:wrap;margin:0;padding:0;list-style:none}
+.maturity li{border:1.5px solid var(--c);color:var(--ink);border-radius:999px;padding:2px 12px;font-size:13.5px;font-weight:600}
+.maturity li:nth-child(n+3){background:color-mix(in srgb,var(--c) 10%,#fff)}
+
+/* Offers */
+.offers{padding-block:clamp(56px,7vw,96px)}
+.offer-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--ink)}
+.offer{padding:22px 24px 6px 0}
+.offer + .offer{padding-left:24px;border-left:1px solid var(--rule)}
+.offer h3{font-size:22px;line-height:1.15;letter-spacing:-.015em;font-weight:700;margin:0 0 4px}
+.offer .tag{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink-2);margin:0 0 12px}
+.offer p{margin:0 0 12px;color:var(--muted);font-size:15.5px}
+.offer .fills{font-size:14px;color:var(--ink-2)}
+.levels{margin-top:clamp(40px,5vw,64px);display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:40px}
+.levels h3{font-size:24px;letter-spacing:-.015em;margin:0 0 8px;line-height:1.15}
+.levels > div > p{margin:0;color:var(--ink-2)}
+.ladder{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}
+.ladder li{background:var(--panel);border-radius:6px;padding:18px}
+.ladder li:nth-child(1){min-height:150px}
+.ladder li:nth-child(2){min-height:190px}
+.ladder li:nth-child(3){min-height:230px;background:var(--ink);color:#fff}
+.ladder li:nth-child(3) span{color:#c9d1e3}
+.ladder b{display:block;font-size:18px;margin-bottom:6px}
+.ladder small{display:block;font-weight:600;font-size:13px;margin-bottom:6px;opacity:.75}
+.ladder span{display:block;font-size:14.5px;color:var(--muted);line-height:1.45}
+
+/* Index */
+.index{background:var(--panel);padding-block:clamp(56px,7vw,96px)}
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.filter button{font:inherit;font-size:14.5px;font-weight:600;border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink)}
+.filter button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;list-style:none;margin:0;padding:0}
+.links li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:13px 0;border-top:1px solid var(--rule)}
+.links li[hidden]{display:none}
+.links i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--advisory));transform:translateY(1px)}
+.links li[data-t="finops"]{--c:var(--finops)}
+.links li[data-t="change"]{--c:var(--change)}
+.links a{font-weight:600;text-decoration:none}
+.links a:hover{text-decoration:underline;text-underline-offset:3px}
+.links span{display:block;font-size:14.5px;color:var(--muted)}
+.links code{font-family:var(--sans);font-size:13.5px;color:var(--muted);white-space:nowrap}
+
+/* Contact + footer */
+.contact{padding-block:clamp(56px,7vw,96px)}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center}
+.contact h2{font-size:clamp(30px,3.6vw,46px);line-height:1.05;letter-spacing:-.03em;margin:0 0 10px;font-weight:800;max-width:18ch}
+.contact p{margin:0;color:var(--ink-2);max-width:56ch}
+.btn{display:inline-block;font-weight:700;font-size:16px;text-decoration:none;background:var(--ink);color:#fff;border-radius:999px;padding:14px 26px}
+.btn:hover{background:var(--advisory)}
+footer{border-top:1px solid var(--rule);padding-block:28px 40px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ph{background:#fff1b8;border-radius:3px;padding:0 4px;color:#6b4e00}
+
+@media (max-width:900px){
+  .top nav{display:none}
+  .hero .intro,.router,.section-head,.levels,.contact .wrap{grid-template-columns:1fr}
+  .detail{position:static}
+  .offer-list,.ladder,.links{grid-template-columns:1fr}
+  .links li{grid-template-columns:12px minmax(0,1fr)}
+  .links code{grid-column:2;white-space:normal;overflow-wrap:anywhere}
+  .offer + .offer{padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  .ladder li{min-height:0!important}
+  .stops{grid-template-columns:1fr}
+  .stops::before{left:8px;right:auto;top:10px;bottom:10px;width:4px;height:auto}
+  .stops li{padding:0 0 18px 36px}
+  .stops.loop::after{position:static;display:block;padding-left:36px}
+  .line-head{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>Frontier Partner Incubation</a>
+    <nav aria-label="Primary">
+      <a href="#practices">Practices</a>
+      <a href="#offers">Offers</a>
+      <a href="#index">Resource index</a>
+    </nav>
+    <a class="ask" href="#contact">Talk to the team</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="wrap">
+    <div class="intro">
+      <h1>Start with the gap you feel.</h1>
+      <p class="lede">Not with the resource list. Pick the sentence that sounds most like your team and we'll show you what to check and which asset closes the gap.</p>
+    </div>
+
+    <div class="router">
+      <div class="gaps" id="gaps">
+        <h2>Which of these sounds like your team?</h2>
+      </div>
+      <article class="detail" id="detail" aria-live="polite"></article>
+    </div>
+  </div>
+</section>
+
+<section class="practices" id="practices">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Three practices, each with a route to follow</h2>
+      <p>Advisory is where most partners start. FinOps for AI and agent adoption run across every engagement once customers are spending on credits and putting agents into real processes.</p>
+    </div>
+
+    <div class="line">
+      <div class="line-head">
+        <div>
+          <h3>AI advisory practice</h3>
+          <p>A Copilot Cowork engagement runs in four steps over six weeks, led by cohort leaders and enabled by IT for cost governance.</p>
+        </div>
+        <a class="src" href="https://aka.ms/CoworkPartnerKit">Get the Proof of Value Kit</a>
+      </div>
+      <ol class="stops" style="--n:4">
+        <li><span class="when">Weeks 0 to 1</span><b>Assess</b><span>Agree objectives, cohorts, success metrics and the credit budget before any task runs.</span></li>
+        <li><span class="when">Weeks 1 to 2</span><b>Identify</b><span>Turn the cohort's day-to-day work into a short, measurable, costed task list.</span></li>
+        <li><span class="when">Weeks 3 to 4</span><b>Implement and prove</b><span>Set policies and limits, run the tasks live and capture before-and-after evidence.</span></li>
+        <li><span class="when">Weeks 4 to 6</span><b>Scale</b><span>Deliver the value and cost readout, then plan the next cohorts and governance.</span></li>
+      </ol>
+    </div>
+
+    <div class="line finops">
+      <div class="line-head">
+        <div>
+          <h3>FinOps for AI</h3>
+          <p>Help customers forecast, govern and optimise every AI investment, from licensed Copilot to consumption-based agents and Azure AI.</p>
+        </div>
+        <a class="src" href="https://aka.ms/CoworkOfferTemplates">Cowork and FinOps offer templates</a>
+      </div>
+      <ol class="stops loop" style="--n:3">
+        <li><b>Plan</b><span>Should we invest, and where? Forecast credit consumption and build the business case.</span></li>
+        <li><b>Control</b><span>How do we control it? Spending policies, named budget owners, showback and guardrails.</span></li>
+        <li><b>Optimise</b><span>Are we spending in the right places? Monitor use, catch anomalies, relate credits to outcomes.</span></li>
+      </ol>
+      <div class="maturity">
+        <strong>Customer maturity</strong>
+        <ol>
+          <li>Cost visibility</li><li>Cost control</li><li>Cost attribution</li><li>Cost-to-outcome optimisation</li><li>AI capital allocation</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="line change">
+      <div class="line-head">
+        <div>
+          <h3>Agent adoption and change</h3>
+          <p>Agents change business processes, not just personal habits. Lead the people side of the change through five phases.</p>
+        </div>
+        <a class="src" href="#index" data-jump="change">Playbook resources</a>
+      </div>
+      <ol class="stops" style="--n:5">
+        <li><b>Plan</b><span>Align the agent to business priorities, set success measures and baseline them.</span></li>
+        <li><b>Implement</b><span>Pilot end to end, launch comms and training, run hypercare with a fallback.</span></li>
+        <li><b>Adopt</b><span>Leaders and managers reinforce the new way of working; act on feedback.</span></li>
+        <li><b>Manage</b><span>Prove value against the baseline and keep governance and performance in check.</span></li>
+        <li><b>Improve</b><span>Move from project to operations, then scale to the next process.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="offers" id="offers">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Turn the capability into an offer you can price</h2>
+      <p>Capability that isn't packaged stays a cost. Each template carries the structure, pricing model and value story, ready to adapt this quarter.</p>
+    </div>
+    <div class="offer-list">
+      <div class="offer">
+        <h3>AI Investment Planning Strategy</h3>
+        <p class="tag">From AI investment to value</p>
+        <p>Builds the AI spend baseline, the value hypothesis and the investment case.</p>
+        <p class="fills">Closes discovery, cost modelling and baseline gaps</p>
+      </div>
+      <div class="offer">
+        <h3>AI Functional or Industry Starter Pack</h3>
+        <p class="tag">AI functional starter pack</p>
+        <p>One function or industry, bounded. Hybrid fixed, outcome and subscription pricing.</p>
+        <p class="fills">Closes use case, task design and cost governance gaps</p>
+      </div>
+      <div class="offer">
+        <h3>Custom Skills and Plugin Offer</h3>
+        <p class="tag">AI workforce accelerator</p>
+        <p>Skills, plugins and grounding that turn a scenario into finished work.</p>
+        <p class="fills">Closes task design, value story and expansion gaps</p>
+      </div>
+    </div>
+
+    <div class="levels">
+      <div>
+        <h3>Where is your practice today?</h3>
+        <p>Shift the centre of gravity from the product to the customer's transformation. Assess your offers, skills and evidence against the level you're aiming for.</p>
+      </div>
+      <ol class="ladder">
+        <li><small>Level 1</small><b>Product-centric</b><span>Readiness workshops, licensing talks and use-case lists.</span></li>
+        <li><small>Level 2</small><b>Process-centric</b><span>Workflow redesign, prioritised roadmaps, defendable cases and KPI baselines.</span></li>
+        <li><small>Level 3</small><b>Transformation-centric</b><span>Executive AI strategy, operating model, industry plays and managed advisory.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="index" id="index">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Every kit, guide and link in one place</h2>
+      <p>The full index from the three practice guides. Filter by practice to see only what you need.</p>
+    </div>
+    <div class="filter" role="group" aria-label="Filter resources by practice">
+      <button type="button" data-f="all" aria-pressed="true">All practices</button>
+      <button type="button" data-f="advisory" aria-pressed="false">AI advisory</button>
+      <button type="button" data-f="finops" aria-pressed="false">FinOps for AI</button>
+      <button type="button" data-f="change" aria-pressed="false">Agent adoption</button>
+    </div>
+    <ul class="links" id="links"></ul>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Still not sure where your gap is?</h2>
+      <p>Tell the Partner Incubation team where your practice is today. We'll recommend where to start and which engagement fits. <span class="ph">Contact route to confirm</span></p>
+    </div>
+    <a class="btn" href="#contact">Talk to the team</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Prepared by Microsoft Frontier Partner Incubation</span>
+    <span>Mock-up for review. Content drawn from the Advisory, FinOps for AI and agent ACM guides.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var K = "https://aka.ms/";
+  var KIT = ["Cowork Proof of Value Kit", K+"CoworkPartnerKit"];
+  var GUIDE = ["Partner Practice Development Guide", K+"CopilotPartnerGuide"];
+  var DOCS = ["Copilot Cowork on Microsoft Learn", K+"CopilotCoworkDocs"];
+  var CPM = ["Copilot Credit Planning Model", K+"CopilotCreditPlanningModel"];
+  var HUB_BILL = ["Analytics Hub: Cowork billing", "https://microsoft.github.io/Analytics-Hub/cowork-billing/"];
+
+  var components = [
+    { name: "Executive and business discovery", cats: [
+      { say: "I demo when I should be running discovery.", title: "Advisory and discovery skills",
+        head: "Lead with discovery, not a demo. It carries the rest.",
+        why: "This sits under every other category. The best cost model falls flat if the conversation starts wrong: customers want an advisor, not a tour.",
+        checks: ["I open by asking about goals, not with what Copilot does.", "I have a repeatable framework for scoping an engagement.", "Customers come to me for judgement, not only for reporting.", "I can pause a demo and shift into discovery when it's called for."],
+        res: [["Task Ideation Exercise", K+"CoworkPartnerKit", "Proof of Value Kit"], GUIDE, ["Cowork micro-learning", null, "Session 4"], DOCS] },
+      { say: "I defend features instead of the platform.", title: "Compete and positioning",
+        head: "Answer the objective, not the objection.",
+        why: "Models and benchmarks change weekly. Argue the leaderboard and you defend ground that moves; name the objective underneath and the platform wins it.",
+        checks: ["I can name Cowork's durable differentiators without a feature list.", "I know where the compete battlecards live and have read the current set.", "I can hear the unstated objective behind an objection and reframe to it.", "I can say which tool fits a job, including when it isn't Cowork."],
+        res: [["Why Microsoft for Partners", K+"WhyMicrosoftForPartners", "Battlecards"], ["Compete deep dive", null, "Session 3"], DOCS] }
+    ]},
+    { name: "Business value and case", cats: [
+      { say: "Usage won't turn into a credible forecast.", title: "Cost and credit modelling",
+        head: "Answer the cost question with a defensible number.",
+        why: "Every usage-based billing conversation opens with cost. Partners who can't answer with a credible number lose credibility before the value conversation starts.",
+        checks: ["I can explain how tasks and turns become credits, and credits become dollars.", "I've forecast cost before a rollout, not just reported usage after.", "I've run a cost-modelling tool live, in front of a customer.", "I know which assumptions, like rate and task mix, drive the forecast."],
+        res: [CPM, ["Copilot Credits licensing guide", K+"CopilotCredits/LicensingGuide"], ["Business Outcomes Workbook", K+"CoworkPartnerKit", "Proof of Value Kit"], ["Economics of AI and FinOps", null, "Session 2"]] },
+      { say: "We start before anyone captured the baseline.", title: "Business case and ROI",
+        head: "Capture the baseline before the pilot starts.",
+        why: "Value is a comparison. With no captured before, meaning time and cost per task and who does it, there is nothing to measure the after against.",
+        checks: ["I capture today's effort and cost per task before Cowork goes on.", "I agree success metrics and KPIs with the sponsor, in writing.", "I can build a forward ROI case from hours saved, run rate and credit cost.", "The customer signs off the assumptions the case rests on."],
+        res: [["Business Outcomes Workbook", K+"CoworkPartnerKit", "Proof of Value Kit"], ["Engagement Delivery Guide", K+"CoworkPartnerKit", "Proof of Value Kit"], CPM, ["Partner-led customer trials", K+"ABSTrialsRequest"]] }
+    ]},
+    { name: "Process transformation", cats: [
+      { say: "I'm unsure which workflows deliver real value.", title: "Use case fit",
+        head: "Recommend workflows that pay, and say when they don't.",
+        why: "Not all usage is equal. High-volume tasks like inbox triage return far less than fewer, complex ones. Wrong use cases cost budget and credibility.",
+        checks: ["I can map a customer's processes to task categories and spot the fits.", "I know when to recommend a different tool instead of Cowork.", "I can tell high-volume usage apart from high-value usage.", "I have a view on which function should pilot first, and why."],
+        res: [["Cowork Task Packs", K+"CoworkPartnerKit", "All functions"], ["Nifty Fifty scenario catalogue", K+"CoworkPartnerKit"], ["Cowork adoption site", "https://adoption.microsoft.com/copilot/cowork"], ["Key functions and high-value tasks", null, "Session 4"]] },
+      { say: "Right scenario, but the output needs rework.", title: "Task design and scenario build",
+        head: "A good use case still needs a well-built task.",
+        why: "Cowork delivers against how the job was framed. A task that names its sources, deliverables and guardrails returns finished work.",
+        checks: ["I frame a task as the whole job, not just the first step.", "I name the systems and sources a task should ground itself in.", "I define what good looks like: artefacts, structure, exclusions.", "I know when to build a skill or add a plugin rather than reprompt."],
+        res: [["Cowork Task Packs", K+"CoworkPartnerKit", "57 tasks"], ["Anatomy of a great Cowork prompt", null, "Session 1"], ["Skills and plugins in Cowork", K+"CopilotCoworkDocs"], ["Microskilling: Cowork", K+"MicroSkillingCowork", "On demand"]] }
+    ]},
+    { name: "Measurement and proof", cats: [
+      { say: "Usage I can show; dollar value I cannot.", title: "Value storytelling and readout",
+        head: "Turn telemetry into a story a CFO trusts.",
+        why: "Executives don't want a dashboard; they want to know if it was worth it. Report numbers and you're a vendor; interpret them and you're an advisor.",
+        checks: ["I can turn tasks and hours into a defensible dollar calculation.", "I build a value-versus-cost narrative, not just a usage report.", "I lead with the headline insight rather than a data dump.", "I can defend my assumptions, like loaded rate and time saved, under pushback."],
+        res: [["Microsoft Analytics Hub", "https://microsoft.github.io/Analytics-Hub/choose-report/", "Report catalogue"], HUB_BILL, ["Value readout", K+"CoworkPartnerKit", "Delivery Guide"], ["Consumption dashboard walkthrough", null, "Session 2"]] }
+    ]},
+    { name: "Governance and economics", cats: [
+      { say: "I can't predict how usage scales at rollout.", title: "Demand sizing and rollout",
+        head: "Size the rollout before usage and cost scale on you.",
+        why: "Usage rarely grows evenly; a few power users drive most consumption. Partners who don't plan for it get blindsided by cost spikes mid-rollout.",
+        checks: ["I can segment users into usage tiers and estimate consumption per tier.", "I have a rollout sequence, from pilot to org-wide, tied to demand.", "I know the levers, like policies, alerts and limits, that hold cost as it scales.", "I can set expectations for how usage evolves in the first 90 days."],
+        res: [["Cost management guided demos", K+"CostManagementDemo"], ["Cowork Partner Launch Kit", K+"CoworkPartnerLaunchKit"], CPM, HUB_BILL] },
+      { say: "Nobody owns the budget or the guardrails.", title: "Cost governance and chargeback",
+        head: "Put an owner, a budget and a guardrail on spend.",
+        why: "Governance is where consumption stops being a surprise. Policies, budget owners and a chargeback model turn variable cost into managed cost.",
+        checks: ["I can stand up spending policies, limits and alerts in the admin center.", "I've agreed a budget owner and a purchase path with the customer.", "I can recommend central budget, showback or chargeback, and say why.", "I run an agent and skill inventory so spend stays accountable."],
+        res: [["Manage Copilot Cowork", K+"CopilotCoworkDocs", "Microsoft Learn"], ["Copilot Credits on Learn", K+"CopilotCredits/Learn"], ["Chargeback models", K+"CoworkPartnerKit", "Proof of Value Kit"], HUB_BILL] }
+    ]},
+    { name: "Ongoing strategic advisory", cats: [
+      { say: "We prove value once, then the work stops.", title: "Value cadence and expansion",
+        head: "The pilot ends. The advisory relationship shouldn't.",
+        why: "Consumption shifts every month, so a roadmap goes stale fast. Partners who run a recurring value review keep the relationship and the next cohort.",
+        checks: ["I run a scheduled value review rather than waiting to be called back.", "I can recommend the next cohort or function, with the evidence for it.", "I revisit the credit operating model as usage patterns change.", "I have a retained advisory or managed-service offer to move them onto."],
+        res: [["Scale step", K+"CoworkPartnerKit", "Delivery Guide"], GUIDE, ["FY27 Commercial GTM Playbook", K+"FY27PartnerGTMPlaybooks"], ["Cowork Offer Templates", K+"CoworkOfferTemplates"]] }
+    ]}
+  ];
+
+  function el(tag, attrs, text){
+    var e = document.createElement(tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var gaps = document.getElementById("gaps");
+  var detail = document.getElementById("detail");
+  var buttons = [];
+
+  components.forEach(function(c){
+    var block = el("div", {class: "component"});
+    block.appendChild(el("h3", {}, c.name));
+    c.cats.forEach(function(cat){
+      var b = el("button", {type: "button", class: "gap", "aria-pressed": "false", "aria-controls": "detail"});
+      var s = el("span", {}, "\u201C" + cat.say + "\u201D");
+      b.appendChild(s);
+      b.addEventListener("click", function(){ show(cat, b, c.name); if (window.matchMedia("(max-width:900px)").matches) detail.scrollIntoView({behavior: "smooth", block: "start"}); });
+      block.appendChild(b);
+      buttons.push([b, cat, c.name]);
+    });
+    gaps.appendChild(block);
+  });
+
+  function show(cat, btn, comp){
+    buttons.forEach(function(x){ x[0].setAttribute("aria-pressed", x[0] === btn ? "true" : "false"); });
+    detail.innerHTML = "";
+    detail.appendChild(el("p", {class: "cat"}, cat.title));
+    detail.appendChild(el("h2", {}, cat.head));
+    detail.appendChild(el("p", {class: "why"}, cat.why));
+    detail.appendChild(el("h3", {}, "Tick what's already true for you"));
+    var ul = el("ul", {class: "checks"});
+    cat.checks.forEach(function(t){
+      var li = el("li"); var lab = el("label"); var cb = el("input", {type: "checkbox"});
+      lab.appendChild(cb); lab.appendChild(document.createTextNode(t)); li.appendChild(lab); ul.appendChild(li);
+    });
+    detail.appendChild(ul);
+    var verdict = el("p", {class: "verdict"});
+    detail.appendChild(verdict);
+    function update(){
+      var n = ul.querySelectorAll("input:checked").length;
+      verdict.innerHTML = n === 0 ? "Nothing ticked yet." :
+        n < 3 ? "<strong>" + n + " of 4.</strong> This is a real gap. Start with the resources below." :
+        n === 3 ? "<strong>3 of 4.</strong> Close to solid. Use the resources to fill the last check." :
+        "<strong>4 of 4.</strong> This is a strength. Pick another sentence, or build an offer on it.";
+    }
+    ul.addEventListener("change", update); update();
+    detail.appendChild(el("h3", {}, "Resources that close this gap"));
+    var res = el("ul", {class: "res"});
+    cat.res.forEach(function(r){
+      var li = el("li");
+      if (r[1]) li.appendChild(el("a", {href: r[1], target: "_blank", rel: "noopener"}, r[0]));
+      else li.appendChild(el("span", {class: "plain"}, r[0]));
+      li.appendChild(el("small", {}, r[2] || (r[1] ? r[1].replace("https://", "") : "")));
+      res.appendChild(li);
+    });
+    detail.appendChild(res);
+  }
+  show(buttons[0][1], buttons[0][0], buttons[0][2]);
+
+  // Resource index
+  var INDEX = [
+    ["advisory", "Cowork Proof of Value Kit", "Delivery guide, task packs, ROI workbook and pitch deck.", K+"CoworkPartnerKit"],
+    ["advisory", "Cowork Partner Launch Kit", "Ready-to-use launch assets.", K+"CoworkPartnerLaunchKit"],
+    ["advisory", "Practice Development Guide", "The four-chapter build of a Copilot practice.", K+"CopilotPartnerGuide"],
+    ["advisory", "Cowork Offer Templates", "Three ready-made offers with pricing models.", K+"CoworkOfferTemplates"],
+    ["advisory", "FY27 Commercial GTM Playbook", "Frontier go-to-market playbook.", K+"FY27PartnerGTMPlaybooks"],
+    ["advisory", "FY27 SMB GTM Playbook", "The SMB edition.", K+"SMBPartnerPlaybook"],
+    ["advisory", "Why Microsoft for Partners", "Compete battlecards.", K+"WhyMicrosoftForPartners"],
+    ["advisory", "Partner Skilling Hub", "Trainings and learning journeys.", K+"PartnerSkilling"],
+    ["advisory", "Microskilling: Cowork", "On-demand sales and technical skilling.", K+"MicroSkillingCowork"],
+    ["advisory", "Partner-led customer trials", "Trials for customer engagements.", K+"ABSTrialsRequest"],
+    ["finops", "Copilot Credit Planning Model", "Model credit spend by persona and scenario.", K+"CopilotCreditPlanningModel"],
+    ["finops", "Copilot Credits licensing guide", "How credits are bought: pay-as-you-go or prepaid.", K+"CopilotCredits/LicensingGuide"],
+    ["finops", "Copilot Credits on Learn", "Purchase, set-up and cost-management docs.", K+"CopilotCredits/Learn"],
+    ["finops", "Cost management guided demos", "Click-through demos of the admin tools.", K+"CostManagementDemo"],
+    ["finops", "Manage Copilot Cowork", "Admin and governance documentation.", K+"CopilotCoworkDocs"],
+    ["finops", "Analytics Hub: Cowork billing", "Reports and web apps for usage-based billing.", "https://microsoft.github.io/Analytics-Hub/cowork-billing/"],
+    ["finops", "Cowork ROI Model", "Test ROI scenarios without tenant data.", "https://microsoft.github.io/Analytics-Hub/cowork-billing/cowork-roi-model/app/"],
+    ["finops", "Get started with FinOps", "Microsoft Learn training module.", "https://learn.microsoft.com/en-us/training/modules/get-started-with-finops/"],
+    ["change", "Copilot Studio Agents Report", "Usage, resolution and satisfaction to steer each agent.", null],
+    ["change", "Agent scenario prioritisation matrix", "Rank scenarios by business impact and complexity.", null],
+    ["change", "Agentic solution envisioning template", "Problem, personas, current and future state.", null],
+    ["change", "Addressing resistance to agent adoption", "Six common concerns and how to mitigate each.", null],
+    ["change", "Work Trend Index 2025", "The year the Frontier Firm is born.", null]
+  ];
+  var list = document.getElementById("links");
+  INDEX.forEach(function(r){
+    var li = el("li", {"data-t": r[0]});
+    li.appendChild(el("i", {"aria-hidden": "true"}));
+    var d = el("div");
+    if (r[3]) d.appendChild(el("a", {href: r[3], target: "_blank", rel: "noopener"}, r[1]));
+    else d.appendChild(el("b", {}, r[1]));
+    d.appendChild(el("span", {}, r[2]));
+    li.appendChild(d);
+    var c = el("code", {}, r[3] ? r[3].replace("https://", "").replace(/\/$/, "") : "");
+    if (!r[3]) { c.className = "ph"; c.textContent = "Link to confirm"; }
+    li.appendChild(c);
+    list.appendChild(li);
+  });
+  var fbtns = document.querySelectorAll(".filter button");
+  function filter(v){
+    fbtns.forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.f === v ? "true" : "false"); });
+    list.querySelectorAll("li").forEach(function(li){ li.hidden = v !== "all" && li.dataset.t !== v; });
+  }
+  fbtns.forEach(function(b){ b.addEventListener("click", function(){ filter(b.dataset.f); }); });
+  document.querySelectorAll("[data-jump]").forEach(function(a){ a.addEventListener("click", function(){ filter(a.dataset.jump); }); });
+})();
+</script>
+</body>
+</html>
