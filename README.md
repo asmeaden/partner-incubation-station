@@ -12,9 +12,10 @@ Then open http://localhost:8080/.
 
 ## Publish
 
-Every push to `main` deploys automatically via `.github/workflows/pages.yml`.
+Every merge into `main` deploys automatically via `.github/workflows/pages.yml`.
+`main` is protected: changes go through a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Source material
 
-PowerPoint decks and the HTML mock-up stay in OneDrive and are excluded by `.gitignore`.
-Link to them from SharePoint/OneDrive rather than committing them to this public repo.
+Source decks live in the team SharePoint, not in this public repo, and are excluded by `.gitignore`.
+The site links to them rather than holding copies.
