@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resource Bank | Partner Incubation Station</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="resources">
+<main id="main">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Home</a> / Resource Bank</div>
+      <h1>Resource Bank</h1>
+      <p>Every kit, guide, tool and training from the practice guides in one place. Journeys point you to the right ones; this is the full list.</p>
+    </div>
+  </section>
+  <section style="padding-bottom:80px">
+    <div class="wrap">
+      <div class="toolbar">
+        <input class="search" id="q" type="search" placeholder="Search resources" aria-label="Search resources">
+        <div role="group" aria-label="Filter by area" style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="chip" type="button" data-a="all" aria-pressed="true">All areas</button>
+          <button class="chip" type="button" data-a="practice" aria-pressed="false">Practice Development</button>
+          <button class="chip" type="button" data-a="fin" aria-pressed="false">FinOps</button>
+          <button class="chip" type="button" data-a="agent" aria-pressed="false">Agentic and workforce</button>
+        </div>
+      </div>
+      <div class="res-grid" id="grid"></div>
+      <p class="empty" id="empty" hidden>No resources match. Try a different search or area.</p>
+    </div>
+  </section>
+</main>
+<script src="site.js"></script>
+<script>
+(function(){
+  var K = "https://aka.ms/";
+  var R = [
+    ["practice","Kit","Cowork Proof of Value Kit","Delivery guide, pitch deck, task packs, ROI workbook and scenario catalogue.",K+"CoworkPartnerKit"],
+    ["practice","Kit","Cowork Partner Launch Kit","Ready-to-use launch assets.",K+"CoworkPartnerLaunchKit"],
+    ["practice","Guide","Partner Practice Development Guide","Build a Copilot practice in four chapters.",K+"CopilotPartnerGuide"],
+    ["practice","Template","Cowork Offer Templates","Three ready-made offers with pricing models.",K+"CoworkOfferTemplates"],
+    ["practice","Playbook","FY27 Commercial GTM Playbook","Frontier go-to-market playbook.",K+"FY27PartnerGTMPlaybooks"],
+    ["practice","Playbook","FY27 SMB GTM Playbook","The SMB edition.",K+"SMBPartnerPlaybook"],
+    ["practice","Compete","Why Microsoft for Partners","Compete battlecards.",K+"WhyMicrosoftForPartners"],
+    ["practice","Training","Partner Skilling Hub","Trainings and learning journeys.",K+"PartnerSkilling"],
+    ["practice","Training","Microskilling: Cowork","On-demand sales and technical skilling.",K+"MicroSkillingCowork"],
+    ["practice","Programme","Partner-led customer trials","Trials to support your customer engagements.",K+"ABSTrialsRequest"],
+    ["fin","Tool","Copilot Credit Planning Model","Model credit spend by persona and scenario.",K+"CopilotCreditPlanningModel"],
+    ["fin","Guide","Copilot Credits licensing guide","How credits are bought: pay-as-you-go or prepaid.",K+"CopilotCredits/LicensingGuide"],
+    ["fin","Docs","Copilot Credits on Microsoft Learn","Purchase, set-up and cost-management docs.",K+"CopilotCredits/Learn"],
+    ["fin","Demo","Cost management guided demos","Click-through demos of the admin tools.",K+"CostManagementDemo"],
+    ["fin","Docs","Manage Copilot Cowork","Admin and governance documentation.",K+"CopilotCoworkDocs"],
+    ["fin","Reports","Analytics Hub: Cowork billing","Reports and web apps for usage-based billing.","https://microsoft.github.io/Analytics-Hub/cowork-billing/"],
+    ["fin","Tool","Cowork ROI Model","Test ROI scenarios without tenant data.","https://microsoft.github.io/Analytics-Hub/cowork-billing/cowork-roi-model/app/"],
+    ["fin","Tool","Cowork Chargeback","Allocate credit consumption to users and departments.","https://microsoft.github.io/Analytics-Hub/cowork-billing/cowork-chargeback/app/index.html"],
+    ["fin","Training","Get started with FinOps","Microsoft Learn training module.","https://learn.microsoft.com/en-us/training/modules/get-started-with-finops/"],
+    ["agent","Report","Copilot Studio Agents Report","Usage, resolution and satisfaction to steer each agent.",null],
+    ["agent","Template","Agent scenario prioritisation matrix","Rank scenarios by business impact and complexity.",null],
+    ["agent","Template","Agentic solution envisioning template","Problem, personas, current and future state.",null],
+    ["agent","Guide","Addressing resistance to agent adoption","Six common concerns and how to handle each.",null],
+    ["agent","Research","Work Trend Index 2025","The year the Frontier Firm is born.",null]
+  ];
+  var C = { practice:"var(--biz)", fin:"var(--fin)", agent:"var(--agent)" }, N = { practice:"Practice Development", fin:"FinOps", agent:"Agentic and workforce" };
+  var grid = document.getElementById("grid");
+  R.forEach(function(r){
+    grid.insertAdjacentHTML("beforeend", '<article class="res" data-a="' + r[0] + '" style="--c:' + C[r[0]] + '"><span class="kind"><i></i>' + N[r[0]] + " | " + r[1] + "</span><h3>" + r[2] + "</h3><p>" + r[3] + "</p>" +
+      (r[4] ? '<a class="lnk" href="' + r[4] + '" target="_blank" rel="noopener">Open resource</a>' : '<span class="lnk ph">Link to confirm</span>') + "</article>");
+  });
+  var area = "all", q = document.getElementById("q"), chips = document.querySelectorAll(".chip");
+  function apply(){
+    var t = q.value.trim().toLowerCase(), n = 0;
+    grid.querySelectorAll(".res").forEach(function(el){
+      var ok = (area === "all" || el.dataset.a === area) && (!t || el.textContent.toLowerCase().indexOf(t) >= 0);
+      el.hidden = !ok; if (ok) n++;
+    });
+    document.getElementById("empty").hidden = n > 0;
+  }
+  chips.forEach(function(c){ c.addEventListener("click", function(){ area = c.dataset.a; chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); }); apply(); }); });
+  q.addEventListener("input", apply);
+})();
+</script>
+</body>
+</html>

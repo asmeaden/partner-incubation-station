@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Incubation Station</title>
+<meta name="description" content="Guided journeys, services and resources that help Microsoft partners build AI practices across business, workforce, agentic and FinOps.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <h1>Build an AI practice your customers keep investing in.</h1>
+        <p class="lede">Guided journeys built from the Partner Incubation team's practice guides. Answer a few questions at each stop and leave with a plan for your practice.</p>
+        <div class="btns">
+          <a class="btn fade" href="journey.html?j=biz">Start a journey</a>
+          <button class="btn line" type="button" data-tour>Take the tour</button>
+        </div>
+      </div>
+      <div id="tour-video">
+        <button class="video" type="button" data-tour aria-label="Play: Discover Partner Incubation Station. Video coming soon; starts the guided tour.">
+          <span class="t">Discover Partner Incubation Station<small>A two-minute walkthrough of the site</small></span>
+          <span class="play"><i></i></span>
+          <span class="len">2:00</span>
+        </button>
+        <div class="vcap"><span class="ph">Video to record</span><button type="button" data-tour>Or take the guided tour now</button></div>
+      </div>
+    </div>
+
+    <div class="board" role="region" aria-label="Journeys">
+      <div class="board-head"><b>Journeys</b><span>Choose where your practice is heading</span><span class="clock" id="clock" aria-hidden="true">09:00</span></div>
+      <ol class="rows" id="rows"></ol>
+    </div>
+  </div>
+</section>
+
+<section class="band white" id="how">
+  <div class="wrap">
+    <div class="head">
+      <h2>How we help partners</h2>
+      <p>The Partner Incubation team helps Microsoft partners build AI practices that customers buy, adopt and keep paying for. Start on your own, then bring us in when you need depth.</p>
+    </div>
+    <div class="ways">
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h12M12 6l6 6-6 6"/></svg></span><h3>Take a journey</h3><p>Work through a practice area at your own pace and leave with a plan.</p><ul><li>Four guided journeys</li><li>A printable plan for your practice</li><li>Source guides to download</li></ul><span class="when">Any time</span></div>
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 15c3 0 6 1.5 6 4"/></svg></span><h3>Work with us</h3><p>Bring your plan to a session with the team.</p><ul><li>Practice Review</li><li>UBB Deep-Dive</li><li>Roadmap planning</li></ul><span class="when">By request</span></div>
+      <div class="way"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span><h3>Build with us</h3><p>Pilot new assets with your own customers before they're released.</p><ul><li>Open incubation cohorts</li><li>Early access to new tools</li></ul><span class="when">Cohorts through the year</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="whats-on">
+  <div class="wrap">
+    <div class="head">
+      <h2>What's on</h2>
+      <p>Events, trainings, engagements and incubations you can join. Most start from a journey, so your plan comes with you.</p>
+    </div>
+    <div class="svc-tabs" role="group" aria-label="Filter what's on">
+      <button class="chip" type="button" data-k="all" aria-pressed="true">Everything</button>
+      <button class="chip" type="button" data-k="event" aria-pressed="false">Events and training</button>
+      <button class="chip" type="button" data-k="engage" aria-pressed="false">Engagements</button>
+      <button class="chip" type="button" data-k="incubate" aria-pressed="false">Incubations</button>
+      <button class="chip" type="button" data-k="programme" aria-pressed="false">Programmes</button>
+    </div>
+    <div class="svc">
+      <ul class="svc-list" id="svc"></ul>
+      <aside class="svc-side">
+        <h3>How engagements work</h3>
+        <p>Bring the plan from your journey and we'll start from where you are, not from scratch.</p>
+        <ol><li>Take a journey and save your plan</li><li>Request a Practice Review, UBB Deep-Dive or Roadmap</li><li>We agree priorities and the support we'll provide</li></ol>
+        <a class="btn" href="#team">Request an engagement</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="band white" id="journeys">
+  <div class="wrap">
+    <div class="head">
+      <h2>Every journey ends with a plan</h2>
+      <p>Practice Development covers business, workforce and agentic transformation. FinOps runs alongside them. Journeys share some stops, so progress on one counts towards another.</p>
+    </div>
+    <div class="mapcard">
+      <div class="map-tabs" role="group" aria-label="Show a journey">
+        <span class="grp">Practice Development</span>
+        <button type="button" data-line="biz" style="--c:var(--biz)" aria-pressed="false"><i></i>Business</button>
+        <button type="button" data-line="work" style="--c:var(--work)" aria-pressed="false"><i></i>Workforce</button>
+        <button type="button" data-line="agent" style="--c:var(--agent)" aria-pressed="false"><i></i>Agentic</button>
+        <span class="grp" style="margin-left:10px">FinOps</span>
+        <button type="button" data-line="fin" style="--c:var(--fin)" aria-pressed="false"><i></i>FinOps for AI</button>
+      </div>
+      <div class="map-body">
+        <svg class="map" id="mapsvg" viewBox="0 0 760 420" role="img" aria-label="Four journeys starting from one point, sharing some stops, and ending at your plan"></svg>
+        <div class="detail" id="detail" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="head">
+      <h2>What's inside</h2>
+      <p>Three practice guides, rebuilt as journeys. The guides are still here when you want the full detail.</p>
+    </div>
+    <div class="inside">
+      <div class="stat"><b>10</b><span>Capability checks that pinpoint your practice's gaps</span></div>
+      <div class="stat"><b>37</b><span>Microsoft and open-source tools mapped to the services they support</span></div>
+      <div class="stat"><b>3</b><span>Ready-made offer templates you can adapt and price</span></div>
+      <div class="stat"><b>30+</b><span>Kits, playbooks and trainings in the Resource Bank</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band white" id="team">
+  <div class="wrap team">
+    <div>
+      <h2>The team behind the journeys</h2>
+      <p>Practice development, business value and consumption specialists in Microsoft Frontier Partner Incubation. When a question needs a person, it comes to one of us.</p>
+      <a class="btn" href="#" style="--c:var(--ink)">Talk to the team</a>
+    </div>
+    <div class="people">
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+      <div class="person"><span class="avatar"><span></span></span><div><b class="ph">Name</b><small class="ph">Role</small></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script>
+(function(){
+  var J = window.JOURNEYS, reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Clock
+  var clock = document.getElementById("clock");
+  function tick(){ var d = new Date(); clock.textContent = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); }
+  tick(); setInterval(tick, 30000);
+
+  // Departure board
+  var VIA = { biz:"discovery, business case, use-case fit, value story", work:"plan, launch, adopt, manage, improve", agent:"scenario, pilot, adoption, value, scale", fin:"cost modelling, plan, control, optimise" };
+  var rows = document.getElementById("rows");
+  ["biz","work","agent","fin"].forEach(function(k){
+    var L = J[k], live = k === "biz";
+    rows.insertAdjacentHTML("beforeend",
+      '<li class="row" style="--c:' + L.color + '"><span class="bar"></span>' +
+      '<span class="dest"><span class="flap" data-text="' + L.name + '">' + L.name + '</span><small>' + L.group + '</small></span>' +
+      '<span class="via">Calling at <b>' + VIA[k] + '</b></span>' +
+      '<span class="time">' + L.time.replace("About ", "") + '<small>' + L.stops.length + ' stops</small></span>' +
+      '<a class="go' + (live ? "" : " soon") + '" href="journey.html?j=' + k + '"><span>' + (live ? "Start journey" : "Preview stops") + '</span></a></li>');
+  });
+  if (!reduce) {
+    var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    document.querySelectorAll(".flap").forEach(function(el, row){
+      var target = el.dataset.text, start = performance.now();
+      el.setAttribute("aria-hidden", "true");
+      var sr = document.createElement("span"); sr.className = "sr"; sr.textContent = target; el.after(sr);
+      var settle = target.split("").map(function(_, i){ return 260 + row * 160 + i * 38; }), last = settle[settle.length - 1];
+      (function frame(){
+        var t = performance.now() - start, done = true;
+        el.textContent = target.split("").map(function(ch, i){ if (ch === " " || t >= settle[i]) return ch; done = false; return A[Math.floor(Math.random() * A.length)]; }).join("");
+        if (!done) requestAnimationFrame(frame);
+      })();
+      setTimeout(function(){ el.textContent = target; }, last + 200);
+    });
+  }
+
+  // What's on
+  var SVC = [
+    { k:"event", c:"var(--biz)", d:["On","demand"], kind:"Training", t:"Cowork Micro-Learning Series", p:"Five short sessions: foundation, economics and FinOps, compete, the Proof of Value Kit and offer building.", a:"Watch now", h:"https://aka.ms/MicroSkillingCowork" },
+    { k:"event", c:"var(--biz)", d:["04","Dec"], ph:true, kind:"Live session", t:"Office hours: Business Transformation", p:"Bring your journey plan and get answers from the team.", a:"Register", h:"#" },
+    { k:"event", c:"var(--fin)", d:["11","Dec"], ph:true, kind:"Webinar", t:"FinOps for AI: building the practice", p:"Plan, control and optimise services, and the tools that support each.", a:"Register", h:"#" },
+    { k:"engage", c:"var(--agent)", d:["By","request"], kind:"Engagement", t:"Practice Review", p:"Score your practice against the FY27 maturity model with a specialist.", a:"Request", h:"#team" },
+    { k:"engage", c:"var(--fin)", d:["By","request"], kind:"Engagement", t:"UBB Deep-Dive", p:"Usage-based billing readiness across eight areas, with a maturity score and next steps.", a:"Request", h:"#team" },
+    { k:"engage", c:"var(--biz)", d:["By","request"], kind:"Engagement", t:"Roadmap planning", p:"Agree priorities and the support we'll provide.", a:"Request", h:"#team" },
+    { k:"incubate", c:"var(--fin)", d:["Open","now"], kind:"Incubation", t:"FinOps practice development cohort", p:"Build your FinOps for AI capability with the team. Register your interest.", a:"Register interest", h:"#" },
+    { k:"incubate", c:"var(--agent)", d:["Soon",""], ph:true, kind:"Incubation", t:"Agent adoption pilot", p:"Trial new agent adoption assets with your own customers.", a:"Get notified", h:"#" },
+    { k:"programme", c:"var(--work)", d:["Any","time"], kind:"Programme", t:"Partner-led customer trials", p:"Trials to support your customer engagements.", a:"Apply", h:"https://aka.ms/ABSTrialsRequest" }
+  ];
+  var svc = document.getElementById("svc");
+  SVC.forEach(function(s){
+    var any = isNaN(+s.d[0]);
+    svc.insertAdjacentHTML("beforeend",
+      '<li class="svc-item" data-k="' + s.k + '" style="--c:' + s.c + '"><span class="date' + (any ? " any" : "") + '"' + (s.ph ? ' title="Date to confirm"' : "") + '><b' + (s.ph ? ' class="ph"' : "") + '>' + s.d[0] + '</b><span>' + s.d[1] + '</span></span>' +
+      '<div><span class="kind"><i></i>' + s.kind + '</span><h3>' + s.t + '</h3><p>' + s.p + '</p></div>' +
+      '<a class="btn line" href="' + s.h + '"' + (s.h.indexOf("http") === 0 ? ' target="_blank" rel="noopener"' : "") + '>' + s.a + '</a></li>');
+  });
+  var chips = document.querySelectorAll(".svc-tabs .chip");
+  chips.forEach(function(c){ c.addEventListener("click", function(){
+    chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+    svc.querySelectorAll(".svc-item").forEach(function(li){ li.hidden = c.dataset.k !== "all" && li.dataset.k !== c.dataset.k; });
+  }); });
+
+  // Journey map
+  var MAP = { biz:{ y:70, stops:["Discovery","Business case","Use-case fit","Value story"] }, fin:{ y:165, stops:["Cost modelling","Business case","Control","Optimise"] },
+              agent:{ y:260, stops:["Scenario","Adoption","Value story","Scale"] }, work:{ y:355, stops:["Plan","Adoption","Manage","Improve"] } };
+  var STEPS = { biz:["Place your practice on the maturity path","Pick the problems that sound like your team","Check yourself against seven capabilities","Check the seats on your advisory team","Get your plan"] };
+  var SHARED = [["biz","fin","Business case"],["biz","agent","Value story"],["agent","work","Adoption"]];
+  var X0 = 40, X1 = 720, XS = [250, 360, 470, 580], MID = 210, NS = "http://www.w3.org/2000/svg", svg = document.getElementById("mapsvg");
+  function mk(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  function d(y){ return "M"+X0+","+MID+" C140,"+MID+" 120,"+y+" 220,"+y+" L610,"+y+" C700,"+y+" 640,"+MID+" "+X1+","+MID; }
+  var gLinks = mk("g", {}), gLines = mk("g", {}), gStops = mk("g", {}), paths = {};
+  Object.keys(MAP).forEach(function(k){
+    var L = MAP[k], c = J[k].color;
+    mk("path", { class:"glow", d:d(L.y), stroke:c, "data-l":k }, gLines);
+    paths[k] = mk("path", { class:"path", d:d(L.y), stroke:c, "data-l":k }, gLines);
+    L.stops.forEach(function(s, i){
+      if (SHARED.some(function(x){ return x[2] === s && (x[0] === k || x[1] === k); })) return;
+      mk("circle", { class:"stop", cx:XS[i], cy:L.y, r:7, stroke:c, "data-l":k }, gStops);
+      mk("text", { class:"lbl", x:XS[i], y:L.y - 16, "text-anchor":"middle", "data-l":k }, gStops).textContent = s;
+    });
+  });
+  SHARED.forEach(function(x){
+    var a = MAP[x[0]], b = MAP[x[1]], xx = XS[a.stops.indexOf(x[2])], l = x[0] + " " + x[1];
+    mk("line", { class:"link", x1:xx, y1:a.y, x2:xx, y2:b.y, "data-l":l }, gLinks);
+    [a, b].forEach(function(L){ mk("circle", { class:"stop", cx:xx, cy:L.y, r:8, stroke:"var(--ink)", "data-l":l }, gStops); });
+    mk("text", { class:"lbl", x:xx + 12, y:(a.y + b.y)/2 + 4, "data-l":l }, gStops).textContent = x[2];
+  });
+  mk("circle", { class:"node", cx:X0, cy:MID, r:11 }); mk("circle", { cx:X0, cy:MID, r:4, fill:"#fff" });
+  mk("text", { class:"node-lbl", x:X0 - 4, y:MID + 34 }).textContent = "Start";
+  mk("circle", { class:"node", cx:X1, cy:MID, r:14 }); mk("circle", { cx:X1, cy:MID, r:5, fill:"var(--amber)" });
+  mk("text", { class:"node-lbl", x:X1, y:MID + 38, "text-anchor":"end" }).textContent = "Your plan";
+  var trav = mk("circle", { class:"traveller", r:7, cx:X0, cy:MID });
+
+  var detail = document.getElementById("detail"), tabs = document.querySelectorAll(".map-tabs button"), anim;
+  function focus(k){
+    tabs.forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.line === k ? "true" : "false"); });
+    cancelAnimationFrame(anim); trav.style.opacity = 0;
+    if (!k) {
+      svg.removeAttribute("data-focus"); detail.style.removeProperty("--c");
+      detail.innerHTML = '<span class="tag"><i></i>Four journeys</span><h3>Choose a journey to see its stops</h3><p>Each journey takes 10 to 15 minutes and ends with a plan you can print or save as a PDF. Your progress is saved on this device.</p><p>Dotted links show where journeys share a stop.</p>';
+      return;
+    }
+    var L = J[k], live = k === "biz"; svg.setAttribute("data-focus", k); detail.style.setProperty("--c", L.color);
+    detail.innerHTML = '<span class="tag"><i></i>' + L.group + '</span><h3>' + L.name + '</h3><p>' + L.intro + '</p><ol>' +
+      (STEPS[k] || L.stops).map(function(s){ return "<li>" + s + "</li>"; }).join("") + '</ol><div class="out"><b>You leave with:</b> ' +
+      (L.out || "Your maturity level, top three gaps, a matching offer and a learning path") + '</div><a class="btn" href="journey.html?j=' + k + '">' + (live ? "Start this journey" : "Preview the stops") + '</a>';
+    if (reduce) return;
+    var p = paths[k], len = p.getTotalLength(), t0 = performance.now();
+    trav.setAttribute("stroke", L.color); trav.style.opacity = 1;
+    (function step(now){
+      var f = Math.min(1, (now - t0) / 1600), e = f < .5 ? 2*f*f : 1 - Math.pow(-2*f + 2, 2)/2, pt = p.getPointAtLength(e * len);
+      trav.setAttribute("cx", pt.x); trav.setAttribute("cy", pt.y);
+      if (f < 1) anim = requestAnimationFrame(step);
+    })(t0);
+  }
+  tabs.forEach(function(b){ b.addEventListener("click", function(){ focus(b.getAttribute("aria-pressed") === "true" ? null : b.dataset.line); }); });
+  Object.keys(paths).forEach(function(k){ paths[k].style.cursor = "pointer"; paths[k].addEventListener("click", function(){ focus(k); }); });
+  focus(null);
+
+  // Guided tour
+  var TOUR = [
+    { el:"#tour-video", t:"Welcome to the station", p:"This is where Microsoft partners build AI practices with the Partner Incubation team. The walkthrough video will live here." },
+    { el:".board", t:"Pick a journey", p:"Each journey covers one practice area. Answer questions at each stop and leave with a plan for your practice." },
+    { el:"#how .ways", t:"Three ways we help", p:"Start on your own with a journey, bring your plan to a session with us, or pilot new assets in an incubation." },
+    { el:"#whats-on .svc", t:"What's on", p:"Upcoming events, trainings, engagements and incubations. Filter by type to find what fits." },
+    { el:"#journeys .mapcard", t:"See where journeys lead", p:"Select a journey to see its stops and what you'll leave with. Shared stops mean progress carries across." },
+    { el:"#team", t:"Meet the team", p:"The specialists behind every journey. Talk to us any time." },
+    { el:"#helpBtn", t:"Ask a question", p:"Ask in your own words. Answers come from our practice guides, and the team picks up anything that needs a person." }
+  ];
+  var hole, pop, ti = 0;
+  function place(){
+    var s = TOUR[ti], el = document.querySelector(s.el); if (!el) return;
+    var r = el.getBoundingClientRect(), pad = 8;
+    hole.style.cssText = "top:" + (r.top - pad) + "px;left:" + (r.left - pad) + "px;width:" + (r.width + pad*2) + "px;height:" + (r.height + pad*2) + "px";
+    var pw = pop.offsetWidth, ph = pop.offsetHeight, vw = innerWidth, vh = innerHeight, top, left;
+    if (r.bottom + ph + 24 < vh) top = r.bottom + 18; else if (r.top - ph - 24 > 0) top = r.top - ph - 18; else top = Math.max(16, vh - ph - 16);
+    left = Math.min(Math.max(16, r.left), vw - pw - 16);
+    pop.style.top = top + "px"; pop.style.left = left + "px";
+  }
+  function show(i){
+    ti = i; var s = TOUR[i], el = document.querySelector(s.el);
+    pop.innerHTML = '<button class="skipt" type="button" data-a="end">Skip tour</button><span class="stepn">' + (i+1) + ' of ' + TOUR.length + '</span><h3>' + s.t + '</h3><p>' + s.p + '</p>' +
+      '<div class="row2"><span class="dots">' + TOUR.map(function(_, j){ return '<i class="' + (j === i ? "on" : "") + '"></i>'; }).join("") + '</span><span class="acts">' +
+      (i ? '<button class="btn line" type="button" data-a="back">Back</button>' : "") +
+      '<button class="btn fade" type="button" data-a="next">' + (i === TOUR.length - 1 ? "Finish" : "Next") + '</button></span></div>';
+    var r = el.getBoundingClientRect();
+    if (el.id !== "helpBtn" && (r.top < 80 || r.bottom > innerHeight - 40)) {
+      scrollTo({ top: scrollY + r.top - Math.max(90, (innerHeight - Math.min(r.height, innerHeight - 260)) / 2 - 80), behavior: reduce ? "auto" : "smooth" });
+      setTimeout(place, reduce ? 0 : 450);
+    }
+    place();
+    pop.querySelector("[data-a=next]").focus();
+  }
+  function end(){ hole.remove(); pop.remove(); hole = pop = null; removeEventListener("resize", place); removeEventListener("scroll", place); document.removeEventListener("keydown", key); }
+  function key(e){ if (e.key === "Escape") end(); }
+  function start(){
+    if (hole) return;
+    hole = document.createElement("div"); hole.className = "tour-hole";
+    pop = document.createElement("div"); pop.className = "tour-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Guided tour");
+    document.body.append(hole, pop);
+    pop.addEventListener("click", function(e){
+      var a = e.target.closest("[data-a]"); if (!a) return;
+      if (a.dataset.a === "end") end(); else if (a.dataset.a === "back") show(ti - 1); else if (ti === TOUR.length - 1) end(); else show(ti + 1);
+    });
+    addEventListener("resize", place); addEventListener("scroll", place, { passive:true }); document.addEventListener("keydown", key);
+    show(0);
+  }
+  document.querySelectorAll("[data-tour]").forEach(function(b){ b.addEventListener("click", start); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journey | Partner Incubation Station</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.jhero{padding-block:clamp(32px,4vw,52px) 28px;position:relative;overflow:hidden}
+.jhero::before{content:"";position:absolute;inset:-60% -10% auto auto;width:760px;height:760px;background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 16%,transparent),transparent 70%);pointer-events:none}
+.jhero .wrap{position:relative}
+.jhero h1{font-size:clamp(32px,4vw,50px);line-height:1.05;letter-spacing:-.035em;margin:6px 0 10px}
+.jhero p{margin:0 0 16px;color:var(--ink-2);max-width:62ch;font-size:18px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-size:13.5px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.pill.c{background:var(--c);border-color:var(--c);color:#fff}
+.linkbtn{background:none;border:0;padding:5px 8px;font-size:13.5px;font-weight:650;color:var(--muted);cursor:pointer}
+.linkbtn:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+
+.jgrid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:start;padding-bottom:80px}
+.rail{position:sticky;top:84px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 18px;box-shadow:var(--shadow)}
+.rail h2{font-size:13.5px;font-weight:650;color:var(--muted);margin:0 0 14px}
+.rail ol{list-style:none;margin:0;padding:0;position:relative}
+.rail ol::before{content:"";position:absolute;left:11px;top:12px;bottom:12px;width:4px;border-radius:2px;background:var(--line)}
+.rail .fill{position:absolute;left:11px;top:12px;width:4px;border-radius:2px;background:var(--c);transition:height .5s var(--ease)}
+.rail li{position:relative}
+.rail button{display:flex;gap:14px;align-items:center;width:100%;background:none;border:0;padding:9px 0;text-align:left;cursor:pointer;font-size:15px;font-weight:550;color:var(--muted)}
+.rail button[disabled]{cursor:default}
+.rail .dot{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--line-2);position:relative;z-index:1;display:grid;place-items:center;transition:all .3s}
+.rail .done .dot{border-color:var(--c);background:var(--c)}
+.rail .done .dot::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.rail .done button{color:var(--ink-2)}
+.rail .cur .dot{border-color:var(--c);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 18%,transparent)}
+.rail .cur button{color:var(--ink);font-weight:700}
+.rail .end .dot{border-radius:8px}
+.rail .note{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.stage-body{padding:clamp(22px,3.4vw,40px)}
+.stage-body.enter{animation:enter .45s var(--ease)}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.stage h2{font-size:clamp(25px,2.6vw,32px);line-height:1.12;letter-spacing:-.025em;margin:0 0 8px}
+.stage .sub{margin:0 0 24px;color:var(--ink-2);max-width:62ch}
+.stage-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px clamp(22px,3.4vw,40px);border-top:1px solid var(--line);background:#fbfbfe}
+.stage-foot .hint{font-size:14px;color:var(--muted)}
+.stage-foot .acts{display:flex;gap:8px;margin-left:auto}
+
+.opts{display:grid;gap:12px}
+.opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{position:relative;display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line-2);border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+.opt:hover{border-color:var(--c)}
+.opt[aria-pressed="true"],.opt[aria-checked="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 6%,#fff);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 14%,transparent)}
+.opt .box{flex:none;width:22px;height:22px;margin-top:2px;border-radius:6px;border:2px solid var(--line-2);display:grid;place-items:center;transition:all .2s}
+.opt.radio .box{border-radius:50%}
+.opt[aria-pressed="true"] .box,.opt[aria-checked="true"] .box{background:var(--c);border-color:var(--c)}
+.opt[aria-pressed="true"] .box::after,.opt[aria-checked="true"] .box::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.opt b{display:block;font-size:16.5px;letter-spacing:-.01em}
+.opt span.d{display:block;font-size:14.5px;color:var(--ink-2)}
+.opt small{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+.opt .q{font-size:17px;font-weight:600;line-height:1.35}
+.opt .lvl{font-size:12.5px;font-weight:700;color:var(--c)}
+.opt .core{position:absolute;right:12px;top:10px;font-size:12px;font-weight:650;color:var(--c)}
+.field{margin-top:22px;max-width:420px}
+.field label{display:block;font-size:14px;font-weight:650;margin-bottom:6px}
+.field input{width:100%;font:inherit;border:1px solid var(--line-2);border-radius:10px;padding:10px 12px}
+.field input:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 15%,transparent)}
+
+.capnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.capnav button{font-size:13px;font-weight:600;border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:5px 11px;cursor:pointer;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.capnav button.seen{border-color:var(--c);color:var(--ink)}
+.capnav button[aria-current="step"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.capnav button .f{width:7px;height:7px;border-radius:50%;background:var(--amber)}
+.capmeta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13.5px;font-weight:650;color:var(--muted);margin-bottom:6px}
+.flagged{background:#fff4d6;color:#7a5600;border-radius:999px;padding:2px 10px}
+.why{background:var(--bg);border-left:4px solid var(--c);border-radius:0 10px 10px 0;padding:12px 16px;margin:0 0 22px;color:var(--ink-2)}
+.capprog{height:6px;background:var(--line);border-radius:3px;margin-bottom:18px;overflow:hidden}
+.capprog span{display:block;height:100%;background:var(--c);transition:width .4s var(--ease)}
+
+/* Plan */
+.plan-hero{background:linear-gradient(160deg,var(--night-2),var(--night));color:#fff;border-radius:18px;padding:clamp(22px,3vw,32px);position:relative;overflow:hidden;margin-bottom:26px}
+.plan-hero::before{content:"";position:absolute;inset:-40% -20% auto auto;width:520px;height:520px;background:radial-gradient(closest-side,rgba(122,79,216,.45),transparent 70%)}
+.plan-hero > *{position:relative}
+.plan-hero .for{font-size:14px;color:#aab3d6;font-weight:600}
+.plan-hero h2{font-size:clamp(26px,3vw,36px);letter-spacing:-.03em;margin:4px 0 6px}
+.plan-hero p{color:#c3cae6;margin:0 0 22px;max-width:60ch}
+.ladder{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:end}
+.rung{border-radius:12px;padding:14px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);min-height:96px}
+.rung:nth-child(2){min-height:118px}.rung:nth-child(3){min-height:140px}
+.rung small{display:block;font-size:12.5px;color:#8a93b8;font-weight:650}
+.rung b{display:block;font-size:16px}
+.rung .mk{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px}
+.rung.you{background:var(--fade);box-shadow:0 10px 30px rgba(79,96,224,.4)}
+.rung.you small{color:#dfe3ff}
+.rung .mk.y{background:#fff;color:var(--night)}
+.rung .mk.s{background:rgba(255,255,255,.12);color:#dfe3ff}
+.score{display:flex;gap:28px;flex-wrap:wrap;margin-top:20px;font-size:14px;color:#aab3d6}
+.score b{display:block;font-size:28px;color:#fff;letter-spacing:-.02em;line-height:1.1}
+
+.psec{margin:0 0 30px}
+.psec > h3{font-size:21px;letter-spacing:-.015em;margin:0 0 4px}
+.psec > p{margin:0 0 16px;color:var(--ink-2)}
+.bars{display:grid;gap:10px}
+.barrow{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 84px;gap:14px;align-items:center;font-size:15px}
+.barrow .nm{font-weight:600;display:flex;gap:6px;align-items:center}
+.barrow .nm i{width:7px;height:7px;border-radius:50%;background:var(--amber);flex:none}
+.track{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.track span{display:block;height:100%;border-radius:6px;width:0;transition:width .8s var(--ease)}
+.band-gap{background:#e2574c}.band-dev{background:var(--amber)}.band-str{background:var(--c)}
+.barrow .lb{font-size:13px;font-weight:650;color:var(--muted);text-align:right}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;gap:6px;align-items:center}
+.legend i{width:12px;height:8px;border-radius:3px}
+
+.gaps{display:grid;gap:14px}
+.gap{border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px}
+.gap .n{width:44px;height:44px;border-radius:12px;background:var(--c);color:#fff;font-weight:700;font-size:18px;display:grid;place-items:center}
+.gap h4{margin:0 0 2px;font-size:18px;letter-spacing:-.01em}
+.gap .cn{font-size:13.5px;font-weight:650;color:var(--muted)}
+.gap p{margin:6px 0 10px;color:var(--ink-2);font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cols h5{margin:0 0 6px;font-size:13.5px;color:var(--muted)}
+.cols ul{margin:0;padding:0;list-style:none;font-size:14.5px}
+.cols li{padding:6px 0;border-top:1px solid var(--line)}
+.cols a{font-weight:650;color:var(--biz)}
+.cols a:hover{text-decoration:underline;text-underline-offset:3px}
+.cols small{color:var(--muted)}
+
+.twoup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px}
+.card .k{font-size:13.5px;font-weight:650;color:var(--muted)}
+.card h4{margin:4px 0 2px;font-size:19px;letter-spacing:-.015em}
+.card .tg{font-style:italic;color:var(--ink-2);margin:0 0 8px}
+.card p{margin:0 0 10px;color:var(--ink-2);font-size:15px}
+.seatlist{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
+.seatlist span{font-size:13px;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--bg);color:var(--muted)}
+.seatlist span.have{background:color-mix(in srgb,var(--c) 12%,#fff);color:var(--ink)}
+.steps3{list-style:none;margin:0;padding:0;counter-reset:n;display:grid;gap:10px}
+.steps3 li{counter-increment:n;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.steps3 li::before{content:counter(n);width:30px;height:30px;border-radius:50%;background:var(--fade);color:#fff;font-weight:700;display:grid;place-items:center}
+.steps3 b{display:block}
+.steps3 span{font-size:14.5px;color:var(--ink-2)}
+.steps3 .btn{padding:8px 14px;font-size:14px}
+.disclaim{font-size:13px;color:var(--muted);margin:20px 0 0}
+
+/* Preview (journeys in build) */
+.preview .soon{display:inline-block;font-size:13px;font-weight:700;color:#7a5600;background:#fff4d6;border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.preview ol{list-style:none;margin:0 0 24px;padding:0;counter-reset:n}
+.preview li{counter-increment:n;display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-weight:600}
+.preview li::before{content:counter(n);flex:none;width:28px;height:28px;border-radius:50%;border:3px solid var(--c);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--c)}
+.preview .out{background:var(--bg);border-radius:12px;padding:14px 16px;margin-bottom:22px}
+
+@media (max-width:980px){
+  .jgrid{grid-template-columns:1fr}
+  .rail{position:static}
+  .rail ol{display:flex;gap:4px;overflow-x:auto}
+  .rail ol::before,.rail .fill{display:none}
+  .rail li{flex:1;min-width:0}
+  .rail button{flex-direction:column;gap:6px;font-size:12.5px;text-align:center}
+  .rail .note{display:none}
+  .opts.two,.cols,.twoup{grid-template-columns:1fr}
+  .barrow{grid-template-columns:minmax(0,1fr) 70px}
+  .barrow .track{grid-column:1/-1;grid-row:2}
+}
+@media (max-width:620px){
+  .ladder{grid-template-columns:1fr}.rung{min-height:0!important}
+  .steps3 li{grid-template-columns:30px minmax(0,1fr)}
+  .steps3 .btn{grid-column:2;justify-self:start}
+  .stage-foot .hint{display:none}
+}
+@media print{
+  header.top,footer.site,.help-btn,.dock,.rail,.stage-foot,.jhero,.skip,.noprint{display:none!important}
+  body{background:#fff;font-size:12pt}
+  .jgrid{display:block;padding:0}
+  .stage{border:0;box-shadow:none}
+  .stage-body{padding:0;animation:none}
+  .plan-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .track span,.gap .n,.rung.you{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .psec,.gap,.card{break-inside:avoid}
+}
+</style>
+</head>
+<body data-page="practice">
+<script>
+  var JK = new URLSearchParams(location.search).get("j") || "biz";
+  if (["biz","work","agent","fin"].indexOf(JK) < 0) JK = "biz";
+  if (JK === "fin") document.body.setAttribute("data-page", "fin");
+</script>
+
+<main id="main">
+  <section class="jhero" id="jhero">
+    <div class="wrap">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="jtitle"></h1>
+      <p id="jintro"></p>
+      <div class="meta" id="jmeta"></div>
+    </div>
+  </section>
+  <div class="wrap jgrid">
+    <aside class="rail" aria-label="Journey stops">
+      <h2>Your route</h2>
+      <ol id="rail"><span class="fill" id="fill"></span></ol>
+      <p class="note" id="railnote"></p>
+    </aside>
+    <section class="stage" aria-live="polite">
+      <div class="stage-body" id="body"></div>
+      <div class="stage-foot" id="foot"></div>
+    </section>
+  </div>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script>
+(function(){
+  var J = window.JOURNEYS[JK], reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.title = J.name + " | Partner Incubation Station";
+  document.documentElement.style.setProperty("--c", J.color);
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  $("crumb").innerHTML = '<a href="index.html">Home</a> / ' + (J.group === "FinOps" ? "FinOps" : '<a href="index.html#journeys">Practice Development</a>') + " / " + J.name;
+  $("jtitle").textContent = J.name;
+  $("jintro").textContent = J.intro;
+
+  var live = JK === "biz";
+  $("jmeta").innerHTML = '<span class="pill c">' + J.group + '</span><span class="pill">' + J.time + '</span><span class="pill">Built from: ' + J.source + '</span>' +
+    (live ? '<span class="pill">Progress saved on this device</span><button class="linkbtn" type="button" id="restart">Start over</button>' : "");
+
+  // Rail
+  var STOPS = J.stops;
+  function rail(cur, maxSeen){
+    var ol = $("rail");
+    ol.querySelectorAll("li").forEach(function(li){ li.remove(); });
+    STOPS.forEach(function(s, i){
+      var cls = i < cur || (i <= maxSeen && i !== cur && live) ? "done" : i === cur ? "cur" : "";
+      if (i === STOPS.length - 1) cls += " end";
+      var canGo = live && i <= maxSeen && i !== cur;
+      ol.insertAdjacentHTML("beforeend", '<li class="' + cls + '"><button type="button" data-stop="' + i + '"' + (canGo ? "" : " disabled") + (i === cur ? ' aria-current="step"' : "") + '><span class="dot"></span>' + esc(s) + "</button></li>");
+    });
+    var items = ol.querySelectorAll("li");
+    if (items.length > 1 && cur >= 0) {
+      var a = items[0].offsetTop, b = items[Math.min(cur, items.length - 1)].offsetTop;
+      $("fill").style.height = (b - a) + "px";
+    } else $("fill").style.height = "0";
+  }
+  $("rail").addEventListener("click", function(e){ var b = e.target.closest("button[data-stop]"); if (b && !b.disabled) go(+b.dataset.stop); });
+
+  if (!live) { preview(); return; }
+
+  // ---------- Business Transformation journey ----------
+  var KEY = "pis-v5-biz", CAPS = J.caps;
+  var blank = function(){ var c = {}; CAPS.forEach(function(x){ c[x.id] = [false,false,false,false]; }); return { stop:0, seen:0, level:0, name:"", flags:[], checks:c, seats:J.seats.map(function(){ return false; }), cap:0, capSeen:[] }; };
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || blank(); } catch(e){ S = blank(); }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+  $("restart").addEventListener("click", function(){ if (confirm("Clear your answers and start this journey again?")) { S = blank(); save(); go(0); } });
+
+  function capOrder(){ return CAPS.slice().sort(function(a, b){ return (S.flags.indexOf(b.id) >= 0) - (S.flags.indexOf(a.id) >= 0); }); }
+
+  function go(i, keepScroll){
+    S.stop = i; S.seen = Math.max(S.seen, i); save();
+    rail(i, S.seen);
+    $("railnote").textContent = i === STOPS.length - 1 ? "Print your plan or save it as a PDF." : "Stop " + (i + 1) + " of " + STOPS.length + ". You can go back to any stop you've visited.";
+    [stop0, stop1, stop2, stop3, plan][i]();
+    var body = $("body");
+    body.classList.remove("enter"); void body.offsetWidth; if (!reduce) body.classList.add("enter");
+    if (!keepScroll) { var top = $("main").querySelector(".jgrid").getBoundingClientRect().top + scrollY - 80; if (scrollY > top) scrollTo({ top: top, behavior: reduce ? "auto" : "smooth" }); }
+  }
+  function foot(opts){
+    $("foot").innerHTML = '<span class="hint">' + (opts.hint || "") + '</span><span class="acts">' +
+      (opts.back !== false ? '<button class="btn line" type="button" id="back">Back</button>' : "") +
+      '<button class="btn" type="button" id="next"' + (opts.ok === false ? " disabled" : "") + ">" + (opts.next || "Continue") + "</button></span>";
+    if ($("back")) $("back").onclick = opts.onBack;
+    $("next").onclick = opts.onNext;
+  }
+
+  function stop0(){
+    $("body").innerHTML = '<h2>Where is your practice today?</h2><p class="sub">Pick the description closest to how you work now. Your answers stay on this device.</p>' +
+      '<div class="opts" role="radiogroup" aria-label="Practice level">' + J.levels.map(function(l){
+        return '<button type="button" class="opt radio" role="radio" aria-checked="' + (S.level === l.id) + '" data-l="' + l.id + '"><span class="box"></span><span><span class="lvl">Level ' + l.id + '</span><b>' + l.name + '</b><span class="d">' + l.text + '</span><small>Typical evidence: ' + l.evidence + '</small></span></button>';
+      }).join("") + '</div>' +
+      '<div class="field"><label for="pname">Practice or company name (optional)</label><input id="pname" value="' + esc(S.name) + '" placeholder="Shown on your plan" autocomplete="organization"></div>';
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ S.level = +b.dataset.l; save(); stop0(); foot0(); }; });
+    $("pname").oninput = function(){ S.name = this.value; save(); };
+    foot0();
+  }
+  function foot0(){ foot({ back:false, ok: !!S.level, hint: S.level ? "" : "Choose a level to continue", onNext: function(){ go(1); } }); }
+
+  function stop1(){
+    $("body").innerHTML = '<h2>Which of these sound like your team?</h2><p class="sub">Pick any that ring true. We\'ll check those capabilities first. Not sure? Skip ahead and we\'ll check them all.</p>' +
+      '<div class="opts two">' + CAPS.map(function(c){
+        return '<button type="button" class="opt" aria-pressed="' + (S.flags.indexOf(c.id) >= 0) + '" data-c="' + c.id + '"><span class="box"></span><span><span class="q">"' + esc(c.say) + '"</span><small>' + c.comp + '</small></span></button>';
+      }).join("") + "</div>";
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){
+      var id = b.dataset.c, k = S.flags.indexOf(id);
+      if (k >= 0) S.flags.splice(k, 1); else S.flags.push(id);
+      b.setAttribute("aria-pressed", k < 0); save(); foot1();
+    }; });
+    foot1();
+  }
+  function foot1(){ var n = S.flags.length; foot({ hint: n ? n + " selected" : "Optional", next: n ? "Continue" : "Skip", onBack: function(){ go(0); }, onNext: function(){ S.cap = 0; go(2); } }); }
+
+  function stop2(){
+    var order = capOrder(), i = Math.min(S.cap, order.length - 1), c = order[i];
+    if (S.capSeen.indexOf(c.id) < 0) { S.capSeen.push(c.id); save(); }
+    var done = S.capSeen.length;
+    $("body").innerHTML =
+      '<div class="capprog" aria-hidden="true"><span style="width:' + Math.round((i + 1) / order.length * 100) + '%"></span></div>' +
+      '<nav class="capnav" aria-label="Capabilities">' + order.map(function(x, j){
+        return '<button type="button" data-j="' + j + '"' + (j === i ? ' aria-current="step"' : "") + (S.capSeen.indexOf(x.id) >= 0 ? ' class="seen"' : "") + '>' + (S.flags.indexOf(x.id) >= 0 ? '<span class="f" title="You flagged this"></span>' : "") + x.title + "</button>";
+      }).join("") + "</nav>" +
+      '<div class="capmeta"><span>Capability ' + (i + 1) + " of " + order.length + "</span><span>" + c.comp + "</span>" + (S.flags.indexOf(c.id) >= 0 ? '<span class="flagged">You said this sounds like you</span>' : "") + "</div>" +
+      "<h2>" + c.head + '</h2><p class="why">' + c.why + '</p><p class="sub" style="margin-bottom:12px"><b>Tick what\'s already true for you</b></p>' +
+      '<div class="opts">' + c.checks.map(function(t, k){
+        return '<button type="button" class="opt" aria-pressed="' + S.checks[c.id][k] + '" data-k="' + k + '"><span class="box"></span><span class="d" style="font-size:16px;color:var(--ink)">' + esc(t) + "</span></button>";
+      }).join("") + "</div>";
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ var k = +b.dataset.k; S.checks[c.id][k] = !S.checks[c.id][k]; b.setAttribute("aria-pressed", S.checks[c.id][k]); save(); }; });
+    $("body").querySelectorAll(".capnav button").forEach(function(b){ b.onclick = function(){ S.cap = +b.dataset.j; save(); stop2(); }; });
+    var last = i === order.length - 1;
+    foot({ hint: done + " of " + order.length + " capabilities checked", next: last ? "Continue to your team" : "Next capability",
+      onBack: function(){ if (i === 0) go(1); else { S.cap = i - 1; save(); stop2(); } },
+      onNext: function(){ if (last) go(3); else { S.cap = i + 1; save(); stop2(); } } });
+  }
+
+  function stop3(){
+    $("body").innerHTML = "<h2>Who's on your advisory bench?</h2><p class=\"sub\">No single profile covers the practice. Tick the roles you have today, in-house or through someone you can call on. Most partners start with the first three and borrow the rest.</p>" +
+      '<div class="opts two">' + J.seats.map(function(s, k){
+        return '<button type="button" class="opt" aria-pressed="' + S.seats[k] + '" data-k="' + k + '"><span class="box"></span><span><b>' + s.name + '</b><span class="d">' + s.text + "</span></span>" + (s.core ? '<span class="core">Start here</span>' : "") + "</button>";
+      }).join("") + "</div>";
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ var k = +b.dataset.k; S.seats[k] = !S.seats[k]; b.setAttribute("aria-pressed", S.seats[k]); save(); }; });
+    foot({ next: "See your plan", onBack: function(){ S.cap = CAPS.length - 1; go(2); }, onNext: function(){ go(4); } });
+  }
+
+  function plan(){
+    var sc = CAPS.map(function(c){ return { c:c, s:S.checks[c.id].filter(Boolean).length, f:S.flags.indexOf(c.id) >= 0 }; });
+    var total = sc.reduce(function(a, x){ return a + x.s; }, 0), max = CAPS.length * 4, pct = total / max;
+    var lvl = pct < .4 ? 1 : pct < .75 ? 2 : 3, self = S.level || lvl;
+    var gaps = sc.filter(function(x){ return x.s < 4; }).sort(function(a, b){ return a.s - b.s || b.f - a.f; }).slice(0, 3);
+    var strong = sc.slice().sort(function(a, b){ return b.s - a.s; }).slice(0, 2);
+    var byId = {}; sc.forEach(function(x){ byId[x.c.id] = x; });
+    var offer = J.offers.map(function(o){ return { o:o, v:o.caps.reduce(function(a, id){ return a + byId[id].s; }, 0) / o.caps.length }; }).sort(function(a, b){ return b.v - a.v; })[0].o;
+    var gapIds = gaps.map(function(g){ return g.c.id; });
+    var sessions = J.sessions.filter(function(s){ return s.caps.some(function(id){ return gapIds.indexOf(id) >= 0; }); });
+    var have = J.seats.filter(function(_, k){ return S.seats[k]; }), missingCore = J.seats.filter(function(s, k){ return s.core && !S.seats[k]; });
+    var L = function(id){ return J.levels[id - 1]; };
+
+    var cmp = self === lvl ? "Your answers match where you placed yourself." :
+      self > lvl ? "You placed yourself at Level " + self + ", but your answers suggest Level " + lvl + ". The difference is usually evidence: the capabilities are there, but not yet repeatable." :
+      "Your answers suggest you're further on than you think: Level " + lvl + " rather than Level " + self + ". Make sure your offers and evidence show it.";
+    var band = function(s){ return s <= 1 ? ["band-gap","Gap"] : s <= 3 ? ["band-dev","Developing"] : ["band-str","Strength"]; };
+    var date = new Date().toLocaleDateString("en-GB", { day:"numeric", month:"long", year:"numeric" });
+
+    $("body").innerHTML =
+      '<div class="plan-hero"><span class="for">' + (S.name ? esc(S.name) + ", " : "") + date + '</span><h2>Your Business Transformation plan</h2><p>' + cmp + '</p>' +
+      '<div class="ladder">' + J.levels.map(function(l){
+        return '<div class="rung' + (l.id === lvl ? " you" : "") + '"><small>Level ' + l.id + '</small><b>' + l.name + '</b>' + (l.id === lvl ? '<span class="mk y">Your answers</span> ' : "") + (l.id === self && self !== lvl ? '<span class="mk s">Where you placed yourself</span>' : "") + "</div>";
+      }).join("") + '</div><div class="score"><span><b>' + total + " of " + max + '</b>checks in place</span><span><b>' + gaps.length + '</b>gaps to close first</span><span><b>' + have.length + ' of ' + J.seats.length + '</b>bench roles covered</span></div></div>' +
+
+      '<div class="psec"><h3>Your capability profile</h3><p>How many of the four checks you have in place for each capability.</p><div class="bars">' + sc.map(function(x){
+        var b = band(x.s); return '<div class="barrow"><span class="nm">' + (x.f ? '<i title="You flagged this"></i>' : "") + x.c.title + '</span><span class="track"><span class="' + b[0] + '" data-w="' + (x.s / 4 * 100) + '"></span></span><span class="lb">' + x.s + "/4 " + b[1] + "</span></div>";
+      }).join("") + '</div><div class="legend"><span><i class="band-gap"></i>Gap: 0 to 1</span><span><i class="band-dev"></i>Developing: 2 to 3</span><span><i class="band-str"></i>Strength: 4</span><span><i style="background:var(--amber);width:8px;height:8px;border-radius:50%"></i>You flagged this</span></div></div>' +
+
+      '<div class="psec"><h3>Start here: your top ' + (gaps.length === 1 ? "gap" : gaps.length + " gaps") + '</h3><p>The capabilities with the fewest checks in place, with what to work on and where to find help.</p><div class="gaps">' +
+      (gaps.length ? gaps.map(function(g, k){
+        var todo = g.c.checks.filter(function(_, j){ return !S.checks[g.c.id][j]; });
+        return '<div class="gap"><span class="n">' + (k + 1) + '</span><div><span class="cn">' + g.c.title + " (" + g.s + '/4)</span><h4>' + g.c.head + '</h4><p>' + g.c.why + '</p><div class="cols"><div><h5>To work on</h5><ul>' +
+          todo.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") + '</ul></div><div><h5>Resources</h5><ul>' +
+          g.c.res.map(function(r){ return '<li><a href="' + r[1] + '" target="_blank" rel="noopener">' + r[0] + "</a> <small>" + r[2] + "</small></li>"; }).join("") + "</ul></div></div></div></div>";
+      }).join("") : '<div class="card"><h4>No gaps found</h4><p>Every check is in place. Build an offer on your strengths and talk to us about an incubation.</p></div>') + "</div></div>" +
+
+      '<div class="psec twoup">' +
+        '<div class="card"><span class="k">Build an offer on your strengths</span><h4>' + offer.name + '</h4><p class="tg">' + offer.tagline + '</p><p>' + offer.text + '</p><p>Your strongest areas are <b>' + strong.map(function(x){ return x.c.title.toLowerCase(); }).join("</b> and <b>") + '</b>. An offer built on proven capability outsells one built on ambition.</p><a class="btn line noprint" href="https://aka.ms/CoworkOfferTemplates" target="_blank" rel="noopener">Get the offer templates</a></div>' +
+        '<div class="card"><span class="k">Your advisory bench</span><h4>' + have.length + " of " + J.seats.length + ' roles covered</h4><div class="seatlist">' + J.seats.map(function(s, k){ return '<span class="' + (S.seats[k] ? "have" : "") + '">' + s.name + "</span>"; }).join("") + '</div><p>' +
+          (missingCore.length ? "Fill the core first: " + missingCore.map(function(s){ return s.name; }).join(", ") + ". Borrow specialists before you hire them." : "Your core three are in place. Borrow the other specialists as your pipeline grows.") + "</p></div>" +
+      "</div>" +
+
+      (sessions.length ? '<div class="psec"><h3>Your learning path</h3><p>Sessions from the Cowork Micro-Learning Series that cover your gaps.</p><ol class="steps3">' + sessions.map(function(s){ return "<li><span><b>" + s.name + "</b><span>" + s.text + '</span></span><a class="btn line noprint" href="https://aka.ms/MicroSkillingCowork" target="_blank" rel="noopener">Watch</a></li>'; }).join("") + "</ol></div>" : "") +
+
+      '<div class="psec"><h3>Next steps</h3><ol class="steps3">' +
+        '<li><span><b>Book a Practice Review</b><span>Bring this plan and a specialist will go through it with you.</span></span><a class="btn noprint" href="index.html#team">Talk to the team</a></li>' +
+        '<li><span><b>Take the FinOps for AI journey</b><span>It shares the business case stop and covers cost modelling, governance and optimisation.</span></span><a class="btn line noprint" href="journey.html?j=fin">Preview</a></li>' +
+        '<li><span><b>Keep the full guide</b><span>The AI Advisory Practice Guide has every kit, playbook and link.</span></span><a class="btn line noprint ph" href="#">Download</a></li>' +
+      '</ol><p class="disclaim">This plan is a self-assessment based on your answers and the AI Advisory Practice Guide. It is a starting point for a conversation, not a formal rating.</p></div>';
+
+    requestAnimationFrame(function(){ document.querySelectorAll(".track span").forEach(function(s){ s.style.width = s.dataset.w + "%"; }); });
+    $("foot").innerHTML = '<button class="btn line" type="button" id="edit">Change answers</button><span class="acts"><button class="btn" type="button" id="print">Print or save as PDF</button></span>';
+    $("edit").onclick = function(){ go(0); };
+    $("print").onclick = function(){ window.print(); };
+  }
+
+  go(Math.min(S.stop || 0, 4), true);
+
+  // ---------- Preview for journeys in build ----------
+  function preview(){
+    rail(-1, -1);
+    $("railnote").textContent = "This journey is being built.";
+    $("body").innerHTML = '<div class="preview"><span class="soon">In build</span><h2>What this journey will cover</h2><p class="sub">' + J.intro + '</p><ol>' +
+      J.stops.map(function(s){ return "<li>" + s + "</li>"; }).join("") + '</ol><div class="out"><b>You\'ll leave with:</b> ' + J.out + '</div>' +
+      '<p class="sub">Built from the ' + J.source + '. Until it\'s ready, you can try Business Transformation or ask the team.</p></div>';
+    $("foot").innerHTML = '<span class="hint"></span><span class="acts"><a class="btn line" href="index.html#team">Talk to the team</a><a class="btn" href="journey.html?j=biz" style="--c:var(--biz)">Try Business Transformation</a></span>';
+  }
+})();
+</script>
+</body>
+</html>
