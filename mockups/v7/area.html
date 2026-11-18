@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service area | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+@media print{
+  header.top,footer.site,.help-btn,.dock,.skip,.area-hero,.noprint,#services,#all,#more{display:none!important}
+  body{background:#fff}.pinned{box-shadow:none;border:0;margin:0;padding:0}
+  .rec{break-inside:avoid;box-shadow:none}
+}
+.start{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--night);color:#fff;border-radius:18px;padding:18px 22px;margin-bottom:18px}
+.start b{display:block;font-size:17px}
+.start span{color:#c3cae6;font-size:14.5px}
+</style>
+</head>
+<body data-page="practice">
+<script>
+  var AK = new URLSearchParams(location.search).get("a") || "biz";
+  if (["biz","work","agent","fin"].indexOf(AK) < 0) AK = "biz";
+  if (AK === "fin") document.body.setAttribute("data-page", "fin");
+</script>
+<main id="main">
+  <section class="area-hero">
+    <div class="wrap">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="title"></h1>
+      <p id="intro"></p>
+      <nav class="area-tabs" id="tabs" aria-label="Service areas"></nav>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom:80px">
+    <section class="pinned" id="mine" aria-live="polite"></section>
+
+    <section style="padding-top:56px" id="services">
+      <div class="head" style="margin-bottom:22px"><h2>Services</h2><p id="svcsub"></p></div>
+      <div class="start noprint"><span><b id="revname"></b><span id="revdesc"></span></span><a class="btn amber" href="team.html#contact">Talk to the team</a></div>
+      <div class="recs" id="svcs"></div>
+    </section>
+
+    <section style="padding-top:56px" id="all">
+      <div class="head" style="margin-bottom:22px"><h2>Recommendations and tools</h2><p id="allsub"></p></div>
+      <div class="recs" id="recs"></div>
+    </section>
+
+    <section style="padding-top:56px" id="more">
+      <div class="area-split">
+        <div class="svc-side" style="background:var(--surface);color:var(--ink);box-shadow:var(--shadow);border:1px solid var(--line)">
+          <h3>Group sessions for this area</h3>
+          <p style="color:var(--ink-2)" id="fmts"></p>
+          <a class="btn line" href="events.html">See events</a>
+        </div>
+        <aside class="svc-side">
+          <h3 id="jtitle"></h3>
+          <p id="jtext"></p>
+          <a class="btn" id="jlink" href="#">Start the journey</a>
+        </aside>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = JOURNEYS, A = J[AK], $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+  document.title = A.name + " | Partner Incubation Station";
+  document.documentElement.style.setProperty("--c", A.color);
+  $("crumb").innerHTML = '<a href="index.html">Home</a> / ' + (A.group === "FinOps" ? "FinOps" : '<a href="index.html#journeys">Practice Development</a> / ' + A.name);
+  $("title").textContent = A.name;
+  $("intro").textContent = "Services, recommendations and tools for this area. If you've had a practice review with us, mark the ones we discussed and they'll stay together at the top.";
+  $("tabs").innerHTML = ["biz","work","agent","fin"].map(function(k){ return '<a href="area.html?a=' + k + '" style="--c:' + J[k].color + '"' + (k === AK ? ' aria-current="page"' : "") + "><i></i>" + J[k].short + "</a>"; }).join("");
+  $("revname").textContent = REVIEW.name;
+  $("revdesc").textContent = REVIEW.desc;
+
+  // Services from the services list
+  var SV = SERVICES.filter(function(s){ return s.areas.indexOf(AK) >= 0; }).sort(function(a, b){ return (a.later || 0) - (b.later || 0); });
+  $("svcsub").textContent = SV.length + " services for " + A.short + ". Each has a 1:1 engagement and group formats.";
+
+  // Recommendations and tools from the practice guides
+  var st = A.stops.filter(function(s){ return s.id === A.recStop; })[0], RECS = [];
+  st.groups.forEach(function(g){
+    if (AK === "fin") g.checks.forEach(function(s){ RECS.push({ id: s.id, k: g.title, title: s.t, p: "Customer need: " + s.need, native: s.native, tools: s.tools, gap: s.gap, fit: s.fit }); });
+    else RECS.push({ id: g.id, k: g.meta, title: AK === "biz" ? g.title : g.title + " phase", p: g.head, actions: g.checks, tools: g.res });
+  });
+  if (AK === "fin") A.stops.filter(function(s){ return s.id === "skills"; })[0].groups.forEach(function(g){ RECS.push({ id: g.id, k: "Capability", title: g.title, p: g.head, actions: g.checks, tools: g.res }); });
+  $("allsub").textContent = RECS.length + " recommendations from our practice guides, each with the tools that help.";
+
+  // What the partner marked, saved only in this browser
+  var SKEY = "pis-v7-marked-" + AK, mine = [];
+  try { mine = JSON.parse(localStorage.getItem(SKEY)) || []; } catch (e) {}
+  function save(){ try { localStorage.setItem(SKEY, JSON.stringify(mine)); } catch (e) {} }
+  function btn(id){ var on = mine.indexOf(id) >= 0; return '<button type="button" class="pinbtn noprint" data-id="' + id + '" aria-pressed="' + on + '">' + (on ? "We discussed this" : "Mark as discussed") + "</button>"; }
+
+  function svcCard(s){
+    var id = "s:" + s.id, on = mine.indexOf(id) >= 0;
+    return '<article class="rec' + (on ? " mine" : "") + '"><div class="rec-head"><span class="k">Service</span>' + (s.later ? '<span class="note">Later step, after your practice review</span>' : s.needsCustomer ? '<span class="note">Needs a customer engaged</span>' : "") +
+      "<h3>" + s.name + "</h3><p>" + s.desc + '</p></div><div class="rec-body"><p class="svcard-meta" style="margin:0"><b>With the team (1:1):</b> ' + s.depth + "</p><div><h4>Group formats</h4>" +
+      '<div class="formats">' + s.group.map(function(g){ return "<span>" + g + "</span>"; }).join("") + '</div></div><p class="svcard-meta" style="margin:0"><b>Who it\'s for:</b> ' + s.who + "</p>" + btn(id) + "</div></article>";
+  }
+  function recCard(r){
+    var on = mine.indexOf(r.id) >= 0;
+    return '<article class="rec' + (on ? " mine" : "") + '"><div class="rec-head"><span class="k">' + r.k + "</span><h3>" + r.title + "</h3><p>" + r.p + '</p></div><div class="rec-body">' +
+      (r.native ? '<p class="meta2" style="margin:0"><b>Microsoft tool today:</b> ' + r.native + ' <span class="fitpill">' + r.fit + "</span></p>" : "") +
+      (r.actions ? "<div><h4>What good looks like</h4><ul>" + r.actions.map(function(a){ return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>" : "") +
+      "<div><h4>Tools and resources</h4><ul>" + r.tools.map(function(t){ return "<li>" + (t[1] ? '<a href="' + t[1] + '" target="_blank" rel="noopener">' + t[0] + "</a>" : t[0] + ' <span class="ph">Link to confirm</span>') + "<small>" + t[2] + "</small></li>"; }).join("") + "</ul></div>" +
+      (r.gap ? '<p class="meta2" style="margin:0"><b>Gap you fill:</b> ' + r.gap + "</p>" : "") + btn(r.id) + "</div></article>";
+  }
+  function render(){
+    var ps = SV.filter(function(s){ return mine.indexOf("s:" + s.id) >= 0; }), pr = RECS.filter(function(r){ return mine.indexOf(r.id) >= 0; }), n = ps.length + pr.length;
+    $("mine").innerHTML = n ?
+      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:start"><div><h2>What we discussed</h2><p>' + n + ' marked. Saved in this browser only.</p></div><button class="btn noprint" type="button" id="print">Print or save as PDF</button></div><div class="recs">' + ps.map(svcCard).join("") + pr.map(recCard).join("") + "</div>" :
+      '<h2>What we discussed</h2><div class="empty-pin"><p>After your practice review, mark the services and recommendations we talked about with <b>Mark as discussed</b>. They\'ll gather here so you can come back to them or print them. Nothing leaves your browser.</p><a class="btn" href="journey.html?j=' + AK + '">Or take the journey</a></div>';
+    $("svcs").innerHTML = SV.map(svcCard).join("");
+    $("recs").innerHTML = RECS.map(recCard).join("");
+    if ($("print")) $("print").onclick = function(){ print(); };
+  }
+  document.addEventListener("click", function(e){
+    var b = e.target.closest(".pinbtn"); if (!b) return;
+    var id = b.dataset.id, k = mine.indexOf(id);
+    if (k >= 0) mine.splice(k, 1); else mine.push(id);
+    save(); var y = scrollY; render(); scrollTo(0, y);
+  });
+  render();
+
+  var fm = FORMATS.filter(function(f){ return formatServices(f).some(function(s){ return s.areas.indexOf(AK) >= 0; }); }).map(function(f){ return f.name.toLowerCase(); });
+  $("fmts").textContent = fm.length ? "Group sessions for " + A.short + " include " + fm.join(", ") + ". Dates are being confirmed." : "Group sessions are being confirmed.";
+  $("jtitle").textContent = "Take the " + A.name + " journey";
+  $("jtext").textContent = A.intro + " You leave with " + A.out.charAt(0).toLowerCase() + A.out.slice(1) + ".";
+  $("jlink").href = "journey.html?j=" + AK;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner Incubation Station</title>
+<meta name="description" content="Recommendations, guided journeys and services that help Microsoft partners build AI practices across business, workforce, agentic and FinOps.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+
+<main id="main">
+<section class="hero dark compact">
+  <div class="wrap">
+    <div class="hero-top">
+      <h1>Build an AI practice your customers keep investing in.</h1>
+      <div>
+        <p class="lede">Recommendations, guided journeys and services from the Microsoft Partner Incubation team, built for partners in our community.</p>
+        <button class="btn amber" type="button" data-tour>Take the tour</button>
+      </div>
+    </div>
+
+    <div class="board" id="board" role="region" aria-label="Journeys">
+      <div class="board-head"><b>Journeys departing now</b><span>Each ends with a plan you can print or save</span><span class="clock" id="clock" aria-hidden="true">09:00</span></div>
+      <ol class="rows" id="rows"></ol>
+    </div>
+
+    <div class="fork three" id="fork">
+      <div class="ticket" id="fork-have">
+        <span class="lbl"><i></i>Already worked with us</span>
+        <h2>Find what we discussed</h2>
+        <p>Pick your service area to see its services and recommendations, then mark the ones from your practice review.</p>
+        <div class="stub" id="areaPicks"></div>
+      </div>
+      <div class="ticket" id="fork-new">
+        <span class="lbl"><i style="--c:var(--biz)"></i>Starting fresh</span>
+        <h2>Take a guided journey</h2>
+        <p>Answer a few questions at each stop and leave with a plan for your practice. Takes 10 to 15 minutes.</p>
+        <div class="stub"><a class="btn amber" href="#board">Choose a journey</a><a class="btn line" href="team.html">Meet the team</a></div>
+      </div>
+      <div id="tour-video">
+        <button class="video" type="button" data-tour aria-label="Play: Discover Partner Incubation Station. Video coming soon; starts the guided tour.">
+          <span class="t">Discover Partner Incubation Station<small>A two-minute walkthrough</small></span>
+          <span class="play"><i></i></span><span class="len">2:00</span>
+        </button>
+        <div class="vcap"><span class="ph">Video to record</span><button type="button" data-tour>Take the guided tour</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="coming-up">
+  <div class="wrap">
+    <div class="head">
+      <h2>Coming up</h2>
+      <p>Group sessions run alongside our 1:1 engagements. Dates are being confirmed; register your interest and we'll let you know.</p>
+    </div>
+    <div class="ways" id="next3"></div>
+    <p style="margin:22px 0 0"><a class="btn line" href="events.html">See all events</a></p>
+  </div>
+</section>
+<section class="band white" id="journeys">
+  <div class="wrap">
+    <div class="head">
+      <h2>Every journey ends with a plan</h2>
+      <p>Practice Development covers business, workforce and agentic transformation. FinOps runs alongside them. Journeys share some stops, so progress on one helps with another.</p>
+    </div>
+    <div class="mapcard">
+      <div class="map-tabs" role="group" aria-label="Show a journey">
+        <span class="grp">Practice Development</span>
+        <button type="button" data-line="biz" style="--c:var(--biz)" aria-pressed="false"><i></i>Business</button>
+        <button type="button" data-line="work" style="--c:var(--work)" aria-pressed="false"><i></i>Workforce</button>
+        <button type="button" data-line="agent" style="--c:var(--agent)" aria-pressed="false"><i></i>Agentic</button>
+        <span class="grp" style="margin-left:10px">FinOps</span>
+        <button type="button" data-line="fin" style="--c:var(--fin)" aria-pressed="false"><i></i>FinOps for AI</button>
+      </div>
+      <div class="map-body">
+        <svg class="map" id="mapsvg" viewBox="0 0 760 420" role="img" aria-label="Four journeys starting from one point, sharing some stops, and ending at your plan"></svg>
+        <div class="detail" id="detail" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="team">
+  <div class="wrap about">
+    <div>
+      <h2>The team behind the station</h2>
+      <p>We're Microsoft Frontier Partner Incubation: practice development, business value and consumption specialists. We help partners build AI practices that customers buy, adopt and keep paying for, and we read every question that comes through this site.</p>
+      <a class="btn" href="team.html" style="--c:var(--night)">More about us</a>
+    </div>
+    <div class="about-facts">
+      <div><b>Recommendations</b><span>Find what we discussed in your service area.</span></div>
+      <div><b>Guided journeys</b><span>Four self-serve journeys built from our practice guides.</span></div>
+      <div><b>Engagements</b><span>1:1 services, starting with the Copilot Practice Development Review.</span></div>
+      <div><b>Group sessions</b><span>Webinars, office hours, workshops and bootcamps.</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = window.JOURNEYS, KEYS = ["biz","work","agent","fin"], reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Fork: area picks
+  document.getElementById("areaPicks").innerHTML = KEYS.map(function(k){
+    return '<a class="area-pick" style="--c:' + J[k].color + '" href="area.html?a=' + k + '"><i></i>' + J[k].short + "</a>";
+  }).join("");
+
+  // Clock
+  var clock = document.getElementById("clock");
+  function tick(){ var d = new Date(); clock.textContent = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); }
+  tick(); setInterval(tick, 30000);
+
+  // Departure board
+  var rows = document.getElementById("rows");
+  KEYS.forEach(function(k){
+    var L = J[k], stops = L.stops.length;
+    rows.insertAdjacentHTML("beforeend",
+      '<li class="row" style="--c:' + L.color + '"><span class="bar"></span>' +
+      '<span class="dest"><span class="flap" data-text="' + L.name + '">' + L.name + '</span><small>' + L.group + '</small></span>' +
+      '<span class="via">Calling at <b>' + L.via + '</b></span>' +
+      '<span class="time">' + L.time.replace("About ", "") + '<small>' + stops + ' stops</small></span>' +
+      '<a class="go" href="journey.html?j=' + k + '"><span>Start journey</span></a></li>');
+  });
+  if (!reduce) {
+    var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    document.querySelectorAll(".flap").forEach(function(el, row){
+      var target = el.dataset.text, start = performance.now();
+      el.setAttribute("aria-hidden", "true");
+      var sr = document.createElement("span"); sr.className = "sr"; sr.textContent = target; el.after(sr);
+      var settle = target.split("").map(function(_, i){ return 260 + row * 160 + i * 38; }), last = settle[settle.length - 1];
+      (function frame(){
+        var t = performance.now() - start, done = true;
+        el.textContent = target.split("").map(function(ch, i){ if (ch === " " || t >= settle[i]) return ch; done = false; return A[Math.floor(Math.random() * A.length)]; }).join("");
+        if (!done) requestAnimationFrame(frame);
+      })();
+      setTimeout(function(){ el.textContent = target; }, last + 200);
+    });
+  }
+
+  // Coming up: the first three group formats, linked to the services that use them
+  document.getElementById("next3").innerHTML = FORMATS.slice(0, 3).map(function(f){
+    var svc = formatServices(f);
+    return '<div class="way"><span class="when" style="padding:0 0 10px;margin:0">Date to be announced</span><h3>' + f.name + '</h3><p>' + f.text + '</p><ul>' +
+      svc.slice(0, 3).map(function(s){ return "<li>" + s.name + "</li>"; }).join("") + '</ul><a class="btn line" href="events.html#' + f.id + '" style="margin-top:16px;align-self:flex-start">Register interest</a></div>';
+  }).join("");
+
+  // Journey map
+  var MAP = { biz:{ y:70, stops:["Discovery","Business case","Use-case fit","Value story"] }, fin:{ y:165, stops:["Cost modelling","Business case","Control","Optimise"] },
+              agent:{ y:260, stops:["Scenario","Adoption","Value story","Improve"] }, work:{ y:355, stops:["Plan","Adoption","Manage","Next wave"] } };
+  var SHARED = [["biz","fin","Business case"],["biz","agent","Value story"],["agent","work","Adoption"]];
+  var X0 = 40, X1 = 720, XS = [250, 360, 470, 580], MID = 210, NS = "http://www.w3.org/2000/svg", svg = document.getElementById("mapsvg");
+  function mk(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  function d(y){ return "M"+X0+","+MID+" C140,"+MID+" 120,"+y+" 220,"+y+" L610,"+y+" C700,"+y+" 640,"+MID+" "+X1+","+MID; }
+  var gLinks = mk("g", {}), gLines = mk("g", {}), gStops = mk("g", {}), paths = {};
+  Object.keys(MAP).forEach(function(k){
+    var L = MAP[k], c = J[k].color;
+    mk("path", { class:"glow", d:d(L.y), stroke:c, "data-l":k }, gLines);
+    paths[k] = mk("path", { class:"path", d:d(L.y), stroke:c, "data-l":k }, gLines);
+    L.stops.forEach(function(s, i){
+      if (SHARED.some(function(x){ return x[2] === s && (x[0] === k || x[1] === k); })) return;
+      mk("circle", { class:"stop", cx:XS[i], cy:L.y, r:7, stroke:c, "data-l":k }, gStops);
+      mk("text", { class:"lbl", x:XS[i], y:L.y - 16, "text-anchor":"middle", "data-l":k }, gStops).textContent = s;
+    });
+  });
+  SHARED.forEach(function(x){
+    var a = MAP[x[0]], b = MAP[x[1]], xx = XS[a.stops.indexOf(x[2])], l = x[0] + " " + x[1];
+    mk("line", { class:"link", x1:xx, y1:a.y, x2:xx, y2:b.y, "data-l":l }, gLinks);
+    [a, b].forEach(function(L){ mk("circle", { class:"stop", cx:xx, cy:L.y, r:8, stroke:"var(--ink)", "data-l":l }, gStops); });
+    mk("text", { class:"lbl", x:xx + 12, y:(a.y + b.y)/2 + 4, "data-l":l }, gStops).textContent = x[2];
+  });
+  mk("circle", { class:"node", cx:X0, cy:MID, r:11 }); mk("circle", { cx:X0, cy:MID, r:4, fill:"#fff" });
+  mk("text", { class:"node-lbl", x:X0 - 4, y:MID + 34 }).textContent = "Start";
+  mk("circle", { class:"node", cx:X1, cy:MID, r:14 }); mk("circle", { cx:X1, cy:MID, r:5, fill:"var(--amber)" });
+  mk("text", { class:"node-lbl", x:X1, y:MID + 38, "text-anchor":"end" }).textContent = "Your plan";
+  var trav = mk("circle", { class:"traveller", r:7, cx:X0, cy:MID });
+
+  var detail = document.getElementById("detail"), tabs = document.querySelectorAll(".map-tabs button"), anim;
+  function focus(k){
+    tabs.forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.line === k ? "true" : "false"); });
+    cancelAnimationFrame(anim); trav.style.opacity = 0;
+    if (!k) {
+      svg.removeAttribute("data-focus"); detail.style.removeProperty("--c");
+      detail.innerHTML = '<span class="tag"><i></i>Four journeys</span><h3>Choose a journey to see its stops</h3><p>Each journey takes 10 to 15 minutes and ends with a plan you can print or save as a PDF.</p><p>Dotted links show where journeys share a stop.</p>';
+      return;
+    }
+    var L = J[k]; svg.setAttribute("data-focus", k); detail.style.setProperty("--c", L.color);
+    detail.innerHTML = '<span class="tag"><i></i>' + L.group + '</span><h3>' + L.name + '</h3><p>' + L.intro + '</p><ol>' +
+      L.stops.map(function(s){ return "<li>" + s.label + "</li>"; }).join("") + '</ol><div class="out"><b>You leave with:</b> ' + L.out + '</div><a class="btn" href="journey.html?j=' + k + '">Start this journey</a>';
+    if (reduce) return;
+    var p = paths[k], len = p.getTotalLength(), t0 = performance.now();
+    trav.setAttribute("stroke", L.color); trav.style.opacity = 1;
+    (function step(now){
+      var f = Math.min(1, (now - t0) / 1600), e = f < .5 ? 2*f*f : 1 - Math.pow(-2*f + 2, 2)/2, pt = p.getPointAtLength(e * len);
+      trav.setAttribute("cx", pt.x); trav.setAttribute("cy", pt.y);
+      if (f < 1) anim = requestAnimationFrame(step);
+    })(t0);
+  }
+  tabs.forEach(function(b){ b.addEventListener("click", function(){ focus(b.getAttribute("aria-pressed") === "true" ? null : b.dataset.line); }); });
+  Object.keys(paths).forEach(function(k){ paths[k].style.cursor = "pointer"; paths[k].addEventListener("click", function(){ focus(k); }); });
+  focus(null);
+
+  // Guided tour
+  var TOUR = [
+    { el:".board", t:"Four journeys", p:"Business, Workforce and Agentic Transformation make up Practice Development. FinOps for AI runs alongside them. Each ends with a plan." },
+    { el:"#fork-have", t:"Already worked with us?", p:"Pick your service area to see its services and recommendations, then mark the ones from your practice review." },
+    { el:"#fork-new", t:"Starting fresh?", p:"Take a guided journey instead. Answer questions at each stop and leave with a plan." },
+    { el:"#tour-video", t:"Watch the walkthrough", p:"The walkthrough video will live here. You can replay this tour any time from the footer." },
+    { el:"#coming-up .ways", t:"Coming up", p:"Group sessions like webinars, office hours and workshops. The Events page has the full list." },
+    { el:"#journeys .mapcard", t:"See where journeys lead", p:"Select a journey to see its stops and what you'll leave with." },
+    { el:"#team", t:"Meet the team", p:"Find out more about us and our services on the About us page." },
+    { el:"#helpBtn", t:"Ask a question", p:"Ask in your own words. Answers come from our practice guides, and the team picks up anything that needs a person." }
+  ];
+  var hole, pop, ti = 0;
+  function place(){
+    if (!hole) return;
+    var s = TOUR[ti], el = document.querySelector(s.el); if (!el) return;
+    var r = el.getBoundingClientRect(), pad = 8;
+    hole.style.cssText = "top:" + (r.top - pad) + "px;left:" + (r.left - pad) + "px;width:" + (r.width + pad*2) + "px;height:" + (r.height + pad*2) + "px";
+    var pw = pop.offsetWidth, ph = pop.offsetHeight, vw = innerWidth, vh = innerHeight, top, left;
+    if (r.bottom + ph + 24 < vh) top = r.bottom + 18; else if (r.top - ph - 24 > 0) top = r.top - ph - 18; else top = Math.max(16, vh - ph - 16);
+    left = Math.min(Math.max(16, r.left), vw - pw - 16);
+    pop.style.top = top + "px"; pop.style.left = left + "px";
+  }
+  function show(i){
+    ti = i; var s = TOUR[i], el = document.querySelector(s.el);
+    pop.innerHTML = '<button class="skipt" type="button" data-a="end">Skip tour</button><span class="stepn">' + (i+1) + ' of ' + TOUR.length + '</span><h3>' + s.t + '</h3><p>' + s.p + '</p>' +
+      '<div class="row2"><span class="dots">' + TOUR.map(function(_, j){ return '<i class="' + (j === i ? "on" : "") + '"></i>'; }).join("") + '</span><span class="acts">' +
+      (i ? '<button class="btn line" type="button" data-a="back">Back</button>' : "") +
+      '<button class="btn fade" type="button" data-a="next">' + (i === TOUR.length - 1 ? "Finish" : "Next") + '</button></span></div>';
+    var r = el.getBoundingClientRect();
+    if (el.id !== "helpBtn" && (r.top < 80 || r.bottom > innerHeight - 40)) {
+      scrollTo({ top: scrollY + r.top - Math.max(90, (innerHeight - Math.min(r.height, innerHeight - 260)) / 2 - 80), behavior: reduce ? "auto" : "smooth" });
+      setTimeout(place, reduce ? 0 : 450);
+    }
+    place();
+    pop.querySelector("[data-a=next]").focus();
+  }
+  function end(){ hole.remove(); pop.remove(); hole = pop = null; removeEventListener("resize", place); removeEventListener("scroll", place); document.removeEventListener("keydown", key); }
+  function key(e){ if (e.key === "Escape") end(); }
+  function start(){
+    if (hole) return;
+    scrollTo({ top: 0, behavior: "auto" });
+    hole = document.createElement("div"); hole.className = "tour-hole";
+    pop = document.createElement("div"); pop.className = "tour-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Guided tour");
+    document.body.append(hole, pop);
+    pop.addEventListener("click", function(e){
+      var a = e.target.closest("[data-a]"); if (!a) return;
+      if (a.dataset.a === "end") end(); else if (a.dataset.a === "back") show(ti - 1); else if (ti === TOUR.length - 1) end(); else show(ti + 1);
+    });
+    addEventListener("resize", place); addEventListener("scroll", place, { passive:true }); document.addEventListener("keydown", key);
+    show(0);
+  }
+  document.querySelectorAll("[data-tour]").forEach(function(b){ b.addEventListener("click", start); });
+
+  // Welcome on first visit, or when asked for with ?welcome=1
+  var seen = false; try { seen = localStorage.getItem("pis-welcomed") === "1"; } catch (e) {}
+  if (!seen || new URLSearchParams(location.search).get("welcome")) PIS.welcome(start);
+})();
+</script>
+</body>
+</html>

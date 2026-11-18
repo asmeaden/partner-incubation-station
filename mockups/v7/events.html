@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.ev{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px;scroll-margin-top:90px}
+.ev[hidden]{display:none}
+.ev h2{font-size:24px;margin:6px 0 6px}
+.ev > div:first-child p{color:var(--ink-2);margin:0 0 16px}
+.ev .tba{display:inline-block;font-size:13px;font-weight:700;color:var(--muted);background:var(--bg);border-radius:999px;padding:3px 10px}
+.ev ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ev li{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+.ev li b{display:block}
+.ev li span{font-size:14px;color:var(--ink-2)}
+.ev .areas{display:flex;gap:6px;flex-wrap:wrap}
+.ev .areas a{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:650;border-radius:999px;padding:3px 10px;background:var(--bg)}
+.ev .areas i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+@media (max-width:860px){.ev{grid-template-columns:1fr}.ev li{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="events">
+<main id="main">
+  <section class="area-hero" style="--c:var(--biz)">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Home</a> / Events</div>
+      <h1>Events and group sessions</h1>
+      <p>Group sessions run alongside our 1:1 engagements, so every partner in the community can learn from the team and each other.</p>
+    </div>
+  </section>
+  <section style="padding-block:40px 80px">
+    <div class="wrap">
+      <div class="toolbar" role="group" aria-label="Filter by area">
+        <button class="chip" type="button" data-a="all" aria-pressed="true">All areas</button>
+        <button class="chip" type="button" data-a="biz" aria-pressed="false">Business</button>
+        <button class="chip" type="button" data-a="work" aria-pressed="false">Workforce</button>
+        <button class="chip" type="button" data-a="agent" aria-pressed="false">Agentic</button>
+        <button class="chip" type="button" data-a="fin" aria-pressed="false">FinOps</button>
+      </div>
+      <p class="note" style="margin-bottom:18px">Dates and sessions are being confirmed</p>
+      <div id="list"></div>
+    </div>
+  </section>
+</main>
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = JOURNEYS, list = document.getElementById("list");
+  list.innerHTML = FORMATS.map(function(f){
+    var svc = formatServices(f), areas = [];
+    svc.forEach(function(s){ s.areas.forEach(function(a){ if (areas.indexOf(a) < 0) areas.push(a); }); });
+    return '<article class="ev" id="' + f.id + '" data-areas="' + areas.join(" ") + '"><div><span class="tba">Date to be announced</span><h2>' + f.name + "</h2><p>" + f.text + '</p><div class="areas">' +
+      areas.map(function(a){ return '<a href="area.html?a=' + a + '" style="--c:' + J[a].color + '"><i></i>' + J[a].short + "</a>"; }).join("") +
+      '</div></div><div><ul>' + svc.map(function(s){
+        return "<li><span><b>" + s.name + "</b>" + s.desc + '</span><a class="btn line" href="team.html#contact">Register interest</a></li>';
+      }).join("") + "</ul></div></article>";
+  }).join("");
+  var chips = document.querySelectorAll(".chip");
+  chips.forEach(function(c){ c.addEventListener("click", function(){
+    chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+    list.querySelectorAll(".ev").forEach(function(ev){ ev.hidden = c.dataset.a !== "all" && ev.dataset.areas.split(" ").indexOf(c.dataset.a) < 0; });
+  }); });
+})();
+</script>
+</body>
+</html>
