@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="cases">
+<main id="main">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Home</a> / Case Studies</div>
+      <h1>Partners building real practices</h1>
+      <p>How partners used the journeys, engagements and incubations to grow their AI practice, and what changed.</p>
+    </div>
+  </section>
+  <section style="padding-bottom:80px">
+    <div class="wrap">
+      <div class="toolbar" role="group" aria-label="Filter case studies">
+        <button class="chip" type="button" data-a="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-a="biz" aria-pressed="false">Business</button>
+        <button class="chip" type="button" data-a="work" aria-pressed="false">Workforce</button>
+        <button class="chip" type="button" data-a="agent" aria-pressed="false">Agentic</button>
+        <button class="chip" type="button" data-a="fin" aria-pressed="false">FinOps</button>
+      </div>
+      <div class="stories" id="stories"></div>
+    </div>
+  </section>
+</main>
+<script src="site.js"></script>
+<script>
+(function(){
+  var S = [
+    ["biz","Business Transformation","linear-gradient(135deg,#0b3d91,#1f6fe0)"],
+    ["agent","Agentic Transformation","linear-gradient(135deg,#3b2a8f,#7a4fd8)"],
+    ["fin","FinOps for AI","linear-gradient(135deg,#7a4a06,#d0820f)"],
+    ["work","Workforce Transformation","linear-gradient(135deg,#0a5d63,#0e9f8c)"]
+  ];
+  var el = document.getElementById("stories");
+  S.forEach(function(s){
+    el.insertAdjacentHTML("beforeend", '<article class="story" data-a="' + s[0] + '"><div class="img" style="--g:' + s[2] + '">Partner photo</div><div class="body">' +
+      '<span class="kind" style="--c:var(--' + s[0] + ')"><i></i>' + s[1] + ' | <span class="ph">Region</span></span>' +
+      '<h3><span class="ph">Partner name</span>: <span class="ph">headline outcome</span></h3>' +
+      '<p>Two or three sentences on the challenge, what the partner built with Partner Incubation support, and the result.</p>' +
+      '<a class="btn line" href="#">Read the story</a></div></article>');
+  });
+  var chips = document.querySelectorAll(".chip");
+  chips.forEach(function(c){ c.addEventListener("click", function(){
+    chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+    el.querySelectorAll(".story").forEach(function(s){ s.hidden = c.dataset.a !== "all" && s.dataset.a !== c.dataset.a; });
+  }); });
+})();
+</script>
+</body>
+</html>

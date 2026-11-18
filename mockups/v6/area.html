@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service area | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+@media print{
+  header.top,footer.site,.help-btn,.dock,.skip,.area-hero,.noprint,#all,#more{display:none!important}
+  body{background:#fff}.pinned{box-shadow:none;border:0;margin:0;padding:0}
+  .rec{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body data-page="practice">
+<script>
+  var AK = new URLSearchParams(location.search).get("a") || "biz";
+  if (["biz","work","agent","fin"].indexOf(AK) < 0) AK = "biz";
+  if (AK === "fin") document.body.setAttribute("data-page", "fin");
+</script>
+<main id="main">
+  <section class="area-hero">
+    <div class="wrap">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="title"></h1>
+      <p id="intro"></p>
+      <nav class="area-tabs" id="tabs" aria-label="Service areas"></nav>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom:80px">
+    <section class="pinned" id="mine" aria-live="polite"></section>
+
+    <section style="padding-top:56px" id="all">
+      <div class="head" style="margin-bottom:22px"><h2>All recommendations and tools</h2><p id="allsub"></p></div>
+      <div class="recs" id="recs"></div>
+    </section>
+
+    <section style="padding-top:56px" id="more">
+      <div class="head" style="margin-bottom:22px"><h2>Services for this area</h2><p>Engagements, events and incubations that build on these recommendations.</p></div>
+      <div class="area-split">
+        <ul class="svc-list" id="svc"></ul>
+        <aside class="svc-side">
+          <h3 id="jtitle"></h3>
+          <p id="jtext"></p>
+          <a class="btn" id="jlink" href="#">Start the journey</a>
+        </aside>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = JOURNEYS, A = J[AK], $ = function(id){ return document.getElementById(id); };
+  document.title = A.name + " | Partner Incubation Station";
+  document.documentElement.style.setProperty("--c", A.color);
+  $("crumb").innerHTML = '<a href="index.html">Home</a> / ' + (A.group === "FinOps" ? "FinOps" : '<a href="index.html#journeys">Practice Development</a> / ' + A.name);
+  $("title").textContent = A.name;
+  $("intro").textContent = "Recommendations and tools from the Partner Incubation team for " + A.short.toLowerCase() + (A.short === "FinOps" ? "" : " transformation") + ". If we've worked with you, mark the ones we discussed and keep them in one place.";
+  $("tabs").innerHTML = ["biz","work","agent","fin"].map(function(k){ return '<a href="area.html?a=' + k + '" style="--c:' + J[k].color + '"' + (k === AK ? ' aria-current="page"' : "") + "><i></i>" + J[k].short + "</a>"; }).join("");
+
+  // Build recommendations from the journey content
+  var st = A.stops.filter(function(s){ return s.id === A.recStop; })[0], RECS = [];
+  st.groups.forEach(function(g){
+    if (AK === "fin") g.checks.forEach(function(s){ RECS.push({ id: s.id, k: g.title, title: s.t, p: "Customer need: " + s.need, native: s.native, tools: s.tools, gap: s.gap, fit: s.fit }); });
+    else RECS.push({ id: g.id, k: g.meta, title: AK === "biz" ? g.title : g.title + " phase", p: g.head, actions: g.checks, tools: g.res });
+  });
+  if (AK === "fin") A.stops.filter(function(s){ return s.id === "skills"; })[0].groups.forEach(function(g){ RECS.push({ id: g.id, k: "Capability", title: g.title, p: g.head, actions: g.checks, tools: g.res }); });
+  $("allsub").textContent = RECS.length + " recommendations, each with the tools and resources that help.";
+
+  // Pinned: from a personal link (?r=id,id) plus anything the partner marks
+  var SKEY = "pis-v6-recs-" + AK, fromLink = (new URLSearchParams(location.search).get("r") || "").split(",").filter(Boolean), mine = [];
+  try { mine = JSON.parse(localStorage.getItem(SKEY)) || []; } catch (e) {}
+  fromLink.forEach(function(id){ if (mine.indexOf(id) < 0 && RECS.some(function(r){ return r.id === id; })) mine.push(id); });
+  function save(){ try { localStorage.setItem(SKEY, JSON.stringify(mine)); } catch (e) {} }
+  save();
+
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+  function card(r){
+    var on = mine.indexOf(r.id) >= 0;
+    return '<article class="rec' + (on ? " mine" : "") + '"><div class="rec-head"><span class="k">' + r.k + "</span><h3>" + r.title + "</h3><p>" + r.p + '</p></div><div class="rec-body">' +
+      (r.native ? '<p class="meta2" style="margin:0"><b>Microsoft tool today:</b> ' + r.native + ' <span class="fitpill">' + r.fit + "</span></p>" : "") +
+      (r.actions ? "<div><h4>What good looks like</h4><ul>" + r.actions.map(function(a){ return "<li>" + esc(a) + "</li>"; }).join("") + "</ul></div>" : "") +
+      "<div><h4>Tools and resources</h4><ul>" + r.tools.map(function(t){ return "<li>" + (t[1] ? '<a href="' + t[1] + '" target="_blank" rel="noopener">' + t[0] + "</a>" : t[0] + ' <span class="ph">Link to confirm</span>') + "<small>" + t[2] + "</small></li>"; }).join("") + "</ul></div>" +
+      (r.gap ? '<p class="meta2" style="margin:0"><b>Gap you fill:</b> ' + r.gap + "</p>" : "") +
+      '<button type="button" class="pinbtn noprint" data-id="' + r.id + '" aria-pressed="' + on + '">' + (on ? "In my recommendations" : "Add to my recommendations") + "</button></div></article>";
+  }
+  function render(){
+    var pins = RECS.filter(function(r){ return mine.indexOf(r.id) >= 0; });
+    $("mine").innerHTML = pins.length ?
+      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:start"><div><h2>Your recommendations' + (PIS.partner ? " for " + esc(PIS.partner) : "") + "</h2><p>" + (fromLink.length ? "Shared by the Partner Incubation team, plus any you've added. " : "The ones you've marked. ") + 'Saved on this device.</p></div><button class="btn noprint" type="button" id="print">Print or save as PDF</button></div><div class="recs">' + pins.map(card).join("") + "</div>" :
+      '<h2>Your recommendations</h2><div class="empty-pin"><p>If the team sent you a personal link, your recommendations appear here. Otherwise, mark the ones we discussed below with <b>Add to my recommendations</b>. Haven\'t worked with us yet? Take the journey to get your own plan.</p><a class="btn" href="journey.html?j=' + AK + '">Take the journey</a></div>';
+    $("recs").innerHTML = RECS.map(card).join("");
+    if ($("print")) $("print").onclick = function(){ print(); };
+  }
+  document.addEventListener("click", function(e){
+    var b = e.target.closest(".pinbtn"); if (!b) return;
+    var id = b.dataset.id, k = mine.indexOf(id);
+    if (k >= 0) mine.splice(k, 1); else mine.push(id);
+    save(); var y = scrollY; render(); scrollTo(0, y);
+  });
+  render();
+
+  // Services for this area
+  $("svc").innerHTML = SERVICES.filter(function(s){ return s.areas.indexOf(AK) >= 0; }).map(function(s){
+    var any = isNaN(+s.d[0]);
+    return '<li class="svc-item"><span class="date' + (any ? " any" : "") + '"><b' + (s.ph ? ' class="ph"' : "") + ">" + s.d[0] + "</b><span>" + s.d[1] + '</span></span><div><span class="kind"><i></i>' + s.kind + "</span><h3>" + s.t + "</h3><p>" + s.p + '</p></div><a class="btn line" href="' + s.h + '"' + (s.h.indexOf("http") === 0 ? ' target="_blank" rel="noopener"' : "") + ">" + s.a + "</a></li>";
+  }).join("");
+  $("jtitle").textContent = "Take the " + A.name + " journey";
+  $("jtext").textContent = A.intro + " You leave with: " + A.out.charAt(0).toLowerCase() + A.out.slice(1) + ".";
+  $("jlink").href = "journey.html?j=" + AK;
+})();
+</script>
+</body>
+</html>
