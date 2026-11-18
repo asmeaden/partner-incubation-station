@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.svc-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start;padding-block:36px 80px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,28px);box-shadow:var(--shadow);margin-bottom:18px}
+.box h2{font-size:22px;margin:0 0 4px}
+.box > p{margin:0 0 16px;color:var(--ink-2)}
+.fm{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.fm li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.fm b{display:block}
+.fm small{color:var(--muted);font-size:13px}
+.src{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.src li{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;border-top:1px solid var(--line);padding-top:8px;font-size:15px}
+.src li span:first-child{font-size:13px;font-weight:700;color:var(--muted)}
+.src li span:first-child b{display:block;color:var(--ink-2);font-weight:650}
+.links{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.links li{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.links a{font-weight:650;color:var(--c)}
+.links a:hover{text-decoration:underline;text-underline-offset:3px}
+.links small{display:block;color:var(--muted);font-size:12.5px}
+.jl{display:flex;gap:8px;flex-wrap:wrap}
+.cov{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;border-radius:999px;padding:4px 12px;background:rgba(255,255,255,.12);color:#fff}
+.cov i{width:8px;height:8px;border-radius:50%}
+.cov.covered i{background:#5fd39a}.cov.partly i{background:var(--amber)}.cov.none i{background:#ff8a7a}
+.side{position:sticky;top:84px}
+.side .svc-side p{margin-bottom:12px}
+.feedback{border:2px dashed #e8c766;background:#fffaf0;border-radius:16px;padding:16px 18px;font-size:14.5px;color:#5c4500}
+.feedback b{display:block;margin-bottom:4px}
+.empty{border:2px dashed var(--line-2);border-radius:14px;padding:18px;color:var(--ink-2)}
+@media (max-width:900px){.svc-grid{grid-template-columns:1fr}.side{position:static}.links{grid-template-columns:1fr}.src li{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="practice">
+<main id="main">
+  <section class="area-hero" id="hero">
+    <div class="wrap">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="name"></h1>
+      <p id="desc"></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px" id="pills"></div>
+    </div>
+  </section>
+  <div class="wrap svc-grid">
+    <div>
+      <section class="box" id="group"></section>
+      <section class="box" id="now"></section>
+    </div>
+    <aside class="side">
+      <div class="svc-side" id="one"></div>
+      <div style="margin-top:14px" id="mark"></div>
+      <div class="feedback" id="fb" style="margin-top:14px"></div>
+    </aside>
+  </div>
+</main>
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var id = new URLSearchParams(location.search).get("s") || "advisory-guide", S = serviceById(id) || SERVICES[0], J = JOURNEYS, $ = function(x){ return document.getElementById(x); };
+  var areas = S.areas || ["biz"], A = J[areas[0]];
+  if (areas[0] === "fin") document.body.setAttribute("data-page", "fin");
+  document.title = S.name + " | Partner Incubation Station";
+  document.documentElement.style.setProperty("--c", A.color);
+  $("crumb").innerHTML = '<a href="index.html">Home</a> / <a href="area.html?a=' + areas[0] + '">' + A.name + "</a> / Service";
+  $("name").textContent = S.name;
+  $("desc").textContent = S.desc;
+  $("pills").innerHTML = areas.map(function(a){ return '<a class="area-pick" href="area.html?a=' + a + '" style="--c:' + J[a].color + ';background:rgba(255,255,255,.1);color:#fff"><i></i>' + J[a].short + "</a>"; }).join("") +
+    '<span class="cov ' + S.cover + '"><i></i>' + COVER[S.cover] + "</span>";
+
+  // 1:many first
+  var fmts = (S.group || []).map(function(g){
+    var f = FORMATS.filter(function(x){ return x.match.indexOf(g) >= 0; })[0];
+    return "<li><span><b>" + g + "</b><small>" + (f ? f.text + " Date to be announced." : "A self-serve asset for all partners. To confirm.") + '</small></span><a class="btn line" href="' + (f ? "events.html#" + f.id : "team.html#contact") + '">' + (f ? "See events" : "Register interest") + "</a></li>";
+  }).join("");
+  $("group").innerHTML = "<h2>Group sessions and self-serve</h2><p>Open to every partner in the community. Formats are being confirmed.</p>" + (fmts ? '<ul class="fm">' + fmts + "</ul>" : '<div class="empty">Group formats to be confirmed.</div>');
+
+  // What's available now from our guides
+  var src = S.sources || [], self = S.self || [], js = S.journeys || [];
+  $("now").innerHTML = "<h2>Start now from our guides</h2><p>Content from our practice guides that supports this service.</p>" +
+    (src.length ? '<ul class="src">' + src.map(function(s){ return "<li><span><b>" + s[0] + "</b>" + s[1] + "</span><span>" + s[2] + "</span></li>"; }).join("") + "</ul>" : "") +
+    (self.length ? '<ul class="links">' + self.map(function(r){ return "<li>" + (r[1] ? '<a href="' + r[1] + '" target="_blank" rel="noopener">' + r[0] + "</a>" : "<b>" + r[0] + '</b> <span class="ph">Link to confirm</span>') + "<small>" + r[2] + "</small></li>"; }).join("") + "</ul>" : "") +
+    (js.length ? '<div class="jl">' + js.map(function(j){ return '<a class="btn line" href="journey.html?j=' + j[0] + '" style="--c:' + J[j[0]].color + '">' + j[1] + "</a>"; }).join("") + "</div>" : "") +
+    (!src.length && !self.length ? '<div class="empty">We\'re still building self-serve content for this service. Talk to the team in the meantime.</div>' : "");
+
+  // 1:1 is a conversation with the team
+  $("one").innerHTML = "<h3>Want 1:1 support?</h3><p>" + (S.oneToOne ? "With the team: " + S.oneToOne.charAt(0).toLowerCase() + S.oneToOne.slice(1) + "." : S.desc) + "</p>" +
+    (S.who ? "<p>" + S.who + "</p>" : "") + (S.later ? "<p><b>Usually a later step,</b> after your Copilot Practice Development Review.</p>" : "") +
+    '<a class="btn amber" href="team.html#contact">Talk to the team</a>';
+
+  // Mark as discussed (saved in this browser only)
+  var KEY = "pis-v8-discussed", mine = []; try { mine = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+  function draw(){ var on = mine.indexOf(S.id) >= 0; $("mark").innerHTML = '<button type="button" class="pinbtn" aria-pressed="' + on + '" style="width:100%;justify-content:center;padding:10px">' + (on ? "We discussed this" : "Mark as discussed in my review") + "</button>";
+    $("mark").firstChild.onclick = function(){ var k = mine.indexOf(S.id); if (k >= 0) mine.splice(k, 1); else mine.push(S.id); try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch (e) {} draw(); }; }
+  draw();
+
+  $("fb").innerHTML = "<b>Mock-up note for the team</b>" + (S.note || "Our guides cover this service well.");
+})();
+</script>
+</body>
+</html>
