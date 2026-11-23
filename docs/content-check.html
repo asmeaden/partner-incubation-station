@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content check (internal) | Partner Incubation Station</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:26px}
+.sum div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.sum b{display:block;font-size:34px;line-height:1}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:auto;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-size:12.5px;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line);background:#fbfbfe}
+td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+td a{font-weight:650;color:var(--biz)}
+td ul{margin:0;padding-left:18px}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 24px;margin-top:26px}
+.list li{margin-bottom:8px}
+@media print{header.top,footer.site,.help-btn,.dock,.skip{display:none!important}}
+</style>
+</head>
+<body data-page="check">
+<main id="main">
+  <section class="area-hero" style="--c:var(--amber)">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Home</a> / Content check</div>
+      <h1>Content check</h1>
+      <p>Internal and mock-up only. How each service on slide 5 of the FY27 overview deck maps to our three practice guides, and what to feed back to the team. Remove this page before launch.</p>
+    </div>
+  </section>
+  <section style="padding-block:36px 80px">
+    <div class="wrap">
+      <div class="sum" id="sum"></div>
+      <div class="tbl"><table><thead><tr><th>Service</th><th>Areas</th><th>Guide coverage</th><th>Where in the guides</th><th>Feed back to the team</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div class="list">
+        <h2 style="margin:0 0 10px;font-size:22px">Other gaps across the site</h2>
+        <ul>
+          <li><b>Links missing from the adoption playbook:</b> the prioritisation matrix, envisioning template, business case steps, resistance guide, focus group questions, Copilot Studio Agents Report, Agent Management Essentials and Work Trend Index are named without links.</li>
+          <li><b>Workforce Transformation journey:</b> built from the short Copilot sections of the adoption playbook. A dedicated workforce guide would let it go deeper. A general Copilot adoption link is also needed.</li>
+          <li><b>FY27 maturity model:</b> named in the services list but not in our decks.</li>
+          <li><b>Group sessions:</b> every 1:many format is still to confirm, so the site shows formats, not dates.</li>
+          <li><b>Not shown on the site yet:</b> Workforce Transformation Offer Incubation (unconfirmed) and the four on-hold services: Business Value Practice Transformation, Agent Governance Enablement, Frontier Firm Playbook, and 1:Many Scaled Partner Enablement.</li>
+          <li><b>Older service names</b> in earlier decks: AI Advisory Practice Building Toolkit, Apps, Skills &amp; Plugins Co-Development and Workforce Transformation Incubation. The site uses the slide 5 names.</li>
+          <li><b>Still placeholder:</b> team names and roles, contact route, case studies and the walkthrough video.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = JOURNEYS, all = [REVIEW].concat(SERVICES), n = { covered: 0, partly: 0, none: 0 };
+  all.forEach(function(s){ n[s.cover]++; });
+  document.getElementById("sum").innerHTML = [["covered","Covered by our guides"],["partly","Partly covered"],["none","Not covered yet"]].map(function(x){
+    return '<div><b>' + n[x[0]] + '</b><span class="covpill ' + x[0] + '" style="margin:8px 0 0"><i></i>' + x[1] + "</span></div>";
+  }).join("");
+  document.getElementById("rows").innerHTML = all.map(function(s){
+    return '<tr><td><a href="service.html?s=' + s.id + '">' + s.name + "</a></td><td>" + (s.areas || ["biz","work","agent","fin"]).map(function(a){ return J[a].short; }).join(", ") +
+      '</td><td><span class="covpill ' + s.cover + '" style="margin:0"><i></i>' + COVER[s.cover] + "</span></td><td>" +
+      ((s.sources || []).length ? "<ul>" + s.sources.map(function(x){ return "<li>" + x[0] + ", " + x[1].toLowerCase() + ": " + x[2] + "</li>"; }).join("") + "</ul>" : "Nothing in our three decks") +
+      "</td><td>" + (s.note || "No gaps") + "</td></tr>";
+  }).join("");
+})();
+</script>
+</body>
+</html>

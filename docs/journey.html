@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Journey | Partner Incubation Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="journey.css">
+</head>
+<body data-page="practice">
+<script>
+  var JK = new URLSearchParams(location.search).get("j") || "biz";
+  if (["biz","work","agent","fin"].indexOf(JK) < 0) JK = "biz";
+  if (JK === "fin") document.body.setAttribute("data-page", "fin");
+</script>
+
+<main id="main">
+  <section class="jhero">
+    <div class="wrap">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="jtitle"></h1>
+      <p id="jintro"></p>
+      <div class="meta" id="jmeta"></div>
+    </div>
+  </section>
+  <div class="wrap jgrid">
+    <aside class="rail" aria-label="Journey stops">
+      <h2>Your route</h2>
+      <ol id="rail"><span class="fill" id="fill"></span></ol>
+      <p class="note" id="railnote"></p>
+    </aside>
+    <section class="stage" aria-live="polite">
+      <div class="stage-body" id="body"></div>
+      <div class="stage-foot" id="foot"></div>
+    </section>
+  </div>
+</main>
+
+<script src="site.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/services.js"></script>
+<script>
+(function(){
+  var J = JOURNEYS[JK], STOPS = J.stops, T = TOOLS, reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function stopById(id){ return STOPS.filter(function(s){ return s.id === id; })[0]; }
+  function txt(c){ return typeof c === "string" ? c : c.t; }
+
+  document.title = J.name + " | Partner Incubation Station";
+  document.documentElement.style.setProperty("--c", J.color);
+  $("crumb").innerHTML = '<a href="index.html">Home</a> / ' + (J.group === "FinOps" ? '<a href="area.html?a=fin">FinOps</a>' : '<a href="index.html#journeys">Practice Development</a>') + " / " + J.name;
+  $("jtitle").textContent = J.name;
+  $("jintro").textContent = J.intro;
+  $("jmeta").innerHTML = '<span class="pill c">' + J.group + '</span><span class="pill">' + J.time + '</span><span class="pill">Built from: ' + J.source + '</span><span class="pill">Progress saved on this device</span><button class="linkbtn" type="button" id="restart">Start over</button>';
+
+  // ---------- State ----------
+  var KEY = "pis-v6-" + JK;
+  function blank(){ return { i: 0, seen: 0, a: {}, p: {} }; }
+  var S; try { S = JSON.parse(localStorage.getItem(KEY)) || blank(); } catch (e) { S = blank(); }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  $("restart").onclick = function(){ if (confirm("Clear your answers and start this journey again?")) { S = blank(); save(); go(0); } };
+  function checksFor(st){
+    S.a[st.id] = S.a[st.id] || {};
+    st.groups.forEach(function(g){ if (!S.a[st.id][g.id]) S.a[st.id][g.id] = g.checks.map(function(){ return false; }); });
+    return S.a[st.id];
+  }
+  function score(st, gid){ return checksFor(st)[gid].filter(Boolean).length; }
+
+  // ---------- Rail ----------
+  function rail(cur){
+    var ol = $("rail");
+    ol.querySelectorAll("li").forEach(function(li){ li.remove(); });
+    STOPS.forEach(function(s, i){
+      var cls = i === cur ? "cur" : i <= S.seen ? "done" : "";
+      if (i === STOPS.length - 1) cls += " end";
+      var can = i <= S.seen && i !== cur;
+      ol.insertAdjacentHTML("beforeend", '<li class="' + cls + '"><button type="button" data-stop="' + i + '"' + (can ? "" : " disabled") + (i === cur ? ' aria-current="step"' : "") + '><span class="dot"></span>' + esc(s.label) + "</button></li>");
+    });
+    var items = ol.querySelectorAll("li");
+    $("fill").style.height = (items[cur].offsetTop - items[0].offsetTop) + "px";
+    $("railnote").textContent = cur === STOPS.length - 1 ? "Print your plan or save it as a PDF." : "Stop " + (cur + 1) + " of " + STOPS.length + ". You can go back to any stop you've visited.";
+  }
+  $("rail").addEventListener("click", function(e){ var b = e.target.closest("button[data-stop]"); if (b && !b.disabled) go(+b.dataset.stop, 0); });
+
+  // ---------- Navigation ----------
+  function go(i, dir){
+    S.i = i; S.seen = Math.max(S.seen, i);
+    var st = STOPS[i];
+    if (st.type === "groups") { var n = order(st).length; if (dir < 0) S.p[st.id] = n - 1; else if (dir > 0 || S.p[st.id] == null) S.p[st.id] = 0; }
+    save(); rail(i);
+    ({ single: single, multi: multi, groups: groups, matrix: matrix, plan: plan })[st.type](st);
+    var body = $("body"); body.classList.remove("enter"); void body.offsetWidth; if (!reduce) body.classList.add("enter");
+    var top = document.querySelector(".jgrid").getBoundingClientRect().top + scrollY - 84;
+    if (dir !== undefined && scrollY > top) scrollTo({ top: top, behavior: reduce ? "auto" : "smooth" });
+  }
+  function next(){ go(S.i + 1, 1); }
+  function back(){ if (S.i > 0) go(S.i - 1, -1); }
+  function foot(o){
+    $("foot").innerHTML = '<span class="hint">' + (o.hint || "") + '</span><span class="acts">' +
+      (S.i > 0 || o.onBack ? '<button class="btn line" type="button" id="back">Back</button>' : "") +
+      '<button class="btn" type="button" id="next"' + (o.ok === false ? " disabled" : "") + ">" + (o.next || "Continue") + "</button></span>";
+    if ($("back")) $("back").onclick = o.onBack || back;
+    $("next").onclick = o.onNext || next;
+  }
+  function nextLabel(){ return S.i === STOPS.length - 2 ? "See your plan" : "Continue"; }
+
+  // ---------- Stop: single choice ----------
+  function single(st){
+    var v = S.a[st.id];
+    $("body").innerHTML = "<h2>" + st.title + '</h2><p class="sub">' + st.sub + '</p><div class="opts" role="radiogroup" aria-label="' + esc(st.label) + '">' +
+      st.options.map(function(o){
+        return '<button type="button" class="opt radio" role="radio" aria-checked="' + (v === o.id) + '" data-v="' + o.id + '"><span class="box"></span><span>' + (o.tag ? '<span class="lvl">' + o.tag + "</span>" : "") +
+          "<b>" + o.name + '</b><span class="d">' + o.text + "</span>" + (o.small ? "<small>" + o.small + "</small>" : "") + "</span></button>";
+      }).join("") + "</div>" +
+      (st.field ? '<div class="field"><label for="fld">' + st.field.label + '</label><input id="fld" value="' + esc(S.a[st.field.id] || "") + '" placeholder="' + st.field.placeholder + '" autocomplete="organization"></div>' : "");
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){
+      S.a[st.id] = isNaN(+b.dataset.v) ? b.dataset.v : +b.dataset.v; save();
+      $("body").querySelectorAll(".opt").forEach(function(x){ x.setAttribute("aria-checked", x === b); });
+      f();
+    }; });
+    if ($("fld")) $("fld").oninput = function(){ S.a[st.field.id] = this.value; save(); };
+    function f(){ var ok = !st.required || S.a[st.id] != null; foot({ ok: ok, hint: ok ? "" : "Choose one to continue", next: nextLabel() }); }
+    f();
+  }
+
+  // ---------- Stop: multiple choice ----------
+  function multi(st){
+    var opts = st.options || stopById(st.fromGroups).groups.map(function(g){ return { id: g.id, name: g.say, small: g.meta }; });
+    var v = S.a[st.id] = S.a[st.id] || [];
+    $("body").innerHTML = "<h2>" + st.title + '</h2><p class="sub">' + st.sub + '</p><div class="opts' + (st.two ? " two" : "") + '">' +
+      opts.map(function(o){
+        var body = st.quote ? '<span class="q">"' + esc(o.name) + '"</span>' : "<b>" + o.name + "</b>" + (o.text ? '<span class="d">' + o.text + "</span>" : "");
+        return '<button type="button" class="opt" aria-pressed="' + (v.indexOf(o.id) >= 0) + '" data-v="' + o.id + '"><span class="box"></span><span>' + body + (o.small ? "<small>" + o.small + "</small>" : "") + "</span>" + (o.badge ? '<span class="badge">' + o.badge + "</span>" : "") + "</button>";
+      }).join("") + "</div>";
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){
+      var id = b.dataset.v, k = v.indexOf(id);
+      if (k >= 0) v.splice(k, 1); else v.push(id);
+      b.setAttribute("aria-pressed", k < 0); save(); f();
+    }; });
+    function f(){ foot({ hint: v.length ? v.length + " selected" : "Optional", next: v.length || S.i === STOPS.length - 2 ? nextLabel() : "Skip" }); }
+    f();
+  }
+
+  // ---------- Stop: paged checklists ----------
+  function order(st){
+    var flags = st.priorityFrom ? (S.a[st.priorityFrom] || []) : [];
+    return st.groups.slice().sort(function(a, b){ return (flags.indexOf(b.id) >= 0) - (flags.indexOf(a.id) >= 0); });
+  }
+  function groups(st){
+    var list = order(st), i = Math.min(S.p[st.id] || 0, list.length - 1), g = list[i], c = checksFor(st), flags = st.priorityFrom ? (S.a[st.priorityFrom] || []) : [];
+    $("body").innerHTML =
+      '<div class="capprog" aria-hidden="true"><span style="width:' + Math.round((i + 1) / list.length * 100) + '%"></span></div>' +
+      '<nav class="capnav" aria-label="' + esc(st.label) + '">' + list.map(function(x, j){
+        return '<button type="button" data-j="' + j + '"' + (j === i ? ' aria-current="step"' : "") + (score(st, x.id) ? ' class="seen"' : "") + ">" + (flags.indexOf(x.id) >= 0 ? '<span class="f" title="You flagged this"></span>' : "") + x.title + "</button>";
+      }).join("") + "</nav>" +
+      '<div class="capmeta"><span>' + st.what.charAt(0).toUpperCase() + st.what.slice(1) + " " + (i + 1) + " of " + list.length + "</span><span>" + g.meta + "</span>" + (flags.indexOf(g.id) >= 0 ? '<span class="flagged">You said this sounds like you</span>' : "") + "</div>" +
+      "<h2>" + (st.what === "area" ? g.title : g.head) + '</h2><p class="why">' + (st.what === "area" ? "<b>" + g.head + "</b> " : "") + g.why + '</p><p class="sub" style="margin-bottom:12px"><b>' + (st.tick || "Tick what's already true for you") + '</b></p>' +
+      '<div class="opts">' + g.checks.map(function(t, k){
+        return '<button type="button" class="opt" aria-pressed="' + c[g.id][k] + '" data-k="' + k + '"><span class="box"></span><span><span class="d" style="font-size:16px;color:var(--ink)">' + esc(txt(t)) + "</span>" + (t.need ? "<small>Customer need: " + t.need + "</small>" : "") + "</span></button>";
+      }).join("") + "</div>";
+    $("body").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ var k = +b.dataset.k; c[g.id][k] = !c[g.id][k]; b.setAttribute("aria-pressed", c[g.id][k]); save(); }; });
+    $("body").querySelectorAll(".capnav button").forEach(function(b){ b.onclick = function(){ S.p[st.id] = +b.dataset.j; save(); groups(st); }; });
+    var last = i === list.length - 1;
+    foot({ hint: (i + 1) + " of " + list.length, next: last ? nextLabel() : "Next " + st.what,
+      onBack: function(){ if (i === 0) back(); else { S.p[st.id] = i - 1; save(); groups(st); } },
+      onNext: function(){ if (last) next(); else { S.p[st.id] = i + 1; save(); groups(st); } } });
+  }
+
+  // ---------- Stop: prioritisation matrix ----------
+  var QUAD = {
+    quick: { name: "Quick win", order: 0, text: "High value and simple to implement. Start here and use it across the organisation or within groups." },
+    trans: { name: "Business transformation", order: 1, text: "High value but complex. Plan it as a strategic programme once you have quick wins." },
+    first: { name: "First success", order: 2, text: "Low value but simple. Good for learning and building confidence." },
+    depri: { name: "Deprioritise", order: 3, text: "Low value and complex. Park it for now." }
+  };
+  function quadOf(s){ return s.i === "high" ? (s.c === "low" ? "quick" : "trans") : (s.c === "low" ? "first" : "depri"); }
+  function quadHTML(list){
+    function cell(q, cls){ return '<div class="' + cls + '"><b>' + QUAD[q].name + '</b><span>' + (q === "quick" ? "High impact, low complexity" : q === "trans" ? "High impact, high complexity" : q === "first" ? "Low impact, low complexity" : "Low impact, high complexity") + '</span><div class="mdots">' +
+      list.map(function(s, k){ return s.n && quadOf(s) === q ? '<i title="' + esc(s.n) + '">' + (k + 1) + "</i>" : ""; }).join("") + "</div></div>"; }
+    return '<div class="quadwrap"><span class="axlbl">Business impact</span><div class="quad">' + cell("quick", "q-tl") + cell("trans", "q-tr") + cell("first", "q-bl") + cell("depri", "q-br") + '</div><span class="axlbl x">Complexity: low to high</span></div>';
+  }
+  function matrix(st){
+    var v = S.a[st.id] = S.a[st.id] && S.a[st.id].length ? S.a[st.id] : [{ n: "", i: "high", c: "low" }];
+    function draw(){
+      $("body").innerHTML = "<h2>" + st.title + '</h2><p class="sub">' + st.sub + '</p><div class="mx"><div id="scns">' +
+        v.map(function(s, k){
+          return '<div class="scn" data-k="' + k + '"><label><span class="num">' + (k + 1) + '</span><span class="sr">Scenario ' + (k + 1) + ' name</span></label><input data-f="n" value="' + esc(s.n) + '" placeholder="For example: HR self-service agent">' +
+            '<div class="tog"><span>Business impact</span><span class="seg2" role="group" aria-label="Business impact">' + ["high","low"].map(function(x){ return '<button type="button" data-f="i" data-x="' + x + '" aria-pressed="' + (s.i === x) + '">' + (x === "high" ? "High" : "Low") + "</button>"; }).join("") + "</span></div>" +
+            '<div class="tog"><span>Complexity</span><span class="seg2" role="group" aria-label="Complexity">' + ["low","high"].map(function(x){ return '<button type="button" data-f="c" data-x="' + x + '" aria-pressed="' + (s.c === x) + '">' + (x === "high" ? "High" : "Low") + "</button>"; }).join("") + "</span>" +
+            (v.length > 1 ? '<button type="button" class="linkbtn" data-rm="' + k + '">Remove</button>' : "") + "</div></div>";
+        }).join("") + (v.length < 3 ? '<button type="button" class="addscn" id="add">Add another scenario</button>' : "") + '</div><div id="quad">' + quadHTML(v) + "</div></div>";
+      $("body").querySelectorAll(".scn").forEach(function(row){
+        var s = v[+row.dataset.k];
+        row.querySelector("input").oninput = function(){ s.n = this.value; save(); $("quad").innerHTML = quadHTML(v); f(); };
+        row.querySelectorAll(".seg2 button").forEach(function(b){ b.onclick = function(){ s[b.dataset.f] = b.dataset.x; save(); draw(); }; });
+        var rm = row.querySelector("[data-rm]"); if (rm) rm.onclick = function(){ v.splice(+rm.dataset.rm, 1); save(); draw(); };
+      });
+      if ($("add")) $("add").onclick = function(){ v.push({ n: "", i: "high", c: "low" }); save(); draw(); $("body").querySelectorAll(".scn input")[v.length - 1].focus(); };
+      f();
+    }
+    function f(){ var ok = v.some(function(s){ return s.n.trim(); }); foot({ ok: ok, hint: ok ? "" : "Name at least one scenario" }); }
+    draw();
+  }
+
+  // ---------- Plan helpers ----------
+  var date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  function hero(o){
+    return '<div class="plan-hero"><span class="for">' + (S.a.pname ? esc(S.a.pname) + ", " : "") + date + "</span><h2>" + o.title + "</h2><p>" + o.sub + "</p>" +
+      '<div class="ladder' + (o.rungs.length > 3 ? " rungs5" : "") + '">' + o.rungs.map(function(r, k){
+        return '<div class="rung' + (k === o.you ? " you" : "") + '"><small>' + r.tag + "</small><b>" + r.name + "</b>" + (k === o.you ? '<span class="mk y">' + o.youLabel + "</span> " : "") + (o.other != null && k === o.other && k !== o.you ? '<span class="mk s">' + o.otherLabel + "</span>" : "") + "</div>";
+      }).join("") + '</div><div class="score">' + o.scores.map(function(s){ return "<span><b>" + s[0] + "</b>" + s[1] + "</span>"; }).join("") + "</div></div>";
+  }
+  function band(s, m){ var p = s / m; return p <= .25 ? ["band-gap","Gap"] : p < 1 ? ["band-dev","Developing"] : ["band-str","Strength"]; }
+  function bars(rows){
+    return '<div class="bars">' + rows.map(function(x){ var b = band(x.s, x.m);
+      return '<div class="barrow"><span class="nm">' + (x.f ? '<i title="You flagged this"></i>' : "") + x.name + '</span><span class="track"><span class="' + b[0] + '" data-w="' + (x.s / x.m * 100) + '"></span></span><span class="lb">' + x.s + "/" + x.m + " " + b[1] + "</span></div>";
+    }).join("") + '</div><div class="legend"><span><i class="band-gap"></i>Gap</span><span><i class="band-dev"></i>Developing</span><span><i class="band-str"></i>Strength</span>' + (rows.some(function(x){ return x.f; }) ? '<span><i style="background:var(--amber);width:8px;height:8px;border-radius:50%"></i>You flagged this</span>' : "") + "</div>";
+  }
+  function resList(res){ return res.map(function(r){ return "<li>" + (r[1] ? '<a href="' + r[1] + '" target="_blank" rel="noopener">' + r[0] + "</a>" : r[0] + ' <span class="ph">Link to confirm</span>') + " <small>" + r[2] + "</small></li>"; }).join(""); }
+  function gapCard(n, cn, head, why, todo, res, todoTitle){
+    return '<div class="gap"><span class="n">' + n + '</span><div><span class="cn">' + cn + "</span><h4>" + head + "</h4><p>" + why + '</p><div class="cols"><div><h5>' + (todoTitle || "To work on") + "</h5><ul>" +
+      (todo.length ? todo.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") : "<li>All in place. Keep it going.</li>") + '</ul></div><div><h5>Resources</h5><ul>' + resList(res) + "</ul></div></div></div></div>";
+  }
+  function sec(title, sub, inner, cls){ return '<div class="psec' + (cls ? " " + cls : "") + '"><h3>' + title + "</h3>" + (sub ? "<p>" + sub + "</p>" : "") + inner + "</div>"; }
+  function steps(items){ return '<ol class="steps3">' + items.map(function(s){ return "<li><span><b>" + s[0] + "</b><span>" + s[1] + "</span></span>" + s[2] + "</li>"; }).join("") + "</ol>"; }
+  function link(href, label, cls){ var ext = href.indexOf("http") === 0; return '<a class="btn ' + (cls || "line") + ' noprint" href="' + href + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + ">" + label + "</a>"; }
+  function concernsSec(){
+    var picked = (S.a.concerns || []).map(function(id){ return CONCERNS.filter(function(c){ return c.id === id; })[0]; });
+    if (!picked.length) return "";
+    return sec("Handling the concerns you're hearing", "From the playbook's guidance on resistance.", '<div class="twoup">' + picked.map(function(c){ return '<div class="card"><span class="k">' + c.text + "</span><h4>" + c.name + "</h4><p>" + c.fix + "</p></div>"; }).join("") + "</div>");
+  }
+  function disclaimer(){ return '<p class="disclaim">This plan is a self-assessment based on your answers and the ' + J.source + ". It's a starting point for a conversation, not a formal rating.</p>"; }
+  function phaseFocus(st){
+    var sc = st.groups.map(function(g){ return { g: g, s: score(st, g.id), m: g.checks.length }; });
+    var cur = 0; while (cur < sc.length - 1 && sc[cur].s >= sc[cur].m - 1) cur++;
+    return { sc: sc, cur: cur };
+  }
+  function phaseRungs(st){ return st.groups.map(function(g){ return { tag: g.meta, name: g.title }; }); }
+
+  // ---------- Plans ----------
+  var PLANS = {};
+
+  PLANS.biz = function(){
+    var caps = stopById("caps"), flags = S.a.flags || [], seats = S.a.seats || [], seatSt = stopById("seats");
+    var sc = caps.groups.map(function(g){ return { g: g, s: score(caps, g.id), f: flags.indexOf(g.id) >= 0 }; });
+    var total = sc.reduce(function(a, x){ return a + x.s; }, 0), max = caps.groups.length * 4, pct = total / max;
+    var lvl = pct < .4 ? 1 : pct < .75 ? 2 : 3, self = S.a.level || lvl;
+    var gaps = sc.filter(function(x){ return x.s < 4; }).sort(function(a, b){ return a.s - b.s || b.f - a.f; }).slice(0, 3);
+    var strong = sc.slice().sort(function(a, b){ return b.s - a.s; }).slice(0, 2), byId = {}; sc.forEach(function(x){ byId[x.g.id] = x; });
+    var offer = J.offers.map(function(o){ return { o: o, v: o.caps.reduce(function(a, id){ return a + byId[id].s; }, 0) / o.caps.length }; }).sort(function(a, b){ return b.v - a.v; })[0].o;
+    var gapIds = gaps.map(function(g){ return g.g.id; }), sessions = J.sessions.filter(function(s){ return s.caps.some(function(id){ return gapIds.indexOf(id) >= 0; }); });
+    var core = seatSt.options.filter(function(o){ return o.badge && seats.indexOf(o.id) < 0; });
+    var levels = stopById("level").options;
+    var cmp = self === lvl ? "Your answers match where you placed yourself." : self > lvl ? "You placed yourself at Level " + self + ", but your answers suggest Level " + lvl + ". The difference is usually evidence: the capabilities are there, but not yet repeatable." : "Your answers suggest you're further on than you think: Level " + lvl + " rather than Level " + self + ". Make sure your offers and evidence show it.";
+    return hero({ title: "Your Business Transformation plan", sub: cmp, rungs: levels.map(function(l){ return { tag: l.tag, name: l.name }; }), you: lvl - 1, youLabel: "Your answers", other: self - 1, otherLabel: "Where you placed yourself",
+        scores: [[total + " of " + max, "checks in place"], [gaps.length, "gaps to close first"], [seats.length + " of " + seatSt.options.length, "bench roles covered"]] }) +
+      sec("Your capability profile", "How many of the four checks you have in place for each capability.", bars(sc.map(function(x){ return { name: x.g.title, s: x.s, m: 4, f: x.f }; }))) +
+      sec("Start here: your top " + (gaps.length === 1 ? "gap" : gaps.length + " gaps"), "The capabilities with the fewest checks in place, with what to work on and where to find help.",
+        '<div class="gaps">' + (gaps.length ? gaps.map(function(x, k){ return gapCard(k + 1, x.g.title + " (" + x.s + "/4)", x.g.head, x.g.why, x.g.checks.filter(function(_, j){ return !checksFor(caps)[x.g.id][j]; }), x.g.res); }).join("") : '<div class="card"><h4>No gaps found</h4><p>Every check is in place. Build an offer on your strengths and talk to us about an incubation.</p></div>') + "</div>") +
+      '<div class="psec twoup"><div class="card"><span class="k">Build an offer on your strengths</span><h4>' + offer.name + '</h4><p class="tg">' + offer.tagline + "</p><p>" + offer.text + "</p><p>Your strongest areas are <b>" + strong.map(function(x){ return x.g.title.toLowerCase(); }).join("</b> and <b>") + "</b>. An offer built on proven capability outsells one built on ambition.</p>" + link(T.offers[1], "Get the offer templates") + "</div>" +
+        '<div class="card"><span class="k">Your advisory bench</span><h4>' + seats.length + " of " + seatSt.options.length + ' roles covered</h4><div class="seatlist">' + seatSt.options.map(function(o){ return '<span class="' + (seats.indexOf(o.id) >= 0 ? "have" : "") + '">' + o.name + "</span>"; }).join("") + "</div><p>" +
+        (core.length ? "Fill the core first: " + core.map(function(o){ return o.name; }).join(", ") + ". Borrow specialists before you hire them." : "Your core three are in place. Borrow the other specialists as your pipeline grows.") + "</p></div></div>" +
+      (sessions.length ? sec("Your learning path", "Sessions from the Cowork Micro-Learning Series that cover your gaps.", steps(sessions.map(function(s){ return [s.name, s.text, link(T.micro[1], "Watch")]; }))) : "") +
+      svcSec() + sec("Next steps", "", steps([
+        [REVIEW.name, "Bring this plan. The review is where every partner's roadmap starts.", link("team.html#contact", "Talk to the team", "")],
+        ["See every tool for this area", "All Business Transformation recommendations and tools in one place.", link("area.html?a=biz", "Open")],
+        ["Take the FinOps for AI journey", "It shares the business case stop and covers cost modelling, governance and optimisation.", link("journey.html?j=fin", "Start")]
+      ]) + disclaimer());
+  };
+
+  PLANS.work = function(){
+    var ph = stopById("phases"), F = phaseFocus(ph), cur = F.cur, g = ph.groups[cur], stage = S.a.stage || 1;
+    var expected = [0, 0, 1, 2, 4][stage], total = F.sc.reduce(function(a, x){ return a + x.s; }, 0);
+    var meas = S.a.measures || [], allMeas = stopById("measures").options;
+    var ADV = { usage: "Start with active users and feature use from the Copilot usage reports.", productivity: "Capture time per task before and after, using the baseline from the Plan phase.", sentiment: "Run a short pulse survey. The Adoption and Sentiment Report links answers to usage.", outcomes: "Pick one business KPI per scenario so value shows up in the language leaders use." };
+    var sub = cur < expected ? "Your rollout is further along than its foundations. Shore up the " + g.title + " phase before pushing usage further." : cur > expected ? "Your foundations are ahead of the rollout. You're ready to move faster." : "Your foundations match where the rollout is. Focus on the " + g.title + " phase next.";
+    var nxt = ph.groups[cur + 1];
+    return hero({ title: "Your Workforce Transformation plan", sub: sub, rungs: phaseRungs(ph), you: cur, youLabel: "Focus now",
+        scores: [[total + " of 20", "checks in place"], [meas.length + " of 4", "success measures tracked"], [(S.a.concerns || []).length, "concerns to handle"]] }) +
+      sec("Readiness by phase", "How many checks you have in place in each phase of the adoption and change approach.", bars(F.sc.map(function(x){ return { name: x.g.meta + ": " + x.g.title, s: x.s, m: x.m }; }))) +
+      sec("Focus now: " + g.title, "The first phase with gaps. Close these before moving on.", '<div class="gaps">' + gapCard(1, g.meta + " (" + F.sc[cur].s + "/4)", g.head, g.why, g.checks.filter(function(_, j){ return !checksFor(ph)[g.id][j]; }), g.res) +
+        (nxt ? gapCard(2, nxt.meta + ": up next", nxt.head, nxt.why, nxt.checks.filter(function(_, j){ return !checksFor(ph)[nxt.id][j]; }), nxt.res, "Then") : "") + "</div>") +
+      sec("Success measures", "The playbook's success metrics for Copilot: usage, productivity and sentiment, tied to business outcomes.", '<div class="twoup">' + allMeas.map(function(m){
+        var on = meas.indexOf(m.id) >= 0;
+        return '<div class="card"><span class="k">' + (on ? "Tracking" : "Not tracked yet") + "</span><h4>" + m.name + "</h4><p>" + (on ? m.text : ADV[m.id]) + "</p></div>";
+      }).join("") + "</div>") +
+      concernsSec() +
+      sec("Plan the next wave", "Every company is on a journey to becoming a Frontier Firm. Copilot as every employee's assistant is the first pattern; agents joining teams is the next.", steps([
+        ["Pattern 1: human with assistant", "Every employee has an AI assistant that helps them work better and faster.", ""],
+        ["Pattern 2: human-led agents", "Agents join teams as digital colleagues, taking on specific tasks.", link("journey.html?j=agent", "Agentic journey")],
+        ["Pattern 3: human-led, agent-operated", "People set direction and agents run whole processes, checking in as needed.", ""]
+      ])) +
+      svcSec() + sec("Next steps", "", steps([
+        [REVIEW.name, "Bring this plan. The review is where every partner's roadmap starts.", link("team.html#contact", "Talk to the team", "")],
+        ["See every tool for this area", "All Workforce Transformation recommendations and tools in one place.", link("area.html?a=work", "Open")]
+      ]) + disclaimer() + '<p class="disclaim"><span class="ph">Content note</span> This journey uses the Copilot sections of the adoption playbook. A dedicated workforce guide would let us go deeper.</p>');
+  };
+
+  PLANS.agent = function(){
+    var ph = stopById("phases"), F = phaseFocus(ph), cur = F.cur, g = ph.groups[cur], total = F.sc.reduce(function(a, x){ return a + x.s; }, 0);
+    var scn = (S.a.scenarios || []).filter(function(s){ return s.n.trim(); }), ranked = scn.map(function(s, k){ return { s: s, k: k, q: quadOf(s) }; }).sort(function(a, b){ return QUAD[a.q].order - QUAD[b.q].order; });
+    var top = ranked[0], vals = (S.a.value || []).map(function(id){ return stopById("value").options.filter(function(o){ return o.id === id; })[0]; });
+    var sub = top ? "Start with <b>" + esc(top.s.n) + "</b>: a " + QUAD[top.q].name.toLowerCase() + ". Then focus on the " + g.title + " phase of the change." : "Focus on the " + g.title + " phase of the change.";
+    return hero({ title: "Your Agentic Transformation plan", sub: sub, rungs: phaseRungs(ph), you: cur, youLabel: "Focus now",
+        scores: [[scn.length, scn.length === 1 ? "scenario rated" : "scenarios rated"], [total + " of 21", "change checks in place"], [vals.length, "value areas chosen"]] }) +
+      sec("Your scenario priorities", "Placed on the prioritisation matrix by business impact and complexity.", '<div class="mx"><div>' + quadHTML(S.a.scenarios || []) + "</div><div>" + steps(ranked.map(function(r){ return [(r.k + 1) + ". " + esc(r.s.n), "<b>" + QUAD[r.q].name + ".</b> " + QUAD[r.q].text, ""]; })) + "</div></div>") +
+      sec("Change readiness by phase", "Agent change is different: it transforms business processes, not just personal habits.", bars(F.sc.map(function(x){ return { name: x.g.meta + ": " + x.g.title, s: x.s, m: x.m }; }))) +
+      sec("Focus now: " + g.title, "The first phase with gaps, with the key actions from the playbook.", '<div class="gaps">' + gapCard(1, g.meta + " (" + F.sc[cur].s + "/" + F.sc[cur].m + ")", g.head, g.why, g.checks.filter(function(_, j){ return !checksFor(ph)[g.id][j]; }), g.res, "Key actions") + "</div>") +
+      (vals.length ? sec("How you'll show value", "Track from leading to lagging indicators: adoption first, then the operational KPI, then the business outcome.", '<div class="chain">' + vals.map(function(v){
+        return '<div class="ln"><span><small>Value area</small>' + v.name + '</span><span aria-hidden="true">→</span><span><small>Operational KPI</small>' + v.kpi + '</span><span aria-hidden="true">→</span><span><small>Business outcome</small>' + v.outcome + "</span></div>";
+      }).join("") + '</div><p class="disclaim">Start with adoption metrics too: agent usage, repeat use and satisfaction.</p>') : "") +
+      concernsSec() +
+      (top ? sec("Envision " + esc(top.s.n), "Fill in the envisioning template with your sponsor and process experts.", '<div class="twoup"><div class="card"><ul class="chk"><li>Problem statement</li><li>End users and personas</li><li>Success metrics and KPIs</li></ul></div><div class="card"><ul class="chk"><li>Current state process</li><li>Future state, and where the agent fits</li><li>Target outcome and expected impact</li></ul></div></div>') : "") +
+      svcSec() + sec("Next steps", "", steps([
+        [REVIEW.name, "Bring this plan. The review is where every partner's roadmap starts.", link("team.html#contact", "Talk to the team", "")],
+        ["See group sessions", "Office hours, bootcamps and Agentathons for agent builders.", link("events.html", "Events")],
+        ["See every tool for this area", "All Agentic Transformation recommendations and resources in one place.", link("area.html?a=agent", "Open")]
+      ]) + disclaimer());
+  };
+
+  PLANS.fin = function(){
+    var m = S.a.maturity || 1, svcSt = stopById("services"), sk = stopById("skills"), modes = S.a.modes || [], c = checksFor(svcSt);
+    var PRI = { 1: "control", 2: "control", 3: "optimise", 4: "plan", 5: "optimise" };
+    var WHY = { 1: "Your customers can see spend but can't steer it yet. Governance services move them to cost control.", 2: "Guardrails are in place. Budget ownership and showback move them to cost attribution.", 3: "Cost is attributed. Relating it to outcomes moves them to cost-to-outcome optimisation.", 4: "They optimise for value. Roadmap and investment prioritisation moves them to AI capital allocation.", 5: "They allocate AI capital by return. Keep outcome-to-cost analysis and QBRs running to stay there." };
+    var pri = PRI[m], delivered = 0; svcSt.groups.forEach(function(g){ delivered += score(svcSt, g.id); });
+    var skTotal = 0; sk.groups.forEach(function(g){ skTotal += score(sk, g.id); });
+    var missing = []; svcSt.groups.slice().sort(function(a, b){ return (b.id === pri) - (a.id === pri); }).forEach(function(g){ g.checks.forEach(function(s, j){ if (!c[g.id][j]) missing.push({ g: g, s: s }); }); });
+    var MODE = { cowork: "Consumption is in the mix, so forecasting and guardrails come first.", azure: "Azure AI consumption adds to the forecast; bring it into the same spend review.", custom: "Project and IP work needs an agent inventory with named owners.", ops: "Managed AgentOps pairs naturally with Optimise services as recurring revenue.", licensed: "Licensed spend is predictable, so focus Plan services on value realisation." };
+    var skSc = sk.groups.map(function(g){ return { g: g, s: score(sk, g.id) }; }), skGap = skSc.slice().sort(function(a, b){ return a.s - b.s; })[0];
+    var levels = stopById("maturity").options;
+    return hero({ title: "Your FinOps for AI plan", sub: WHY[m], rungs: levels.map(function(l){ return { tag: l.tag, name: l.name }; }), you: m - 1, youLabel: "Your customers", other: Math.min(m, 4), otherLabel: "Next",
+        scores: [[delivered + " of 15", "services delivered"], [skTotal + " of 12", "capability checks"], [modes.length, "investment modes"]] }) +
+      sec("Your service menu", "The three capability areas you can build and sell. Your focus area is highlighted.", '<div class="menu3">' + svcSt.groups.map(function(g){
+        return '<div class="' + (g.id === pri ? "prio" : "") + '">' + (g.id === pri ? '<span class="flag">Focus here</span>' : "") + "<h4>" + g.title + '</h4><p class="q">' + g.head + "</p><ul>" + g.checks.map(function(s, j){
+          return '<li class="' + (c[g.id][j] ? "on" : "off") + '"><i>' + (c[g.id][j] ? "✓" : "+") + "</i>" + s.t + "</li>";
+        }).join("") + "</ul></div>";
+      }).join("") + "</div>") +
+      sec("Tools for the services to add", "Microsoft tools available today, the open-source reports that extend them, and the gap only a partner can fill.", missing.length ? '<div class="tblwrap"><table class="tooltbl"><thead><tr><th>Service</th><th>Microsoft tool today</th><th>Reports and web apps</th><th>Gap you fill</th><th>Fit</th></tr></thead><tbody>' + missing.map(function(x){
+        return "<tr><td><b>" + x.s.t + '</b><span class="muted" style="font-size:13px;color:var(--muted)">' + x.s.need + "</span></td><td>" + x.s.native + "</td><td>" + x.s.tools.map(function(t){ return t[1] ? '<a href="' + t[1] + '" target="_blank" rel="noopener">' + t[0] + "</a>" : t[0]; }).join("") + "</td><td>" + x.s.gap + '</td><td><span class="fitpill">' + x.s.fit + "</span></td></tr>";
+      }).join("") + '</tbody></table></div><p class="disclaim">Native tools report credits only. Open-source reports need deploying and validating against customer data.</p>' : '<div class="card"><h4>You deliver all fifteen services</h4><p>Talk to us about joining the FinOps practice development cohort.</p></div>') +
+      (modes.length ? sec("What your customers' investment mix means", "", '<ul class="chk">' + modes.map(function(id){ return "<li>" + MODE[id] + "</li>"; }).join("") + "</ul>") : "") +
+      sec("Your capability profile", "Your skills in cost modelling, demand sizing and governance.", bars(skSc.map(function(x){ return { name: x.g.title, s: x.s, m: 4 }; })) +
+        (skGap.s < 4 ? '<div class="gaps" style="margin-top:16px">' + gapCard(1, skGap.g.title + " (" + skGap.s + "/4)", skGap.g.head, skGap.g.why, skGap.g.checks.filter(function(_, j){ return !checksFor(sk)[skGap.g.id][j]; }), skGap.g.res) + "</div>" : "")) +
+      svcSec() + sec("Next steps", "", steps([
+        [REVIEW.name, "Bring this plan. The review is where every partner's roadmap starts.", link("team.html#contact", "Talk to the team", "")],
+        ["Join the FinOps practice development cohort", "Build your FinOps for AI capability with the team.", link("https://forms.cloud.microsoft/r/RrfKr7dYuA", "Register interest")],
+        ["Build your offer", "Use the Cowork and FinOps offer templates.", link(T.offers[1], "Get templates")],
+        ["Learn the fundamentals", "The Get started with FinOps module on Microsoft Learn.", link("https://learn.microsoft.com/en-us/training/modules/get-started-with-finops/", "Start module")]
+      ]) + disclaimer());
+  };
+
+  // ---------- Services that fit each plan (names from the services list) ----------
+  function svcIds(){
+    if (JK === "biz") {
+      var caps = stopById("caps"), MAP = { discovery: "advisory-guide", compete: "gtm", "case": "advisory-guide", usecase: "advisory-guide", task: "co-dev", story: "case-study", cadence: "offer-dev" };
+      var sc = caps.groups.map(function(g){ return { id: g.id, s: score(caps, g.id) }; }), total = sc.reduce(function(a, x){ return a + x.s; }, 0);
+      var ids = sc.filter(function(x){ return x.s < 4; }).sort(function(a, b){ return a.s - b.s; }).slice(0, 3).map(function(x){ return MAP[x.id]; });
+      ids.push("offer-dev"); if (total / (caps.groups.length * 4) >= .4) ids.push("advisory-ubb");
+      return ids;
+    }
+    if (JK === "work") return ["acm", "profitability"];
+    if (JK === "agent") { var cur = phaseFocus(stopById("phases")).cur; return cur <= 1 ? ["agent-dev", "acm", "co-dev"] : ["acm", "factory", "economics", "case-study"]; }
+    return ["economics", "advisory-ubb"];
+  }
+  function svcSec(){
+    var seen = {}, list = svcIds().filter(function(id){ if (seen[id]) return false; seen[id] = 1; return true; }).map(function(id){ return SERVICES.filter(function(s){ return s.id === id; })[0]; });
+    return sec("Services that fit your plan", "Group sessions and self-serve content most likely to help, based on your answers. Every roadmap starts with the " + REVIEW.name + "; talk to the team for 1:1 support.",
+      '<div class="twoup">' + list.map(function(s){
+        return '<div class="card">' + (s.later ? '<span class="note">Later step</span>' : s.needsCustomer ? '<span class="note">Needs a customer engaged</span>' : "") + "<h4>" + s.name + "</h4><p>" + s.desc + '</p><div class="formats">' + s.group.map(function(g){ return "<span>" + g + "</span>"; }).join("") + '</div><p class="svcard-meta"><b>1:1 support:</b> talk to the team.</p><a class="btn line noprint" href="service.html?s=' + s.id + '" style="padding:7px 13px;font-size:13.5px">Open service</a></div>';
+      }).join("") + '</div><p class="disclaim">Group formats are still being confirmed. See <a href="events.html" style="color:var(--c);font-weight:650">Events</a> for what\'s coming up.</p>');
+  }
+
+  function plan(){
+    $("body").innerHTML = PLANS[JK]();
+    requestAnimationFrame(function(){ document.querySelectorAll(".track span").forEach(function(s){ s.style.width = s.dataset.w + "%"; }); });
+    $("foot").innerHTML = '<button class="btn line" type="button" id="edit">Change answers</button><span class="acts"><button class="btn" type="button" id="print">Print or save as PDF</button></span>';
+    $("edit").onclick = function(){ go(0, -1); };
+    $("print").onclick = function(){ print(); };
+  }
+
+  go(Math.min(S.i || 0, STOPS.length - 1));
+})();
+</script>
+</body>
+</html>
